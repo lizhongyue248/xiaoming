@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: xiaoMing
+  datasource:
+    url: jdbc:mysql://localhost:3306/gakDev
+    username: root
+    password: 123456
+    platform: mysql
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  redis:
+    host: 127.0.0.1
+    database: 4
+    password: 123456
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: -1ms
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

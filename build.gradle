@@ -1,0 +1,62 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+//apply plugin: 'war'
+apply from: this.file("common.gradle")
+
+group = 'cn.echocow'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenLocal()
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+    mavenCentral()
+}
+
+dependencies {
+    implementation(
+            rootProject.ext.springBoot.actuator,
+            rootProject.ext.springBoot.aop,
+            rootProject.ext.springBoot.jpa,
+            rootProject.ext.springBoot.redis,
+            rootProject.ext.springBoot.hateoas,
+            rootProject.ext.springBoot.mail,
+            rootProject.ext.springBoot.security,
+            rootProject.ext.springBoot.validation,
+            rootProject.ext.springBoot.web,
+//            rootProject.ext.springBoot.jdbc,
+            rootProject.ext.lib.commonPools
+    )
+    implementation(
+            rootProject.ext.security.oauth2,
+            rootProject.ext.security.jwt
+
+    )
+    runtimeOnly(
+            rootProject.ext.springBoot.devtools,
+            rootProject.ext.lib.mysql,
+    )
+    compileOnly rootProject.ext.lib.lombok
+//    providedRuntime rootProject.ext.springBoot.tomcat
+    testImplementation(
+            rootProject.ext.springBoot.test,
+            rootProject.ext.springBoot.restdocsMockmvc,
+            rootProject.ext.springBoot.securityTest
+    )
+
+}

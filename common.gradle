@@ -1,0 +1,34 @@
+def springBootVersion = '2.1.2.RELEASE'
+ext {
+    java = ['javaVersion': JavaVersion.VERSION_1_8]
+
+    lib = [
+            'mysql'      : 'mysql:mysql-connector-java',
+            'lombok'     : 'org.projectlombok:lombok',
+            'commonPools': 'org.apache.commons:commons-pool2:'
+    ]
+
+    springBoot = [
+            'actuator'       : 'org.springframework.boot:spring-boot-starter-actuator',
+            'web'            : 'org.springframework.boot:spring-boot-starter-web',
+            'aop'            : 'org.springframework.boot:spring-boot-starter-aop',
+            'jpa'            : 'org.springframework.boot:spring-boot-starter-data-jpa',
+            'jdbc'           : 'org.springframework.boot:spring-boot-starter-data-jdbc',
+            'redis'          : 'org.springframework.boot:spring-boot-starter-data-redis',
+            'hateoas'        : 'org.springframework.boot:spring-boot-starter-hateoas',
+            'mail'           : 'org.springframework.boot:spring-boot-starter-mail',
+            'security'       : 'org.springframework.boot:spring-boot-starter-security',
+            'validation'     : 'org.springframework.boot:spring-boot-starter-validation',
+            'devtools'       : 'org.springframework.boot:spring-boot-devtools',
+            'tomcat'         : 'org.springframework.boot:spring-boot-starter-tomcat',
+            'test'           : 'org.springframework.boot:spring-boot-starter-test',
+            'restdocsMockmvc': 'org.springframework.restdocs:spring-restdocs-mockmvc',
+            'securityTest'   : 'org.springframework.security:spring-security-test',
+            'mybatis'        : 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0'
+    ]
+
+    security = [
+            'oauth2': "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:${springBootVersion}",
+            'jwt'   : 'org.springframework.security:spring-security-jwt:1.0.9.RELEASE'
+    ]
+}
