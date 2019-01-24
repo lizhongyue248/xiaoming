@@ -32,28 +32,24 @@ public class SysMenuRole implements Serializable {
     /**
      * 菜单id
      */
-    @Basic
     @Column(name = "menu_id")
     private Long menuId;
 
     /**
      * 角色id
      */
-    @Basic
     @Column(name = "role_id")
     private Long roleId;
 
     /**
      * 是否启用
      */
-    @Basic
     @Column(name = "enabled", nullable = false, columnDefinition = "bit not null default 1 comment '是否启用'")
     private Boolean enabled;
 
     /**
      * 创建时间
      */
-    @Basic
     @CreatedDate
     @Column(name = "create_time", nullable = false, columnDefinition = "datetime not null default now() comment '创建时间'")
     private LocalDateTime createTime;
@@ -69,7 +65,6 @@ public class SysMenuRole implements Serializable {
     /**
      * 修改时间
      */
-    @Basic
     @LastModifiedDate
     @Column(name = "modify_time", nullable = false, columnDefinition = "datetime not null default now() comment '修改时间'")
     private LocalDateTime modifyTime;
@@ -85,7 +80,6 @@ public class SysMenuRole implements Serializable {
     /**
      * 备注
      */
-    @Basic
     @Column(name = "remark")
     private String remark;
 }

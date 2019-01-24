@@ -1,7 +1,6 @@
 package cn.echocow.xiaoming.entity;
 
 import lombok.Data;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,7 +22,6 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "sys_role")
-@ToString(exclude = {"menus","users"})
 @EntityListeners(AuditingEntityListener.class)
 public class SysRole implements Serializable {
 
@@ -38,35 +36,30 @@ public class SysRole implements Serializable {
     /**
      * 角色名,按照SpringSecurity的规范,以ROLE_开头
      */
-    @Basic
     @Column(name = "name", unique = true, nullable = false, columnDefinition = "varchar(20) not null comment '角色名,按照SpringSecurity的规范,以ROLE_开头'")
     private String name;
 
     /**
      * 角色名,中文
      */
-    @Basic
     @Column(name = "name_zh", nullable = false, columnDefinition = "varchar(255) not null comment '角色名,中文'")
     private String nameZh;
 
     /**
      * 排序
      */
-    @Basic
     @OrderColumn(name = "sort")
     private Integer sort;
 
     /**
      * 是否启用
      */
-    @Basic
     @Column(name = "enabled", nullable = false, columnDefinition = "bit not null default 1 comment '是否启用'")
     private Boolean enabled;
 
     /**
      * 创建时间
      */
-    @Basic
     @CreatedDate
     @Column(name = "create_time", nullable = false, columnDefinition = "datetime not null default now() comment '创建时间'")
     private LocalDateTime createTime;
@@ -82,7 +75,6 @@ public class SysRole implements Serializable {
     /**
      * 修改时间
      */
-    @Basic
     @LastModifiedDate
     @Column(name = "modify_time", nullable = false, columnDefinition = "datetime not null default now() comment '修改时间'")
     private LocalDateTime modifyTime;
@@ -98,7 +90,6 @@ public class SysRole implements Serializable {
     /**
      * 备注
      */
-    @Basic
     @Column(name = "remark")
     private String remark;
 

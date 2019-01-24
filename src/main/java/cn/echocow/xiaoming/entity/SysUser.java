@@ -2,7 +2,8 @@ package cn.echocow.xiaoming.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.NotNull;
-import lombok.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
@@ -31,8 +31,6 @@ import java.util.Set;
  */
 @Data
 @Entity
-@ToString(exclude = "roles")
-@EqualsAndHashCode(exclude = "roles")
 @Table(name = "sys_user")
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -49,15 +47,13 @@ public class SysUser implements UserDetails {
     /**
      * 用户昵称
      */
-    @Basic
     @NotNull
-    @Column(name = "name", columnDefinition = "varchar(255) not null comment '用户昵称'")
-    private String name;
+    @Column(name = "nickname", columnDefinition = "varchar(255) not null comment '用户昵称'")
+    private String nickname;
 
     /**
      * 用户名
      */
-    @Basic
     @NotNull
     @Column(name = "username", unique = true, columnDefinition = "varchar(255) not null comment '用户名'")
     private String username;
@@ -65,7 +61,6 @@ public class SysUser implements UserDetails {
     /**
      * 密码
      */
-    @Basic
     @NotNull
     @Column(name = "password", columnDefinition = "varchar(255) not null comment '密码'")
     @JsonIgnore
@@ -74,7 +69,6 @@ public class SysUser implements UserDetails {
     /**
      * 性别,1男0女
      */
-    @Basic
     @NotNull
     @Pattern(regexp = "[01]", message = "性别只能为男或女")
     @Column(name = "sex", columnDefinition = "int not null default 1 comment '性别,1男0女'")
@@ -83,7 +77,6 @@ public class SysUser implements UserDetails {
     /**
      * 电话号码
      */
-    @Basic
     @Length(min = 11, max = 11)
     @Column(name = "phone", unique = true, columnDefinition = "varchar(255) null comment '电话号码'")
     private String phone;
@@ -91,7 +84,6 @@ public class SysUser implements UserDetails {
     /**
      * 邮箱
      */
-    @Basic
     @Email
     @Column(name = "email", unique = true, columnDefinition = "varchar(255) null comment '邮箱'")
     private String email;
@@ -99,21 +91,18 @@ public class SysUser implements UserDetails {
     /**
      * 头像
      */
-    @Basic
     @Column(name = "img", columnDefinition = "varchar(255) null comment '头像'")
     private String img;
 
     /**
      * 是否启用
      */
-    @Basic
     @Column(name = "enabled", nullable = false, columnDefinition = "bit not null default 1 comment '是否启用'")
     private Boolean enabled;
 
     /**
      * 创建时间
      */
-    @Basic
     @CreatedDate
     @Column(name = "create_time", nullable = false, columnDefinition = "datetime not null default now() comment '创建时间'")
     private LocalDateTime createTime;
@@ -129,7 +118,6 @@ public class SysUser implements UserDetails {
     /**
      * 修改时间
      */
-    @Basic
     @LastModifiedDate
     @Column(name = "modify_time", nullable = false, columnDefinition = "datetime not null default now() comment '修改时间'")
     private LocalDateTime modifyTime;
@@ -145,7 +133,6 @@ public class SysUser implements UserDetails {
     /**
      * 备注
      */
-    @Basic
     @Column(name = "remark")
     private String remark;
 
