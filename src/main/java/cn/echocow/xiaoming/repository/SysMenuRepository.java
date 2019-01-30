@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Repository
 public interface SysMenuRepository extends JpaRepository<SysMenu, Long> {
-    @Override
-    @Query("select m from SysMenu m, SysMenuRole mr, SysRole r where m.id = mr.menuId and mr.roleId = r.id")
-    List<SysMenu> findAll();
+//    @Override
+//    @Query("select m from SysMenu m, SysMenuRole mr, SysRole r where m.id = mr.menuId and mr.roleId = r.id")
+//    List<SysMenu> findAll();
 }

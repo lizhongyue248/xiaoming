@@ -1,6 +1,9 @@
 package cn.echocow.xiaoming.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.Proxy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -10,7 +13,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 角色表
@@ -22,6 +26,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "sys_role")
+@ToString(exclude = {"users", "menus"})
 @EntityListeners(AuditingEntityListener.class)
 public class SysRole implements Serializable {
 
@@ -96,16 +101,17 @@ public class SysRole implements Serializable {
     /**
      * 当前角色的菜单
      */
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "sys_menu_role", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "menu_id"))
-    private Set<SysMenu> menus;
+    private List<SysMenu> menus = new ArrayList<>();
 
-//    /**
-//     * 当前角色对应的用户
-//     * 双向映射造成数据重复查询死循环问题
-//     */
-//    @ManyToMany(mappedBy = "roles")
-//    private Set<SysUser> users;
+    /**
+     * 当前角色对应的用户
+     * 双向映射造成数据重复查询死循环问题
+     */
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
+    private List<SysUser> users = new ArrayList<>();
 
 }

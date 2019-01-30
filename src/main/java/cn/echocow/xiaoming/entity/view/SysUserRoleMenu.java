@@ -1,5 +1,7 @@
 package cn.echocow.xiaoming.entity.view;
 
+import org.hibernate.annotations.Subselect;
+import org.hibernate.annotations.Synchronize;
 import org.springframework.data.annotation.Immutable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * 用户角色菜单视图 —— 只读
@@ -21,11 +22,30 @@ import javax.persistence.Table;
 @Immutable
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "sys_user_role_menu")
+@Subselect("select `u`.`id`       AS `id`," +
+        "       `u`.`username` AS `username`," +
+        "       `u`.`nickname` AS `nickname`," +
+        "       `r`.`name`     AS `role_name`," +
+        "       `r`.`name_zh`  AS `role_name_zh`," +
+        "       `m`.`name`     AS `menu_name`," +
+        "       `m`.`path`     AS `path`," +
+        "       `m`.`url`      AS `url`," +
+        "       `u`.`email`    AS `email`," +
+        "       `u`.`img`      AS `img`," +
+        "       `u`.`phone`    AS `phone`," +
+        "       `u`.`sex`      AS `sex`," +
+        "       `u`.`enabled`  AS `enabled`," +
+        "       `u`.`remark`   AS `remark`" +
+        "from ((((`sys_user` `u` join `sys_user_role` `ur`) join `sys_role` `r`) join `sys_menu_role` `mr`)" +
+        "       join `sys_menu` `m`)" +
+        "where ((`u`.`id` = `ur`.`user_id`) and (`ur`.`role_id` = `r`.`id`) and (`r`.`id` = `mr`.`role_id`) and" +
+        "       (`mr`.`menu_id` = `m`.`id`) and (`u`.`enabled` = TRUE) and (`ur`.`enabled` = TRUE) and (`r`.`enabled` = TRUE) and" +
+        "       (`mr`.`enabled` = TRUE) and (`m`.`enabled` = TRUE))")
+@Synchronize({"sys_user", "sys_role", "sys_menu", "sys_user_role", "sys_menu_role"})
 public class SysUserRoleMenu {
     @Id
     @Column(name = "id")
-    private Long id;
+    private Long userId;
 
     /**
      * 用户名

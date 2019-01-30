@@ -3,7 +3,8 @@ package cn.echocow.xiaoming.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.NotNull;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 用户表
@@ -31,8 +31,8 @@ import java.util.Set;
  */
 @Data
 @Entity
+@ToString(exclude = "roles")
 @Table(name = "sys_user")
-@RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class SysUser implements UserDetails {
 
@@ -139,11 +139,11 @@ public class SysUser implements UserDetails {
     /**
      * 当前用户的权限
      */
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "sys_user_role", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<SysRole> roles;
+    @ManyToMany
+    @JoinTable(name = "sys_user_role",
+            joinColumns = {@JoinColumn(name = "user_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false)})
+    private List<SysRole> roles = new ArrayList<>();
 
     /**
      * 授权

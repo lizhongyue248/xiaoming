@@ -1,6 +1,9 @@
 package cn.echocow.xiaoming.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.Proxy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -10,6 +13,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单表
@@ -125,10 +131,11 @@ public class SysMenu implements Serializable {
     @Column(name = "remark")
     private String remark;
 
-//    /**
-//     * 菜单角色
-//     * 双向映射造成数据重复查询死循环问题
-//     */
-//    @ManyToMany(mappedBy = "menus")
-//    private Set<SysRole> roles;
+    /**
+     * 菜单角色
+     * 双向映射造成数据重复查询死循环问题
+     */
+    @ManyToMany(mappedBy = "menus")
+    @JsonIgnore
+    private List<SysRole> roles = new ArrayList<>();
 }
