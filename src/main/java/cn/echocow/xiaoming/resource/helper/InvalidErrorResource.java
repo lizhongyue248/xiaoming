@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.resource;
+package cn.echocow.xiaoming.resource.helper;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

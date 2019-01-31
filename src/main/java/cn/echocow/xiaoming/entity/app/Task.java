@@ -1,5 +1,4 @@
-package cn.echocow.xiaoming.entity;
-
+package cn.echocow.xiaoming.entity.app;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
@@ -13,33 +12,59 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 用户角色关联表
+ * 作业任务
  *
  * @author Echo
  * @version 1.0
- * @date 2019-01-21 15:24
+ * @date 2019-01-30 16:01
  */
 @Data
 @Entity
-@Table(name = "sys_user_role")
+@Table(name = "task")
 @EntityListeners(AuditingEntityListener.class)
-public class SysUserRole implements Serializable {
+public class Task implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * 菜单id
+     * 任务名称
      */
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "name", columnDefinition = "varchar(255) not null comment '任务名称'")
+    private String name;
 
     /**
-     * 角色id
+     * 作业
      */
-    @Column(name = "role_id", nullable = false)
-    private Long roleId;
+    @OneToOne
+    @JoinColumn(name = "homework_id")
+    private Homework homework;
+
+    /**
+     * 班级
+     */
+    @OneToOne
+    @JoinColumn(name = "classroom_id")
+    private Classroom classroom;
+
+    /**
+     * 开启时间
+     */
+    @Column(name = "start_time", nullable = false, columnDefinition = "datetime not null default now() comment '开启时间'")
+    private LocalDateTime startTime;
+
+    /**
+     * 结束时间
+     */
+    @Column(name = "end_time", nullable = false, columnDefinition = "datetime not null default now() comment '结束时间'")
+    private LocalDateTime endTime;
+
+    /**
+     * 排序
+     */
+    @OrderColumn(name = "sort")
+    private Integer sort;
 
     /**
      * 是否启用
@@ -58,9 +83,8 @@ public class SysUserRole implements Serializable {
      * 创建用户
      */
     @CreatedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "create_user")
-    private SysUser createUser;
+    @Column(name = "create_user")
+    private Long createUser;
 
     /**
      * 修改时间
@@ -73,13 +97,13 @@ public class SysUserRole implements Serializable {
      * 修改用户
      */
     @LastModifiedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "modify_user")
-    private SysUser modifyUser;
+    @Column(name = "modify_user")
+    private Long modifyUser;
 
     /**
      * 备注
      */
     @Column(name = "remark")
     private String remark;
+
 }

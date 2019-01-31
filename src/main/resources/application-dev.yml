@@ -4,7 +4,7 @@ spring:
   application:
     name: xiaoMing
   datasource:
-    url: jdbc:mysql://localhost:3306/gakDev
+    url: jdbc:mysql://localhost:3306/gakDev?serverTimezone=GMT%2B8
     username: root
     password: 123456
     platform: mysql
@@ -12,7 +12,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         enable_lazy_load_no_trans: true
@@ -29,3 +29,8 @@ logging:
     org:
       springframework:
         security: DEBUG
+security:
+  oauth2:
+    client:
+      client-id: xiaoMing
+      client-secret: $2a$10$Nww6ckqqJUg/botZzZDn1.8xZwTfW2n1mYE66lrUgn00KVzfe2T7C

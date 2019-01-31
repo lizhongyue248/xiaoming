@@ -1,10 +1,8 @@
-package cn.echocow.xiaoming.entity;
+package cn.echocow.xiaoming.entity.sys;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.internal.NotNull;
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.annotations.Proxy;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,7 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,44 +45,36 @@ public class SysUser implements UserDetails {
     /**
      * 用户昵称
      */
-    @NotNull
-    @Column(name = "nickname", columnDefinition = "varchar(255) not null comment '用户昵称'")
+    @Length(max = 20)
+    @Column(name = "nickname", columnDefinition = "varchar(20) not null comment '用户昵称'")
     private String nickname;
 
     /**
      * 用户名
      */
-    @NotNull
-    @Column(name = "username", unique = true, columnDefinition = "varchar(255) not null comment '用户名'")
+    @NotNull(message = "用户名不能为空")
+    @Length(max = 50, message = "用户名长度最大为50")
+    @Column(name = "username", unique = true, columnDefinition = "varchar(50) not null comment '用户名'")
     private String username;
 
     /**
      * 密码
      */
-    @NotNull
+    @NotNull(message = "密码不能为空")
     @Column(name = "password", columnDefinition = "varchar(255) not null comment '密码'")
-    @JsonIgnore
     private String password;
-
-    /**
-     * 性别,1男0女
-     */
-    @NotNull
-    @Pattern(regexp = "[01]", message = "性别只能为男或女")
-    @Column(name = "sex", columnDefinition = "int not null default 1 comment '性别,1男0女'")
-    private Integer sex;
 
     /**
      * 电话号码
      */
-    @Length(min = 11, max = 11)
+    @Length(min = 11, max = 11, message = "手机长度只能为11位")
     @Column(name = "phone", unique = true, columnDefinition = "varchar(255) null comment '电话号码'")
     private String phone;
 
     /**
      * 邮箱
      */
-    @Email
+    @Email(message = "邮箱地址不合法")
     @Column(name = "email", unique = true, columnDefinition = "varchar(255) null comment '邮箱'")
     private String email;
 
@@ -98,7 +88,7 @@ public class SysUser implements UserDetails {
      * 是否启用
      */
     @Column(name = "enabled", nullable = false, columnDefinition = "bit not null default 1 comment '是否启用'")
-    private Boolean enabled;
+    private Boolean enabled = true;
 
     /**
      * 创建时间
@@ -111,9 +101,8 @@ public class SysUser implements UserDetails {
      * 创建用户
      */
     @CreatedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "create_user")
-    private SysUser createUser;
+    @Column(name = "create_user")
+    private Long createUser;
 
     /**
      * 修改时间
@@ -126,9 +115,8 @@ public class SysUser implements UserDetails {
      * 修改用户
      */
     @LastModifiedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "modify_user")
-    private SysUser modifyUser;
+    @Column(name = "modify_user")
+    private Long modifyUser;
 
     /**
      * 备注

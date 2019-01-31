@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service.impl;
 
-import cn.echocow.xiaoming.entity.SysRole;
-import cn.echocow.xiaoming.repository.SysRoleRepository;
+import cn.echocow.xiaoming.entity.sys.SysRole;
+import cn.echocow.xiaoming.repository.sys.SysRoleRepository;
 import cn.echocow.xiaoming.service.SysRoleService;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     private SysRoleRepository sysRoleRepository;
 
     @Override
-    public List<SysRole> findAllByMenuId(Long menuId) {
-        return sysRoleRepository.findAllByMenuId(menuId);
+    public List<SysRole> findAllByPermissionId(Long menuId) {
+        return sysRoleRepository.findAllByPermissionId(menuId);
     }
 }

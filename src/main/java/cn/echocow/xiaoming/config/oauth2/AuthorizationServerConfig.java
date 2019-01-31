@@ -2,10 +2,12 @@ package cn.echocow.xiaoming.config.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -30,7 +32,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final UserDetailsService userDetailsService;
     private final TokenStore tokenStore;
     private final JwtAccessTokenConverter accessTokenConverter;
-
+    @Value("${security.oauth2.client.client-id}")
+    private String clientId;
+    @Value("${security.oauth2.client.client-secret}")
+    private String clientSecret;
     @Autowired
     public AuthorizationServerConfig(AuthenticationManager authenticationManager, RedisConnectionFactory redisConnectionFactory, @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, TokenStore tokenStore, JwtAccessTokenConverter accessTokenConverter) {
         this.authenticationManager = authenticationManager;
@@ -61,12 +66,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("xiaoMing")
+                .withClient(clientId)
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(6000)
                 .resourceIds("xiaoMing")
                 .scopes("all")
-                .secret("$2a$10$TE/zIKlWY6tLPE5boAr.cuOiGGQcfYs.4fNbjkjoRIK11If99l30K");
+                .secret(clientSecret);
     }
 
     /**

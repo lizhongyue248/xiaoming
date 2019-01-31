@@ -1,8 +1,9 @@
 package cn.echocow.xiaoming.config.permission;
 
-import cn.echocow.xiaoming.entity.SysMenu;
-import cn.echocow.xiaoming.entity.SysRole;
-import cn.echocow.xiaoming.service.SysMenuService;
+import cn.echocow.xiaoming.entity.enums.HttpMethod;
+import cn.echocow.xiaoming.entity.sys.SysPermission;
+import cn.echocow.xiaoming.entity.sys.SysRole;
+import cn.echocow.xiaoming.service.SysPermissionService;
 import cn.echocow.xiaoming.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -11,6 +12,9 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,27 +26,35 @@ import java.util.stream.Collectors;
  */
 @Component
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-    private final SysMenuService sysMenuService;
+    private final SysPermissionService sysPermissionService;
 
     private final SysRoleService sysRoleService;
 
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Autowired
-    public SecurityMetadataSource(SysMenuService sysMenuService, SysRoleService sysRoleService) {
-        this.sysMenuService = sysMenuService;
+    public SecurityMetadataSource(SysPermissionService sysPermissionService, SysRoleService sysRoleService) {
+        this.sysPermissionService = sysPermissionService;
         this.sysRoleService = sysRoleService;
     }
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
-        List<SysMenu> menus = sysMenuService.findAll();
-        for (SysMenu menu : menus) {
-            if (!antPathMatcher.match(menu.getUrl(), requestUrl)) {
+        HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
+        String method = httpRequest.getMethod();
+        List<SysPermission> permissions = sysPermissionService.findAll();
+        for (SysPermission permission : permissions) {
+            // 路径匹配
+            if (!antPathMatcher.match(permission.getMatchUrl(), requestUrl)) {
                 continue;
             }
-            List<SysRole> roles = sysRoleService.findAllByMenuId(menu.getId());
+            // 方法匹配
+            if (!HttpMethod.ALL.match(permission.getMethod()) && !method.equals(permission.getMethod())) {
+                continue;
+            }
+            // 角色匹配
+            List<SysRole> roles = sysRoleService.findAllByPermissionId(permission.getId());
             if (roles == null || roles.isEmpty()) {
                 continue;
             }

@@ -22,27 +22,25 @@ import javax.persistence.Id;
 @Immutable
 @NoArgsConstructor
 @AllArgsConstructor
-@Subselect("select `u`.`id`       AS `id`," +
-        "       `u`.`username` AS `username`," +
-        "       `u`.`nickname` AS `nickname`," +
-        "       `r`.`name`     AS `role_name`," +
-        "       `r`.`name_zh`  AS `role_name_zh`," +
-        "       `m`.`name`     AS `menu_name`," +
-        "       `m`.`path`     AS `path`," +
-        "       `m`.`url`      AS `url`," +
-        "       `u`.`email`    AS `email`," +
-        "       `u`.`img`      AS `img`," +
-        "       `u`.`phone`    AS `phone`," +
-        "       `u`.`sex`      AS `sex`," +
-        "       `u`.`enabled`  AS `enabled`," +
-        "       `u`.`remark`   AS `remark`" +
-        "from ((((`sys_user` `u` join `sys_user_role` `ur`) join `sys_role` `r`) join `sys_menu_role` `mr`)" +
-        "       join `sys_menu` `m`)" +
-        "where ((`u`.`id` = `ur`.`user_id`) and (`ur`.`role_id` = `r`.`id`) and (`r`.`id` = `mr`.`role_id`) and" +
-        "       (`mr`.`menu_id` = `m`.`id`) and (`u`.`enabled` = TRUE) and (`ur`.`enabled` = TRUE) and (`r`.`enabled` = TRUE) and" +
-        "       (`mr`.`enabled` = TRUE) and (`m`.`enabled` = TRUE))")
+@Subselect("select `u`.`id`        AS `id`," +
+        "       `u`.`username`     AS `username`," +
+        "       `u`.`nickname`     AS `nickname`," +
+        "       `r`.`name`         AS `role_name`," +
+        "       `r`.`name_zh`      AS `role_name_zh`," +
+        "       `p`.`name`         AS `menu_name`," +
+        "       `p`.`request_path` AS `request_path`," +
+        "       `p`.`match_url`    AS `match_url`," +
+        "       `u`.`email`        AS `email`," +
+        "       `u`.`img`          AS `img`," +
+        "       `u`.`phone`        AS `phone`," +
+        "       `u`.`enabled`      AS `enabled`," +
+        "       `u`.`remark`       AS `remark`" +
+        "from ((((`gakDev`.`sys_user` `u` join `gakDev`.`sys_user_role` `ur`) join `gakDev`.`sys_role` `r`) join `gakDev`.`sys_permission_role` `pr`)" +
+        "       join `gakDev`.`sys_permission` `p`)" +
+        "where ((`u`.`id` = `ur`.`user_id`) and (`ur`.`role_id` = `r`.`id`) and (`r`.`id` = `pr`.`role_id`) and" +
+        "       (`pr`.`permission_id` = `pr`.`id`) and (`u`.`enabled` = TRUE))")
 @Synchronize({"sys_user", "sys_role", "sys_menu", "sys_user_role", "sys_menu_role"})
-public class SysUserRoleMenu {
+public class SysUserRolePermission {
     @Id
     @Column(name = "id")
     private Long userId;
@@ -74,20 +72,20 @@ public class SysUserRoleMenu {
     /**
      * 菜单名称
      */
-    @Column(name = "menu_name")
-    private String menuName;
+    @Column(name = "permission_name")
+    private String permissionName;
 
     /**
      * 路由 path
      */
-    @Column(name = "path")
-    private String path;
+    @Column(name = "request_path")
+    private String requestPath;
 
     /**
      * 请求路径规则
      */
-    @Column(name = "url")
-    private String url;
+    @Column(name = "match_url")
+    private String matchUrl;
 
     /**
      * 邮箱
@@ -106,12 +104,6 @@ public class SysUserRoleMenu {
      */
     @Column(name = "phone")
     private String phone;
-
-    /**
-     * 性别,1男0女
-     */
-    @Column(name = "sex")
-    private Integer sex;
 
     /**
      * 是否启用

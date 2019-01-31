@@ -1,6 +1,6 @@
-package cn.echocow.xiaoming.repository;
+package cn.echocow.xiaoming.repository.sys;
 
-import cn.echocow.xiaoming.entity.SysUser;
+import cn.echocow.xiaoming.entity.sys.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

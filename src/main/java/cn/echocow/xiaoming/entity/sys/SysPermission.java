@@ -1,9 +1,7 @@
-package cn.echocow.xiaoming.entity;
+package cn.echocow.xiaoming.entity.sys;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.ToString;
-import org.hibernate.annotations.Proxy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -15,7 +13,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单表
@@ -26,9 +23,9 @@ import java.util.Set;
  */
 @Data
 @Entity
-@Table(name = "sys_menu")
+@Table(name = "sys_permission")
 @EntityListeners(AuditingEntityListener.class)
-public class SysMenu implements Serializable {
+public class SysPermission implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,14 +40,20 @@ public class SysMenu implements Serializable {
     /**
      * 请求路径规则
      */
-    @Column(name = "url", columnDefinition = "varchar(255) not null comment '请求路径规则'")
-    private String url;
+    @Column(name = "match_url", columnDefinition = "varchar(255) not null comment '请求路径规则'")
+    private String matchUrl;
 
     /**
      * 路由 path
      */
-    @Column(name = "path", columnDefinition = "varchar(255) not null comment '路由 path'")
-    private String path;
+    @Column(name = "request_path", columnDefinition = "varchar(255) not null comment '路由 path'")
+    private String requestPath;
+
+    /**
+     * 请求方法 GET、POST、PUT、PATCH、DELETE、ALL
+     */
+    @Column(name = "method", columnDefinition = "varchar(50) not null comment '请求方法 GET、POST、PUT、PATCH、DELETE、ALL'")
+    private String method;
 
     /**
      * 组件名称
@@ -71,29 +74,17 @@ public class SysMenu implements Serializable {
     private Boolean keepAlive;
 
     /**
-     * 是否登陆后才能访问
-     */
-    @Column(name = "require_auth", columnDefinition = "bit not null default 1 comment '是否登陆后才能访问'")
-    private Boolean requireAuth;
-
-    /**
      * 父菜单id
      */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_id")
-    private SysMenu sysMenu;
+    private SysPermission sysPermission;
 
     /**
      * 排序
      */
     @OrderColumn(name = "sort")
     private Integer sort;
-
-    /**
-     * 是否启用
-     */
-    @Column(name = "enabled", nullable = false, columnDefinition = "bit not null default 1 comment '是否启用'")
-    private Boolean enabled;
 
     /**
      * 创建时间
@@ -106,9 +97,8 @@ public class SysMenu implements Serializable {
      * 创建用户
      */
     @CreatedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "create_user")
-    private SysUser createUser;
+    @Column(name = "create_user")
+    private Long createUser;
 
     /**
      * 修改时间
@@ -121,9 +111,8 @@ public class SysMenu implements Serializable {
      * 修改用户
      */
     @LastModifiedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "modify_user")
-    private SysUser modifyUser;
+    @Column(name = "modify_user")
+    private Long modifyUser;
 
     /**
      * 备注
@@ -135,7 +124,7 @@ public class SysMenu implements Serializable {
      * 菜单角色
      * 双向映射造成数据重复查询死循环问题
      */
-    @ManyToMany(mappedBy = "menus")
+    @ManyToMany(mappedBy = "permissions")
     @JsonIgnore
     private List<SysRole> roles = new ArrayList<>();
 }

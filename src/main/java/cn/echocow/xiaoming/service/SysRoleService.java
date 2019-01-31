@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.service;
 
-import cn.echocow.xiaoming.entity.SysRole;
+import cn.echocow.xiaoming.entity.sys.SysRole;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ public interface SysRoleService {
      * @param menuId 菜单id
      * @return 结果
      */
-    List<SysRole> findAllByMenuId(Long menuId);
+    List<SysRole> findAllByPermissionId(Long menuId);
 }

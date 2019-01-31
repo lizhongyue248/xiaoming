@@ -1,9 +1,6 @@
-package cn.echocow.xiaoming.entity;
+package cn.echocow.xiaoming.entity.app;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.ToString;
-import org.hibernate.annotations.Proxy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -13,42 +10,36 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * 角色表
+ * 班级，为了区别关键字 class, 使用复数
  *
  * @author Echo
  * @version 1.0
- * @date 2019-01-21 15:24
+ * @date 2019-01-30 15:32
  */
 @Data
 @Entity
-@Table(name = "sys_role")
-@ToString(exclude = {"users", "menus"})
+@Table(name = "classroom")
 @EntityListeners(AuditingEntityListener.class)
-public class SysRole implements Serializable {
+public class Classroom implements Serializable {
 
-    /**
-     * 主键
-     */
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * 角色名,按照SpringSecurity的规范,以ROLE_开头
+     * 班级名称
      */
-    @Column(name = "name", unique = true, nullable = false, columnDefinition = "varchar(20) not null comment '角色名,按照SpringSecurity的规范,以ROLE_开头'")
+    @Column(name = "name", columnDefinition = "varchar(255) not null comment '班级名称'")
     private String name;
 
     /**
-     * 角色名,中文
+     * 班级人数
      */
-    @Column(name = "name_zh", nullable = false, columnDefinition = "varchar(255) not null comment '角色名,中文'")
-    private String nameZh;
+    @Column(name = "number", columnDefinition = "int(10) not null comment '班级人数'")
+    private Integer number;
 
     /**
      * 排序
@@ -73,9 +64,8 @@ public class SysRole implements Serializable {
      * 创建用户
      */
     @CreatedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "create_user")
-    private SysUser createUser;
+    @Column(name = "create_user")
+    private Long createUser;
 
     /**
      * 修改时间
@@ -88,30 +78,13 @@ public class SysRole implements Serializable {
      * 修改用户
      */
     @LastModifiedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "modify_user")
-    private SysUser modifyUser;
+    @Column(name = "modify_user")
+    private Long modifyUser;
 
     /**
      * 备注
      */
     @Column(name = "remark")
     private String remark;
-
-    /**
-     * 当前角色的菜单
-     */
-    @ManyToMany
-    @JoinTable(name = "sys_menu_role", joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_id"))
-    private List<SysMenu> menus = new ArrayList<>();
-
-    /**
-     * 当前角色对应的用户
-     * 双向映射造成数据重复查询死循环问题
-     */
-    @ManyToMany(mappedBy = "roles")
-    @JsonIgnore
-    private List<SysUser> users = new ArrayList<>();
 
 }

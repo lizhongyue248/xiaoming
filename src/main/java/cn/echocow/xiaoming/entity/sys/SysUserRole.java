@@ -1,4 +1,5 @@
-package cn.echocow.xiaoming.entity;
+package cn.echocow.xiaoming.entity.sys;
+
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 菜单角色关联表
+ * 用户角色关联表
  *
  * @author Echo
  * @version 1.0
@@ -20,10 +21,9 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
-@Table(name = "sys_menu_role")
+@Table(name = "sys_user_role")
 @EntityListeners(AuditingEntityListener.class)
-public class SysMenuRole implements Serializable {
-
+public class SysUserRole implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,20 +32,14 @@ public class SysMenuRole implements Serializable {
     /**
      * 菜单id
      */
-    @Column(name = "menu_id")
-    private Long menuId;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     /**
      * 角色id
      */
-    @Column(name = "role_id")
+    @Column(name = "role_id", nullable = false)
     private Long roleId;
-
-    /**
-     * 是否启用
-     */
-    @Column(name = "enabled", nullable = false, columnDefinition = "bit not null default 1 comment '是否启用'")
-    private Boolean enabled;
 
     /**
      * 创建时间
@@ -58,9 +52,8 @@ public class SysMenuRole implements Serializable {
      * 创建用户
      */
     @CreatedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "create_user")
-    private SysUser createUser;
+    @Column(name = "create_user")
+    private Long createUser;
 
     /**
      * 修改时间
@@ -73,13 +66,13 @@ public class SysMenuRole implements Serializable {
      * 修改用户
      */
     @LastModifiedBy
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "modify_user")
-    private SysUser modifyUser;
+    @Column(name = "modify_user")
+    private Long modifyUser;
 
     /**
      * 备注
      */
     @Column(name = "remark")
     private String remark;
+
 }
