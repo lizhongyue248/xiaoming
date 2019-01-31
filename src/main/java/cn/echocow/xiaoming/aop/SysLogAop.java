@@ -1,18 +1,19 @@
 package cn.echocow.xiaoming.aop;
 
+import cn.echocow.xiaoming.Utils.LogUtil;
 import cn.echocow.xiaoming.entity.sys.SysLog;
 import cn.echocow.xiaoming.service.SysLogService;
-import eu.bitwalker.useragentutils.OperatingSystem;
-import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
+import org.apache.commons.lang3.StringUtils;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.StringTokenizer;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * 日志记录
@@ -27,6 +28,7 @@ import java.util.StringTokenizer;
 public class SysLogAop {
     private final HttpServletRequest request;
     private final SysLogService sysLogService;
+    private final static Integer MAX_LENGTH = 2048;
 
     @Autowired
     public SysLogAop(HttpServletRequest request, SysLogService sysLogService) {
@@ -42,37 +44,25 @@ public class SysLogAop {
     public void sysMainControllerLog() {
     }
 
-    @Before("sysMainControllerLog() || sysControllerLog()")
-    public void doBefore(JoinPoint joinPoint) {
-        SysLog sysLog = new SysLog();
-        sysLog.setIp(request.getRemoteAddr());
-        sysLog.setMethod(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        sysLog.setUrl(request.getRequestURL().toString());
-        StringBuilder argString = new StringBuilder();
-        Object[] args = joinPoint.getArgs();
-        for (Object arg: args) {
-            argString.append(arg.toString()).append(",");
+    @Around("sysMainControllerLog() || sysControllerLog()")
+    public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        SysLog sysLog = LogUtil.logBuilder(request);
+        sysLog.setMethod(proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName());
+        String args = Arrays.stream(proceedingJoinPoint.getArgs())
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
+        if (args.length() > MAX_LENGTH) {
+            args = StringUtils.left(args, MAX_LENGTH - 5);
         }
-        sysLog.setArgs(argString.toString());
-        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
-        OperatingSystem operatingSystem = userAgent.getOperatingSystem();
-        sysLog.setBrowser(userAgent.getBrowser().getName() + userAgent.getBrowserVersion());
-        sysLog.setOs(operatingSystem.getName());
-        sysLog.setDeviceType(operatingSystem.getDeviceType().getName());
-        sysLog.setRequestMethod(request.getMethod());
+        sysLog.setArgs(args);
         sysLog.setLevel(LogLevel.INFO.ordinal());
-        sysLogService.save(sysLog);
-        log.info(sysLog.toString());
+        Object proceed = proceedingJoinPoint.proceed();
+        String result = proceed.toString();
+        if (result.length() > MAX_LENGTH) {
+            result = StringUtils.left(result, MAX_LENGTH - 5);
+        }
+        sysLog.setResult(result);
+        log.info(sysLogService.save(sysLog).toString());
+        return proceed;
     }
-
-    @After("sysMainControllerLog() || sysControllerLog()")
-    public void doAfter() {
-        log.info("after");
-    }
-
-    @AfterReturning(pointcut = "sysMainControllerLog() || sysControllerLog()", returning = "result")
-    public void doAfterReturning(Object result) {
-        log.info("result" + result);
-    }
-
 }

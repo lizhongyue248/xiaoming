@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming;
 
-import cn.echocow.xiaoming.entity.enums.HttpMethod;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -16,6 +16,8 @@ public class PasswordTest {
     }
     @Test
     public void enumsTest() {
-        System.out.println(HttpMethod.ALL);
+        String s = "123456789";
+        String left = StringUtils.left(s, 5);
+        System.out.println(left);
     }
 }

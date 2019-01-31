@@ -9,5 +9,11 @@ import cn.echocow.xiaoming.entity.sys.SysLog;
  */
 public interface SysLogService {
 
-    void save(SysLog sysLog);
+    /**
+     * 日志保存操作
+     *
+     * @param sysLog 保存的日志
+     * @return 保存后的只
+     */
+    SysLog save(SysLog sysLog);
 }

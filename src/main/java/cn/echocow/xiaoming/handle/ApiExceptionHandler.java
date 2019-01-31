@@ -1,14 +1,15 @@
 package cn.echocow.xiaoming.handle;
 
+import cn.echocow.xiaoming.Utils.LogUtil;
 import cn.echocow.xiaoming.exception.InvalidRequestException;
 import cn.echocow.xiaoming.exception.ResourceExistException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.resource.helper.ErrorResource;
 import cn.echocow.xiaoming.resource.helper.FieldResource;
 import cn.echocow.xiaoming.resource.helper.InvalidErrorResource;
+import cn.echocow.xiaoming.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +30,18 @@ import java.util.List;
  * @version 1.0
  * @date 2019-01-05 22:59
  */
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class ApiExceptionHandler {
+
+    private final HttpServletRequest request;
+    private final SysLogService sysLogService;
+
+    @Autowired
+    public ApiExceptionHandler(HttpServletRequest request, SysLogService sysLogService) {
+        this.request = request;
+        this.sysLogService = sysLogService;
+    }
 
     /**
      * 资源未找到异常
@@ -41,7 +52,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ResourceNoFoundException.class)
     public HttpEntity<?> handleNotFoundException(ResourceNoFoundException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
-        log.error(errorResource.toString());
+        log.warn(errorResource.toString() +
+                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(errorResource, HttpStatus.NOT_FOUND);
     }
     /**
@@ -64,7 +76,8 @@ public class ApiExceptionHandler {
             );
         }
         InvalidErrorResource invalidErrorResource = new InvalidErrorResource(e.getMessage(), fieldResources);
-        log.error(invalidErrorResource.toString());
+        log.warn(invalidErrorResource.toString() +
+                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(invalidErrorResource, HttpStatus.BAD_REQUEST);
     }
 
@@ -77,6 +90,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ResourceExistException.class)
     public HttpEntity<?> handleExistException(ResourceExistException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
+        log.warn(errorResource.toString() +
+                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(errorResource, HttpStatus.CONFLICT);
     }
 
@@ -89,6 +104,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public HttpEntity handleMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
+        log.warn(errorResource.toString() +
+                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
         return  new ResponseEntity<>(errorResource, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -100,7 +117,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public HttpEntity<?> handleException(Exception e){
-        log.error(e.getMessage());
+        log.error(sysLogService.save(LogUtil.exceptionErrorBuilder(request, e)).toString());
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

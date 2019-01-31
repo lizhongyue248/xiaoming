@@ -84,7 +84,7 @@ public class SysLog {
     /**
      * 请求参数
      */
-    @Column(name = "args", columnDefinition = "varchar(1024) null comment '请求参数'")
+    @Column(name = "args", columnDefinition = "varchar(2048) null comment '请求参数'")
     private String args;
 
     /**

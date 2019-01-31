@@ -18,7 +18,7 @@ public class SysLogServiceImpl implements SysLogService {
     private SysLogRepository sysLogRepository;
 
     @Override
-    public void save(SysLog sysLog) {
-        sysLogRepository.save(sysLog);
+    public SysLog save(SysLog sysLog) {
+        return sysLogRepository.save(sysLog);
     }
 }
