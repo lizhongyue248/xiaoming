@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.repository.view;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
-import cn.echocow.xiaoming.entity.view.SysUserRoleMenu;
+import cn.echocow.xiaoming.entity.view.SysUserRolePermission;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = XiaoMingApplication.class)
 @WebAppConfiguration
-public class SysUserRoleMenuRepositoryTest {
+public class SysUserRolePermissionRepositoryTest {
     @Autowired
-    private SysUserRoleMenuRepository sysUserRoleMenuRepository;
+    private SysUserRolePermissionRepository sysUserRolePermissionRepository;
 
     @Test
     public void test() {
-        List<SysUserRoleMenu> all = sysUserRoleMenuRepository.findAll();
+        List<SysUserRolePermission> all = sysUserRolePermissionRepository.findAll();
         assertNotNull(all);
         assertTrue(all.size() > 0);
         all.forEach(System.out::println);

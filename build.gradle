@@ -39,13 +39,15 @@ dependencies {
             rootProject.ext.springBoot.security,
             rootProject.ext.springBoot.validation,
             rootProject.ext.springBoot.web,
+//            rootProject.ext.springBoot.rest,
 //            rootProject.ext.springBoot.jdbc,
-            rootProject.ext.lib.commonPools
+            rootProject.ext.lib.commonsPools,
+            rootProject.ext.lib.commonsLang,
+            rootProject.ext.lib.userAgent
     )
     implementation(
             rootProject.ext.security.oauth2,
             rootProject.ext.security.jwt
-
     )
     runtimeOnly(
             rootProject.ext.springBoot.devtools,
