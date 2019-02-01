@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * 用户权限匹配
+ *
  * @author Echo
  * @version 1.0
  * @date 2019-01-21 22:53

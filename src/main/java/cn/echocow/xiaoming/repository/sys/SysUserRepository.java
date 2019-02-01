@@ -2,6 +2,7 @@ package cn.echocow.xiaoming.repository.sys;
 
 import cn.echocow.xiaoming.entity.sys.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +25,13 @@ public interface SysUserRepository extends JpaRepository<SysUser, Long> {
      */
     Optional<SysUser> findFirstByUsernameAndEnabledTrue(@Param("username") String username);
 
+
+    /**
+     * 通过用户名查找启用的用户的 ID
+     *
+     * @param username 用户名
+     * @return 结果
+     */
+    @Query("select distinct id from SysUser where username = :username and enabled = true ")
+    Optional<Long> findFirstIdByUsernameAndEnabledTrue(@Param("username") String username);
 }

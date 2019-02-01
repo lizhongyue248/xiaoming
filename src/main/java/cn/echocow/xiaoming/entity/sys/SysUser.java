@@ -102,7 +102,7 @@ public class SysUser implements UserDetails {
      */
     @CreatedBy
     @Column(name = "create_user")
-    private Long createUser;
+    private String createUser;
 
     /**
      * 修改时间
@@ -116,7 +116,7 @@ public class SysUser implements UserDetails {
      */
     @LastModifiedBy
     @Column(name = "modify_user")
-    private Long modifyUser;
+    private String modifyUser;
 
     /**
      * 备注

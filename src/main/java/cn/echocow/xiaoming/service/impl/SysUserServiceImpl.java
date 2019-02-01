@@ -5,7 +5,7 @@ import cn.echocow.xiaoming.exception.ResourceExistException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.repository.sys.SysUserRepository;
 import cn.echocow.xiaoming.service.SysUserService;
-import org.hibernate.validator.constraints.Length;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -13,11 +13,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
+import java.beans.FeatureDescriptor;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Echo
@@ -34,6 +36,11 @@ public class SysUserServiceImpl implements SysUserService {
         return sysUserRepository.findFirstByUsernameAndEnabledTrue(username).orElseThrow(() ->
                 new UsernameNotFoundException("用户不存在")
         );
+    }
+
+    @Override
+    public Optional<Long> findFirstIdByUsernameAndEnabledTrue(String username) {
+        return sysUserRepository.findFirstIdByUsernameAndEnabledTrue(username);
     }
 
     @Override
@@ -64,28 +71,17 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public SysUser put(Long id, SysUser sysUser) {
-        sysUserRepository.findById(id).orElseThrow(() ->
-                new ResourceNoFoundException(String.format("sys_user by id %s not found!", id)));
-        sysUser.setId(id);
-        return save(sysUser);
-    }
-
-    @Override
-    public SysUser patch(Long id, SysUser sysUser) {
+    public SysUser update(Long id, SysUser sysUser) {
         SysUser exist = sysUserRepository.findById(id).orElseThrow(() ->
                 new ResourceNoFoundException(String.format("sys_user by id %s not found!", id)));
-        BeanWrapper beanWrapper = new BeanWrapperImpl(sysUser);
-        PropertyDescriptor[] propertyDescriptors = beanWrapper.getPropertyDescriptors();
-        List<String> nullPropertyNames = new ArrayList<>();
-        for (PropertyDescriptor pd : propertyDescriptors) {
-            if (beanWrapper.getPropertyValue(pd.getName()) == null) {
-                nullPropertyNames.add(pd.getName());
-            }
+        if (StringUtils.compare(sysUser.getUsername(), exist.getUsername()) != 0
+                && sysUserRepository.findFirstIdByUsernameAndEnabledTrue(sysUser.getUsername()).isPresent()) {
+            throw new ResourceExistException(String.format("sys_user by username %s already exist!", sysUser.getUsername()));
         }
-        BeanUtils.copyProperties(sysUser, exist, nullPropertyNames.toArray(new String[nullPropertyNames.size()]));
-        return save(sysUser);
+        BeanWrapper beanWrapper = new BeanWrapperImpl(sysUser);
+        BeanUtils.copyProperties(sysUser, exist, Arrays.stream(beanWrapper.getPropertyDescriptors())
+                .filter(propertyDescriptor -> beanWrapper.getPropertyValue(propertyDescriptor.getName()) == null)
+                .map(FeatureDescriptor::getName).toArray(String[]::new));
+        return sysUserRepository.save(exist);
     }
-
-
 }

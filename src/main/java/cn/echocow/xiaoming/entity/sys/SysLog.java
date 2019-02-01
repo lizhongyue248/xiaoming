@@ -111,7 +111,7 @@ public class SysLog {
      */
     @CreatedBy
     @Column(name = "create_user")
-    private Long createUser;
+    private String createUser;
 
     /**
      * 修改时间
@@ -125,7 +125,7 @@ public class SysLog {
      */
     @LastModifiedBy
     @Column(name = "modify_user")
-    private Long modifyUser;
+    private String modifyUser;
 
     /**
      * 备注

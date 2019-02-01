@@ -20,6 +20,14 @@ public interface SysUserService {
     SysUser loadUserByUsername(String username);
 
     /**
+     * 通过用户名查找启用的用户的 ID
+     *
+     * @param username 用户名
+     * @return 结果
+     */
+    Optional<Long> findFirstIdByUsernameAndEnabledTrue(String username);
+
+    /**
      * 查找所有用户
      *
      * @return 所有用户
@@ -57,16 +65,7 @@ public interface SysUserService {
      * @param sysUser 更新的用户
      * @return 更新后的用户
      */
-    SysUser put(Long id, SysUser sysUser);
-
-    /**
-     * 更新用户
-     *
-     * @param id 被更新的id
-     * @param sysUser 更新的用户
-     * @return 更新后的用户
-     */
-    SysUser patch(Long id, SysUser sysUser);
+    SysUser update(Long id, SysUser sysUser);
 
 
 }

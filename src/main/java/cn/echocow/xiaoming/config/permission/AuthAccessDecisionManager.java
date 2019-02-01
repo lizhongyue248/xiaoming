@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 /**
+ * 角色认证
+ *
  * @author Echo
  * @version 1.0
  * @date 2019-01-21 22:59

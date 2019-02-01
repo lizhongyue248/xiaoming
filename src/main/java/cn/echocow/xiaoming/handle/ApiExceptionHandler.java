@@ -56,6 +56,7 @@ public class ApiExceptionHandler {
                 sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(errorResource, HttpStatus.NOT_FOUND);
     }
+
     /**
      * 无效的请求异常
      *

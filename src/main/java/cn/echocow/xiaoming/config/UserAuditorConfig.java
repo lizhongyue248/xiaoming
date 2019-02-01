@@ -11,33 +11,29 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Optional;
 
 /**
+ * 用户自动装配
+ *
  * @author Echo
  * @version 1.0
  * @date 2019-01-31 20:57
  */
 @Configuration
-public class UserAuditorConfig implements AuditorAware<Long> {
-    private final SysUserService sysUserService;
-
-    @Autowired
-    public UserAuditorConfig(SysUserService sysUserService) {
-        this.sysUserService = sysUserService;
-    }
-
+public class UserAuditorConfig implements AuditorAware<String> {
+    /**
+     * 获取用户 username
+     *
+     * @return 用户 username
+     */
     @Override
-    public Optional<Long> getCurrentAuditor() {
+    public Optional<String> getCurrentAuditor() {
         SecurityContext context = SecurityContextHolder.getContext();
         if (context == null || context.getAuthentication() == null ||
                 context.getAuthentication().getPrincipal() == null){
             return Optional.empty();
         }
         Object principal = context.getAuthentication().getPrincipal();
-        if (principal.getClass().isAssignableFrom(Long.class)) {
-            return Optional.of((Long) principal);
-        }
-        SysUser sysUser = sysUserService.loadUserByUsername(principal.toString());
-        if (sysUser != null){
-            return Optional.of(sysUser.getId());
+        if (principal.getClass().isAssignableFrom(String.class)) {
+            return Optional.of(principal.toString());
         }
         return Optional.empty();
     }

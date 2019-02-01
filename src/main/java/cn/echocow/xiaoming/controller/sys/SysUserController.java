@@ -7,9 +7,6 @@ import cn.echocow.xiaoming.resource.sys.SysUserResource;
 import cn.echocow.xiaoming.entity.sys.SysUser;
 import cn.echocow.xiaoming.service.SysUserService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
@@ -23,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,7 +67,6 @@ public class SysUserController {
                 .orElseThrow(() -> new ResourceNoFoundException(String.format("sys_user by id %s not found!", id)));
     }
 
-
     /**
      * 添加一个用户
      * POST    /sysUsers
@@ -105,15 +99,15 @@ public class SysUserController {
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Invalid parameter", bindingResult);
         }
-        return ResponseEntity.ok(new SysUserResource(sysUserService.put(id, sysUser)));
+        return patchSysUser(id, sysUser);
     }
 
     /**
      * 更新一个用户，提供当前用户的部分信息
      * PATCH    /sysUsers/{id}
      *
-     * @param id      更新的id
-     * @param sysUser 更新后的书单
+     * @param id            更新的id
+     * @param sysUser       更新后的书单
      * @return http 响应
      */
     @PatchMapping("/{id}")
@@ -121,7 +115,7 @@ public class SysUserController {
         if (StringUtils.isNotEmpty(sysUser.getPassword())) {
             sysUser.setPassword(new BCryptPasswordEncoder().encode(sysUser.getPassword()));
         }
-        return ResponseEntity.ok(new SysUserResource(sysUserService.patch(id, sysUser)));
+        return ResponseEntity.ok(new SysUserResource(sysUserService.update(id, sysUser)));
     }
 
     /**

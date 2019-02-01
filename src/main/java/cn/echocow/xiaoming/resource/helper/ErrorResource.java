@@ -1,10 +1,10 @@
 package cn.echocow.xiaoming.resource.helper;
 
+import cn.echocow.xiaoming.resource.ApplicationResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.hateoas.ResourceSupport;
 
 /**
  * 错误资源
@@ -17,7 +17,6 @@ import org.springframework.hateoas.ResourceSupport;
 @NoArgsConstructor
 @ToString
 @Getter
-public class ErrorResource {
+public class ErrorResource extends ApplicationResource {
     private String message;
-
 }

@@ -1,5 +1,6 @@
 package cn.echocow.xiaoming.resource.helper;
 
+import cn.echocow.xiaoming.resource.ApplicationResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Getter
-public class InvalidErrorResource {
+public class InvalidErrorResource extends ApplicationResource {
+    /**
+     * 信息
+     */
     private String message;
+    /**
+     * 具体错误
+     */
     private Object errors;
 }

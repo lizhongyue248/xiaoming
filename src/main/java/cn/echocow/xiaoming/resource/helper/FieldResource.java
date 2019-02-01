@@ -1,5 +1,6 @@
 package cn.echocow.xiaoming.resource.helper;
 
+import cn.echocow.xiaoming.resource.ApplicationResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Getter
-public class FieldResource {
+public class FieldResource extends ApplicationResource {
     /**
      * 实体对象
      */

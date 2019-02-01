@@ -49,4 +49,6 @@ public class SysUserRepositoryTest {
         Optional<SysUser> admin = sysUserRepository.findFirstByUsernameAndEnabledTrue("admin");
         assertNull(admin);
     }
+
+
 }
