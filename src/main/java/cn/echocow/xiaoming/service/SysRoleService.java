@@ -1,8 +1,8 @@
 package cn.echocow.xiaoming.service;
 
 import cn.echocow.xiaoming.entity.sys.SysRole;
-
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Echo
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface SysRoleService {
     /**
-     * 通过菜单 id 关联查询查询角色
+     * 通过权限 id 关联查询查询角色
      *
      * @param menuId 菜单id
      * @return 结果

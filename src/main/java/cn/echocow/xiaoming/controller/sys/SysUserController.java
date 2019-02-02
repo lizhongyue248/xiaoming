@@ -3,13 +3,17 @@ package cn.echocow.xiaoming.controller.sys;
 import cn.echocow.xiaoming.exception.InvalidRequestException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.resource.ApplicationResource;
+import cn.echocow.xiaoming.resource.ApplicationResources;
+import cn.echocow.xiaoming.resource.annotation.PageResult;
+import cn.echocow.xiaoming.resource.helper.PageInfo;
 import cn.echocow.xiaoming.resource.sys.SysUserResource;
 import cn.echocow.xiaoming.entity.sys.SysUser;
 import cn.echocow.xiaoming.service.SysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.hateoas.Link;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -17,10 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +31,6 @@ import java.util.stream.Collectors;
  * @date 2019-01-30 22:37
  */
 @RestController
-@ExposesResourceFor(SysUser.class)
 @RequestMapping("/sysUsers")
 public class SysUserController {
     private final SysUserService sysUserService;
@@ -46,10 +47,21 @@ public class SysUserController {
      * @return http 响应
      */
     @GetMapping
-    public HttpEntity<?> sysUsers() {
-        List<SysUserResource> collect = sysUserService.findAll().stream().map(SysUserResource::new).collect(Collectors.toList());
-        Resources<SysUserResource> resources = new Resources<>(collect);
-        resources.add(new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString(), "self"));
+    @PageResult
+    public HttpEntity<?> sysUsers(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+        if (page == null || size == null || page <= 0 || size <= 0) {
+            return ResponseEntity.ok(new Resources<>(sysUserService.findAll()
+                    .stream().map(SysUserResource::new)
+                    .collect(Collectors.toList())));
+        }
+        page--;
+        Page<SysUser> sysUsers = sysUserService.findAll(PageRequest.of(page, size));
+        ApplicationResources<SysUserResource> resources = new ApplicationResources<>(sysUsers.stream()
+                .map(SysUserResource::new).collect(Collectors.toList()));
+        resources.setPage(new PageInfo(size, sysUsers.getNumber() + 1, sysUsers.getTotalElements(),
+                sysUsers.getTotalPages(), sysUsers.hasPrevious(), sysUsers.hasNext()));
         return ResponseEntity.ok(resources);
     }
 
@@ -62,9 +74,7 @@ public class SysUserController {
      */
     @GetMapping("/{id}")
     public HttpEntity<?> sysUser(@PathVariable long id) {
-        return sysUserService.findById(id)
-                .map(sysUser -> ResponseEntity.ok(new SysUserResource(sysUser)))
-                .orElseThrow(() -> new ResourceNoFoundException(String.format("sys_user by id %s not found!", id)));
+        return ResponseEntity.ok(new SysUserResource(sysUserService.findById(id)));
     }
 
     /**
@@ -106,8 +116,8 @@ public class SysUserController {
      * 更新一个用户，提供当前用户的部分信息
      * PATCH    /sysUsers/{id}
      *
-     * @param id            更新的id
-     * @param sysUser       更新后的书单
+     * @param id      更新的id
+     * @param sysUser 更新后的书单
      * @return http 响应
      */
     @PatchMapping("/{id}")

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -37,31 +38,22 @@ public class SysLogAop {
     }
 
     @Pointcut("execution(* cn.echocow.xiaoming.controller.*.*.*(..))")
-    public void sysControllerLog() {
-    }
+    public void sysControllerLog() { }
 
     @Pointcut("execution(* cn.echocow.xiaoming.controller.MainController.*(..))")
-    public void sysMainControllerLog() {
-    }
+    public void sysMainControllerLog() { }
 
     @Around("sysMainControllerLog() || sysControllerLog()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         SysLog sysLog = LogUtil.logBuilder(request);
         sysLog.setMethod(proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName());
-        String args = Arrays.stream(proceedingJoinPoint.getArgs())
+        sysLog.setArgs(StringUtils.left(Arrays.stream(proceedingJoinPoint.getArgs())
+                .filter(Objects::nonNull)
                 .map(Object::toString)
-                .collect(Collectors.joining(","));
-        if (args.length() > MAX_LENGTH) {
-            args = StringUtils.left(args, MAX_LENGTH - 5);
-        }
-        sysLog.setArgs(args);
+                .collect(Collectors.joining(",")), MAX_LENGTH - 5));
         sysLog.setLevel(LogLevel.INFO.ordinal());
         Object proceed = proceedingJoinPoint.proceed();
-        String result = proceed.toString();
-        if (result.length() > MAX_LENGTH) {
-            result = StringUtils.left(result, MAX_LENGTH - 5);
-        }
-        sysLog.setResult(result);
+        sysLog.setResult(StringUtils.left(proceed.toString(), MAX_LENGTH - 5));
         log.info(sysLogService.save(sysLog).toString());
         return proceed;
     }

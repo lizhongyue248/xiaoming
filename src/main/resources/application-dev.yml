@@ -24,11 +24,11 @@ spring:
       pool:
         max-active: 20
         max-wait: -1ms
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG
 security:
   oauth2:
     client:

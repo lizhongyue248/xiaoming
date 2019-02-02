@@ -3,9 +3,12 @@ package cn.echocow.xiaoming.Utils;
 import cn.echocow.xiaoming.entity.sys.SysLog;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.logging.LogLevel;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * 简单日志封装
@@ -15,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019-01-31 23:59
  */
 public class LogUtil {
+    private final static Integer MAX_LEN = 2048;
+    private final static Integer STANDARD_LEN = 2048;
+
     /**
      * 生成简单日志封装
      *
@@ -38,13 +44,14 @@ public class LogUtil {
      * 错误异常日志封装
      *
      * @param request 请求
-     * @param e 异常
+     * @param e       异常
      * @return 日志
      */
     public static SysLog exceptionErrorBuilder(HttpServletRequest request, Exception e) {
         SysLog sysLog = logBuilder(request);
         sysLog.setLevel(LogLevel.ERROR.ordinal());
-        sysLog.setResult(e.getMessage());
+        sysLog.setRemark(StringUtils.left(e.getMessage(), STANDARD_LEN - 5));
+        sysLog.setResult(StringUtils.left(printStackTraceToString(e), MAX_LEN - 5));
         return sysLog;
     }
 
@@ -52,7 +59,7 @@ public class LogUtil {
      * 警告日志封装
      *
      * @param request 请求
-     * @param e 异常
+     * @param e       异常
      * @return 日志
      */
     public static SysLog exceptionWarnBuilder(HttpServletRequest request, Exception e) {
@@ -60,5 +67,17 @@ public class LogUtil {
         sysLog.setLevel(LogLevel.WARN.ordinal());
         sysLog.setResult(e.getMessage());
         return sysLog;
+    }
+
+    /**
+     * 堆栈信息转化
+     *
+     * @param t 异常
+     * @return 转化字符串
+     */
+    private static String printStackTraceToString(Throwable t) {
+        StringWriter sw = new StringWriter();
+        t.printStackTrace(new PrintWriter(sw, true));
+        return sw.getBuffer().toString();
     }
 }

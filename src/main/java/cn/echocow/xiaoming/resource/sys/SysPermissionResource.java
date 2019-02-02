@@ -1,5 +1,6 @@
 package cn.echocow.xiaoming.resource.sys;
 
+import cn.echocow.xiaoming.controller.sys.SysLogController;
 import cn.echocow.xiaoming.controller.sys.SysPermissionController;
 import cn.echocow.xiaoming.controller.sys.SysUserController;
 import cn.echocow.xiaoming.entity.sys.SysUser;
@@ -24,5 +25,6 @@ public class SysPermissionResource extends ResourceSupport{
         add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SysUserController.class).sysUser(id)).withSelfRel());
         add(ControllerLinkBuilder.linkTo(SysPermissionController.class).withRel("sys_menu"));
         add(ControllerLinkBuilder.linkTo(SysUserController.class).withRel("sys_user"));
+        add(ControllerLinkBuilder.linkTo(SysLogController.class).withRel("sys_log"));
     }
 }

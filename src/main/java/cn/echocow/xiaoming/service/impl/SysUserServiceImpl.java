@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +51,14 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public Optional<SysUser> findById(Long id) {
-        return sysUserRepository.findById(id);
+    public Page<SysUser> findAll(Pageable pageable) {
+        return sysUserRepository.findAll(pageable);
+    }
+
+    @Override
+    public SysUser findById(Long id) {
+        return sysUserRepository.findById(id).orElseThrow(() ->
+                new ResourceNoFoundException(String.format("sys_user by id %s not found!", id)));
     }
 
     @Override
@@ -82,6 +90,6 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, exist, Arrays.stream(beanWrapper.getPropertyDescriptors())
                 .filter(propertyDescriptor -> beanWrapper.getPropertyValue(propertyDescriptor.getName()) == null)
                 .map(FeatureDescriptor::getName).toArray(String[]::new));
-        return sysUserRepository.save(exist);
+        return exist;
     }
 }

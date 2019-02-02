@@ -20,7 +20,7 @@ public class PasswordTest {
     @Test
     public void enumsTest() {
         String s = "123456789";
-        String left = StringUtils.left(s, 5);
+        String left = StringUtils.left(s, 111);
         System.out.println(left);
     }
 

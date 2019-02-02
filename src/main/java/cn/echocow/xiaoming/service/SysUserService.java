@@ -1,6 +1,9 @@
 package cn.echocow.xiaoming.service;
 
+import cn.echocow.xiaoming.entity.sys.SysLog;
 import cn.echocow.xiaoming.entity.sys.SysUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,12 +38,20 @@ public interface SysUserService {
     List<SysUser> findAll();
 
     /**
+     * 分页查找用户
+     *
+     * @param pageable 分页参数
+     * @return 用户
+     */
+    Page<SysUser> findAll(Pageable pageable);
+
+    /**
      * 通过用户 id 查询用户
      *
      * @param id 用户 id
      * @return 结果
      */
-    Optional<SysUser> findById(Long id);
+    SysUser findById(Long id);
 
     /**
      * 删除指定 id 的用户
