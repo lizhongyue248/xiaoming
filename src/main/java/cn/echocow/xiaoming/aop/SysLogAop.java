@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.aop;
 
 import cn.echocow.xiaoming.Utils.LogUtil;
-import cn.echocow.xiaoming.entity.sys.SysLog;
+import cn.echocow.xiaoming.entity.SysLog;
 import cn.echocow.xiaoming.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

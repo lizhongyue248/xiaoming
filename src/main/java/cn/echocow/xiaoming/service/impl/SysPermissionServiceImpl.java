@@ -1,12 +1,10 @@
 package cn.echocow.xiaoming.service.impl;
 
-import cn.echocow.xiaoming.entity.sys.SysPermission;
-import cn.echocow.xiaoming.repository.sys.SysPermissionRepository;
+import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
+import cn.echocow.xiaoming.entity.SysPermission;
+import cn.echocow.xiaoming.repository.SysPermissionRepository;
 import cn.echocow.xiaoming.service.SysPermissionService;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author Echo
@@ -14,12 +12,6 @@ import java.util.List;
  * @date 2019-01-23 22:01
  */
 @Service
-public class SysPermissionServiceImpl implements SysPermissionService {
-    @Resource
-    private SysPermissionRepository sysPermissionRepository;
+public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermission, Long, SysPermissionRepository> implements SysPermissionService {
 
-    @Override
-    public List<SysPermission> findAll() {
-        return sysPermissionRepository.findAll();
-    }
 }

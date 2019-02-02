@@ -1,8 +1,8 @@
 package cn.echocow.xiaoming.aop;
 
-import cn.echocow.xiaoming.resource.ApplicationResources;
+import cn.echocow.xiaoming.resource.RestResources;
 import cn.echocow.xiaoming.resource.annotation.PageResult;
-import cn.echocow.xiaoming.resource.helper.PageInfo;
+import cn.echocow.xiaoming.resource.PageInfo;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
 /**
+ * 对于分页的集合，进行添加分页信息
+ *
  * @author Echo
  * @version 1.0
  * @date 2019-02-02 15:55
@@ -38,10 +40,10 @@ public class RestResultAop {
             if (!res.hasBody()) {
                 return;
             }
-            if (!(res.getBody() instanceof ApplicationResources)) {
+            if (!(res.getBody() instanceof RestResources)) {
                 return;
             }
-            ApplicationResources resources = (ApplicationResources) res.getBody();
+            RestResources resources = (RestResources) res.getBody();
             if (resources == null) {
                 return;
             }

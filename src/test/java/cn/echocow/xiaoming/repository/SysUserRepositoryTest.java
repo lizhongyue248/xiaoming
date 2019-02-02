@@ -1,18 +1,14 @@
 package cn.echocow.xiaoming.repository;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
-import cn.echocow.xiaoming.entity.sys.SysUser;
-import cn.echocow.xiaoming.repository.sys.SysUserRepository;
+import cn.echocow.xiaoming.entity.SysUser;
 import cn.echocow.xiaoming.service.SysUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 

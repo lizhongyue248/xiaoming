@@ -1,9 +1,9 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
-import cn.echocow.xiaoming.entity.sys.SysUser;
+import cn.echocow.xiaoming.entity.SysUser;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
-import cn.echocow.xiaoming.repository.sys.SysUserRepository;
+import cn.echocow.xiaoming.repository.SysUserRepository;
 import cn.echocow.xiaoming.service.SysUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

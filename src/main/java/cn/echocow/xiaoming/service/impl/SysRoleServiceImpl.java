@@ -1,7 +1,8 @@
 package cn.echocow.xiaoming.service.impl;
 
-import cn.echocow.xiaoming.entity.sys.SysRole;
-import cn.echocow.xiaoming.repository.sys.SysRoleRepository;
+import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
+import cn.echocow.xiaoming.entity.SysRole;
+import cn.echocow.xiaoming.repository.SysRoleRepository;
 import cn.echocow.xiaoming.service.SysRoleService;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @date 2019-01-23 22:01
  */
 @Service
-public class SysRoleServiceImpl implements SysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, Long, SysRoleRepository> implements SysRoleService {
     @Resource
     private SysRoleRepository sysRoleRepository;
 

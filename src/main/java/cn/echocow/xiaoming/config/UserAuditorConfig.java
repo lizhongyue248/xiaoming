@@ -1,8 +1,5 @@
 package cn.echocow.xiaoming.config;
 
-import cn.echocow.xiaoming.entity.sys.SysUser;
-import cn.echocow.xiaoming.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContext;

@@ -1,27 +1,22 @@
 package cn.echocow.xiaoming.service.impl;
 
-import cn.echocow.xiaoming.entity.sys.SysUser;
+import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
+import cn.echocow.xiaoming.entity.SysUser;
 import cn.echocow.xiaoming.exception.ResourceExistException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
-import cn.echocow.xiaoming.repository.sys.SysUserRepository;
+import cn.echocow.xiaoming.repository.SysUserRepository;
 import cn.echocow.xiaoming.service.SysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.beans.FeatureDescriptor;
-import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Echo
@@ -29,7 +24,7 @@ import java.util.stream.Collectors;
  * @date 2019-01-23 20:40
  */
 @Service
-public class SysUserServiceImpl implements SysUserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRepository> implements SysUserService {
     @Resource
     private SysUserRepository sysUserRepository;
 
@@ -46,27 +41,9 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public List<SysUser> findAll() {
-        return sysUserRepository.findAll();
-    }
-
-    @Override
-    public Page<SysUser> findAll(Pageable pageable) {
-        return sysUserRepository.findAll(pageable);
-    }
-
-    @Override
     public SysUser findById(Long id) {
         return sysUserRepository.findById(id).orElseThrow(() ->
                 new ResourceNoFoundException(String.format("sys_user by id %s not found!", id)));
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        if (!sysUserRepository.existsById(id)) {
-            throw new ResourceNoFoundException(String.format("sys_user by id %s not found!", id));
-        }
-        sysUserRepository.deleteById(id);
     }
 
     @Override

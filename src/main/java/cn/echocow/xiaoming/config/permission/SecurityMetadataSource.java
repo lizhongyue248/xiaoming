@@ -1,8 +1,8 @@
 package cn.echocow.xiaoming.config.permission;
 
 import cn.echocow.xiaoming.entity.enums.HttpMethod;
-import cn.echocow.xiaoming.entity.sys.SysPermission;
-import cn.echocow.xiaoming.entity.sys.SysRole;
+import cn.echocow.xiaoming.entity.SysPermission;
+import cn.echocow.xiaoming.entity.SysRole;
 import cn.echocow.xiaoming.service.SysPermissionService;
 import cn.echocow.xiaoming.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;

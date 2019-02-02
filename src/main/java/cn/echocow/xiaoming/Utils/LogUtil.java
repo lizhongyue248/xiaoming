@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.Utils;
 
-import cn.echocow.xiaoming.entity.sys.SysLog;
+import cn.echocow.xiaoming.entity.SysLog;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.lang3.StringUtils;
