@@ -1,5 +1,8 @@
 package cn.echocow.xiaoming.controller;
 
+import cn.echocow.xiaoming.base.BaseController;
+import cn.echocow.xiaoming.entity.File;
+import cn.echocow.xiaoming.service.FileService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,5 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/files")
-public class FileController {
+public class FileController extends BaseController<File, FileService> {
+
+    @Override
+    public Class getControllerClass() {
+        return this.getClass();
+    }
+
 }

@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * 实体类基类
+ *
  * @author Echo
  * @version 1.0
  * @date 2019-02-02 22:03

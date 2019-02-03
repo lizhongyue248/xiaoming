@@ -1,5 +1,8 @@
 package cn.echocow.xiaoming.controller;
 
+import cn.echocow.xiaoming.base.BaseController;
+import cn.echocow.xiaoming.entity.Classroom;
+import cn.echocow.xiaoming.service.ClassroomService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,5 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/classrooms")
-public class ClassroomController {
+public class ClassroomController extends BaseController<Classroom, ClassroomService> {
+
+    @Override
+    public Class getControllerClass() {
+        return this.getClass();
+    }
+
 }

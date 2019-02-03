@@ -11,8 +11,6 @@ import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
-
 /**
  * 对于分页的集合，进行添加分页信息
  *
@@ -30,8 +28,7 @@ public class RestResultAop {
     @AfterReturning(value = "pageResult()", returning = "result")
     public void doAfterReturningAdvice1(JoinPoint joinPoint, Object result) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        PageResult annotation = method.getAnnotation(PageResult.class);
+        PageResult annotation = signature.getMethod().getAnnotation(PageResult.class);
         if (annotation == null) {
             return;
         }
@@ -54,7 +51,7 @@ public class RestResultAop {
             Integer size = pageInfo.getSize();
             Integer page = pageInfo.getNumber();
             // 尝试多次，只能手动封装
-            String uri = ControllerLinkBuilder.linkTo(method, page + 1, size).toString();
+            String uri = ControllerLinkBuilder.linkTo(joinPoint.getTarget().getClass()).toString();
             resources.add(new Link(uri + "?page=" + page + "&size=" + size).withSelfRel());
             if (pageInfo.hasPrevioud()) {
                 resources.add(new Link(uri + "?page=" + (page - 1) + "&size=" + size).withRel(Link.REL_PREVIOUS));

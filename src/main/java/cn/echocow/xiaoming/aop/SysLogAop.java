@@ -40,10 +40,13 @@ public class SysLogAop {
     @Pointcut("execution(* cn.echocow.xiaoming.controller.*.*(..))")
     public void sysControllerLog() { }
 
+    @Pointcut("execution(* cn.echocow.xiaoming.base.BaseController.*(..))")
+    public void sysBaseControllerLog() { }
+
     @Pointcut("execution(* cn.echocow.xiaoming.controller.*.getControllerClass(..))")
     public void sysControllerGetClassLog() { }
 
-    @Around("sysControllerLog() && !sysControllerGetClassLog()")
+    @Around("(sysControllerLog() || sysBaseControllerLog()) && !sysControllerGetClassLog()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         SysLog sysLog = LogUtil.logBuilder(request);
         sysLog.setMethod(proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName());

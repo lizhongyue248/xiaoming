@@ -1,22 +1,10 @@
 package cn.echocow.xiaoming.controller;
 
-import cn.echocow.xiaoming.resource.RestResource;
-import cn.echocow.xiaoming.exception.InvalidRequestException;
-import cn.echocow.xiaoming.resource.ApplicationResource;
-import cn.echocow.xiaoming.resource.annotation.PageResult;
+import cn.echocow.xiaoming.base.BaseController;
 import cn.echocow.xiaoming.entity.SysUser;
 import cn.echocow.xiaoming.service.SysUserService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 /**
  * @author Echo
@@ -25,103 +13,11 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/sysUsers")
-public class SysUserController {
-    private final SysUserService sysUserService;
+public class SysUserController extends BaseController<SysUser, SysUserService> {
 
-    @Autowired
-    public SysUserController(SysUserService sysUserService) {
-        this.sysUserService = sysUserService;
+    @Override
+    public Class getControllerClass() {
+        return this.getClass();
     }
 
-    /**
-     * 获取所有的用户
-     * Get    /sysUsers
-     *
-     * @return http 响应
-     */
-    @GetMapping
-    @PageResult
-    public HttpEntity<?> sysUsers(
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size) {
-        return (page == null || size == null || page <= 0 || size <= 0) ?
-                ResponseEntity.ok(sysUserService.findAllResources(this.getClass())) :
-                ResponseEntity.ok(sysUserService.findAll(PageRequest.of(--page, size), this.getClass()));
-    }
-
-    /**
-     * 获取指定 id 的用户
-     * Get    /sysUsers/{id}
-     *
-     * @param id 用户id
-     * @return http 响应
-     */
-    @GetMapping("/{id}")
-    public HttpEntity<?> sysUser(@PathVariable Long id) {
-        return ResponseEntity.ok(new RestResource<>(sysUserService.findById(id), this.getClass()));
-    }
-
-    /**
-     * 添加一个用户
-     * POST    /sysUsers
-     *
-     * @param sysUser       用户
-     * @param bindingResult 参数校验
-     * @return http 响应
-     */
-    @PostMapping
-    public HttpEntity<?> saveSysUser(@Valid @RequestBody SysUser sysUser, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new InvalidRequestException("Invalid parameter", bindingResult);
-        }
-        sysUser.setId(null);
-        sysUser.setPassword(new BCryptPasswordEncoder().encode(sysUser.getPassword()));
-        return new ResponseEntity<>(new RestResource<>(sysUserService.save(sysUser), this.getClass()), HttpStatus.CREATED);
-    }
-
-    /**
-     * 更新一个用户，提供当前用户的所有信息
-     * PUT    /sysUsers/{id}
-     *
-     * @param id            更新的id
-     * @param sysUser       更新后的书单
-     * @param bindingResult 参数校验
-     * @return http 响应
-     */
-    @PutMapping("/{id}")
-    public HttpEntity<?> putSysUser(@PathVariable Long id, @Valid @RequestBody SysUser sysUser, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new InvalidRequestException("Invalid parameter", bindingResult);
-        }
-        return patchSysUser(id, sysUser);
-    }
-
-    /**
-     * 更新一个用户，提供当前用户的部分信息
-     * PATCH    /sysUsers/{id}
-     *
-     * @param id      更新的id
-     * @param sysUser 更新后的书单
-     * @return http 响应
-     */
-    @PatchMapping("/{id}")
-    public HttpEntity<?> patchSysUser(@PathVariable Long id, @RequestBody SysUser sysUser) {
-        if (StringUtils.isNotEmpty(sysUser.getPassword())) {
-            sysUser.setPassword(new BCryptPasswordEncoder().encode(sysUser.getPassword()));
-        }
-        return ResponseEntity.ok(new RestResource<>(sysUserService.save(sysUser), this.getClass()));
-    }
-
-    /**
-     * 删除指定 id 的用户
-     * DELETE   /sysUsers/{id}
-     *
-     * @param id 用户id
-     * @return http 响应
-     */
-    @DeleteMapping("/{id}")
-    public HttpEntity<?> deleteSysUser(@PathVariable long id) {
-        sysUserService.deleteById(id);
-        return new ResponseEntity<>(new ApplicationResource(), HttpStatus.NO_CONTENT);
-    }
 }

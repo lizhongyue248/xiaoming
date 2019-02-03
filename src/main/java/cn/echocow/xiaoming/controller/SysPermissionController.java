@@ -1,5 +1,8 @@
 package cn.echocow.xiaoming.controller;
 
+import cn.echocow.xiaoming.base.BaseController;
+import cn.echocow.xiaoming.entity.SysPermission;
+import cn.echocow.xiaoming.service.SysPermissionService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/sysMenus")
-public class SysPermissionController {
+public class SysPermissionController extends BaseController<SysPermission, SysPermissionService> {
+
+    @Override
+    public Class getControllerClass() {
+        return this.getClass();
+    }
 
 }

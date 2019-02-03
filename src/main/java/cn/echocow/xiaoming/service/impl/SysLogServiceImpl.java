@@ -12,6 +12,6 @@ import org.springframework.stereotype.Service;
  * @date 2019-01-31 13:55
  */
 @Service
-public class SysLogServiceImpl  extends BaseServiceImpl<SysLog, Long, SysLogRepository> implements SysLogService {
+public class SysLogServiceImpl extends BaseServiceImpl<SysLog, Long, SysLogRepository> implements SysLogService {
 
 }

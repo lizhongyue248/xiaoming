@@ -1,5 +1,8 @@
 package cn.echocow.xiaoming.controller;
 
+import cn.echocow.xiaoming.base.BaseController;
+import cn.echocow.xiaoming.entity.SysRole;
+import cn.echocow.xiaoming.service.SysRoleService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/sysRoles")
-public class SysRoleController {
+public class SysRoleController extends BaseController<SysRole, SysRoleService> {
+
+    @Override
+    public Class getControllerClass() {
+        return this.getClass();
+    }
 
 }
