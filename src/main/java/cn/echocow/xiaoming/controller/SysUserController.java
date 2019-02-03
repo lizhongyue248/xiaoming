@@ -1,18 +1,14 @@
-package cn.echocow.xiaoming.controller.sys;
+package cn.echocow.xiaoming.controller;
 
 import cn.echocow.xiaoming.resource.RestResource;
 import cn.echocow.xiaoming.exception.InvalidRequestException;
 import cn.echocow.xiaoming.resource.ApplicationResource;
-import cn.echocow.xiaoming.resource.RestResources;
 import cn.echocow.xiaoming.resource.annotation.PageResult;
-import cn.echocow.xiaoming.resource.PageInfo;
 import cn.echocow.xiaoming.entity.SysUser;
 import cn.echocow.xiaoming.service.SysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.stream.Collectors;
 
 /**
  * @author Echo
@@ -49,19 +44,9 @@ public class SysUserController {
     public HttpEntity<?> sysUsers(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
-        if (page == null || size == null || page <= 0 || size <= 0) {
-            return ResponseEntity.ok(new Resources<>(sysUserService.findAll()
-                    .stream().map(sysUser -> new RestResource<>(sysUser, this.getClass()))
-                    .collect(Collectors.toList())));
-        }
-        page--;
-        Page<SysUser> sysUsers = sysUserService.findAll(PageRequest.of(page, size));
-        RestResources<RestResource> resources = new RestResources<>(sysUsers.stream()
-                .map(sysUser -> new RestResource<>(sysUser, this.getClass()))
-                .collect(Collectors.toList()));
-        resources.setPage(new PageInfo(size, sysUsers.getNumber() + 1, sysUsers.getTotalElements(),
-                sysUsers.getTotalPages(), sysUsers.hasPrevious(), sysUsers.hasNext()));
-        return ResponseEntity.ok(resources);
+        return (page == null || size == null || page <= 0 || size <= 0) ?
+                ResponseEntity.ok(sysUserService.findAllResources(this.getClass())) :
+                ResponseEntity.ok(sysUserService.findAll(PageRequest.of(--page, size), this.getClass()));
     }
 
     /**

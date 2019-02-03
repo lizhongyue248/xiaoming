@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.controller.app;
+package cn.echocow.xiaoming.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019-02-02 22:43
  */
 @RestController
-@RequestMapping("/tasks")
-public class TaskController {
+@RequestMapping("/homeworks")
+public class HomeworkController {
 }

@@ -1,7 +1,8 @@
 package cn.echocow.xiaoming.base;
 
-import org.springframework.data.domain.Page;
+import cn.echocow.xiaoming.resource.RestResources;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Resources;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,12 +12,12 @@ import java.util.List;
  * @version 1.0
  * @date 2019-02-02 20:25
  */
-public interface BaseService<T, ID extends Serializable, R extends BaseRepository<T, ID>> {
+public interface BaseService<T extends BaseEntity, ID extends Serializable, R extends BaseRepository<T, ID>> {
 
     /**
      * 通过 id 更新实体
      *
-     * @param id id
+     * @param id     id
      * @param entity 实体
      * @return 更新后的实体
      */
@@ -56,16 +57,26 @@ public interface BaseService<T, ID extends Serializable, R extends BaseRepositor
     /**
      * 查询所有
      *
-     * @return 结果
+     * @param clazz 控制器
+     * @return 封装好的资源结果集
+     */
+    Resources<?> findAllResources(Class clazz);
+
+    /**
+     * 查询所有
+     *
+     * @return 集合
      */
     List<T> findAll();
+
 
     /**
      * 分页查询
      *
      * @param pageable 分页
+     * @param clazz    控制器
      * @return 结果
      */
-    Page<T> findAll(Pageable pageable);
+    RestResources<?> findAll(Pageable pageable, Class clazz);
 
 }

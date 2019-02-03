@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019-01-30 22:36
  */
 @RestController
-public class MainController {
+public class AppController {
 
-    @RequestMapping(value = {"/"}, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = {"/", "profile"}, produces = "application/json;charset=UTF-8")
     public HttpEntity<?> profile() {
         return ResponseEntity.ok(new Resource<>(new ApplicationResource()));
     }

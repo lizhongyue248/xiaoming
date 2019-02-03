@@ -1,8 +1,8 @@
 package cn.echocow.xiaoming.resource;
 
-import cn.echocow.xiaoming.controller.sys.SysPermissionController;
-import cn.echocow.xiaoming.controller.sys.SysRoleController;
-import cn.echocow.xiaoming.controller.sys.SysUserController;
+import cn.echocow.xiaoming.controller.SysPermissionController;
+import cn.echocow.xiaoming.controller.SysRoleController;
+import cn.echocow.xiaoming.controller.SysUserController;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.hateoas.Resources;

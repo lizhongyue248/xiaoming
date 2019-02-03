@@ -1,20 +1,13 @@
-package cn.echocow.xiaoming.controller.sys;
+package cn.echocow.xiaoming.controller;
 
 import cn.echocow.xiaoming.resource.RestResource;
-import cn.echocow.xiaoming.entity.SysLog;
-import cn.echocow.xiaoming.resource.RestResources;
 import cn.echocow.xiaoming.resource.annotation.PageResult;
-import cn.echocow.xiaoming.resource.PageInfo;
 import cn.echocow.xiaoming.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 /**
  * @author Echo
@@ -43,19 +36,9 @@ public class SysLogController {
     public HttpEntity<?> sysLogs(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
-        if (page == null || size == null || page <= 0 || size <= 0) {
-            return ResponseEntity.ok(new Resources<>(sysLogService.findAll()
-                    .stream().map(sysLog -> new RestResource<>(sysLog, this.getClass()))
-                    .collect(Collectors.toList())));
-        }
-        page--;
-        Page<SysLog> sysLogs = sysLogService.findAll(PageRequest.of(page, size));
-        RestResources<RestResource> resources = new RestResources<>(sysLogs.stream()
-                .map(sysLog -> new RestResource<>(sysLog, this.getClass()))
-                .collect(Collectors.toList()));
-        resources.setPage(new PageInfo(size, sysLogs.getNumber() + 1, sysLogs.getTotalElements(),
-                sysLogs.getTotalPages(), sysLogs.hasPrevious(), sysLogs.hasNext()));
-        return ResponseEntity.ok(resources);
+        return (page == null || size == null || page <= 0 || size <= 0) ?
+                ResponseEntity.ok(sysLogService.findAllResources(this.getClass())) :
+                ResponseEntity.ok(sysLogService.findAll(PageRequest.of(--page, size), this.getClass()));
     }
 
 

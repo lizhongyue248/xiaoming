@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.controller.sys;
+package cn.echocow.xiaoming.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Echo
  * @version 1.0
- * @date 2019-01-30 22:37
+ * @date 2019-02-02 22:43
  */
 @RestController
-@RequestMapping("/sysMenus")
-public class SysPermissionController {
-
+@RequestMapping("/files")
+public class FileController {
 }

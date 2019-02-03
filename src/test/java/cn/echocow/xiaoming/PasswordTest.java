@@ -39,4 +39,10 @@ public class PasswordTest {
     public void timeTest() {
         System.out.println(Duration.ofDays(1).getSeconds());
     }
+
+    @Test
+    public void simpleTest() {
+        int page = 5;
+        System.out.println(--page);
+    }
 }

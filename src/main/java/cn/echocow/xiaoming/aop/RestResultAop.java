@@ -53,6 +53,7 @@ public class RestResultAop {
             }
             Integer size = pageInfo.getSize();
             Integer page = pageInfo.getNumber();
+            // 尝试多次，只能手动封装
             String uri = ControllerLinkBuilder.linkTo(method, page + 1, size).toString();
             resources.add(new Link(uri + "?page=" + page + "&size=" + size).withSelfRel());
             if (pageInfo.hasPrevioud()) {
