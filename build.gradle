@@ -43,7 +43,8 @@ dependencies {
 //            rootProject.ext.springBoot.jdbc,
             rootProject.ext.lib.commonsPools,
             rootProject.ext.lib.commonsLang,
-            rootProject.ext.lib.userAgent
+            rootProject.ext.lib.userAgent,
+            rootProject.ext.lib.fastjson
     )
     implementation(
             rootProject.ext.security.oauth2,

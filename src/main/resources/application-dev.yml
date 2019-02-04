@@ -1,8 +1,6 @@
 server:
   port: 8080
 spring:
-  application:
-    name: xiaoMing
   datasource:
     url: jdbc:mysql://localhost:3306/gakDev?serverTimezone=GMT%2B8
     username: root

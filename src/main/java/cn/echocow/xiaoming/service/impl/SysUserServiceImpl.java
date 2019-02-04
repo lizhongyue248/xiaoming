@@ -2,7 +2,6 @@ package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.Utils.CustomBeanUtils;
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
-import cn.echocow.xiaoming.entity.SysRole;
 import cn.echocow.xiaoming.entity.SysUser;
 import cn.echocow.xiaoming.exception.ResourceExistException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
@@ -10,9 +9,14 @@ import cn.echocow.xiaoming.repository.SysUserRepository;
 import cn.echocow.xiaoming.service.SysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -24,6 +28,7 @@ import java.util.Optional;
  * @date 2019-01-23 20:40
  */
 @Service
+@CacheConfig(cacheNames = {"sysUser"}, keyGenerator = "cacheKeyGenerator")
 public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRepository> implements SysUserService {
     @Resource
     private SysUserRepository sysUserRepository;
@@ -35,18 +40,14 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRe
         );
     }
 
+    @Cacheable
     @Override
     public Optional<Long> findFirstIdByUsernameAndEnabledTrue(String username) {
         return sysUserRepository.findFirstIdByUsernameAndEnabledTrue(username);
     }
 
     @Override
-    public SysUser findById(Long id) {
-        return sysUserRepository.findById(id).orElseThrow(() ->
-                new ResourceNoFoundException(String.format("sys_user by id %s not found!", id)));
-    }
-
-    @Override
+    @CacheEvict
     public SysUser save(SysUser sysUser) {
         String username = sysUser.getUsername();
         sysUser.setPassword(new BCryptPasswordEncoder().encode(sysUser.getPassword()));
@@ -57,6 +58,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRe
     }
 
     @Override
+    @CachePut
     public SysUser update(Long id, SysUser sysUser) {
         if (StringUtils.isNotEmpty(sysUser.getPassword())) {
             sysUser.setPassword(new BCryptPasswordEncoder().encode(sysUser.getPassword()));
@@ -72,4 +74,5 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRe
         BeanUtils.copyProperties(sysUser, exist, CustomBeanUtils.getNullPropertyNames(sysUser));
         return exist;
     }
+
 }

@@ -4,6 +4,7 @@ import cn.echocow.xiaoming.controller.SysPermissionController;
 import cn.echocow.xiaoming.controller.SysRoleController;
 import cn.echocow.xiaoming.controller.SysUserController;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -18,8 +19,9 @@ import java.util.List;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class RestResources<T> extends Resources<T> {
-    private PageInfo page;
+    private PageSimple page;
     private List<T> collect;
 
     public RestResources(List<T> collect) {

@@ -2,7 +2,11 @@ package cn.echocow.xiaoming.controller;
 
 import cn.echocow.xiaoming.base.BaseController;
 import cn.echocow.xiaoming.entity.SysUser;
+import cn.echocow.xiaoming.resource.RestResource;
 import cn.echocow.xiaoming.service.SysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,9 +19,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/sysUsers")
 public class SysUserController extends BaseController<SysUser, SysUserService> {
 
+    private final SysUserService sysUserService;
+
+    @Autowired
+    public SysUserController(SysUserService sysUserService) {
+        this.sysUserService = sysUserService;
+    }
+
     @Override
     public Class getControllerClass() {
         return this.getClass();
+    }
+
+    @GetMapping("/{id}")
+    @Override
+    public HttpEntity<?> getResource(Long id) {
+        RestResource<SysUser> resource = new RestResource<>(sysUserService.findById(id), getControllerClass());
+        resource.setOthers(resource.getEntity().getRoles());
+        return ResponseEntity.ok(resource);
     }
 
 }

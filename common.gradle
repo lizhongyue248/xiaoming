@@ -7,7 +7,9 @@ ext {
             'lombok'      : 'org.projectlombok:lombok',
             'userAgent'   : 'eu.bitwalker:UserAgentUtils:1.21',
             'commonsPools': 'org.apache.commons:commons-pool2:',
-            'commonsLang' : 'org.apache.commons:commons-lang3:'
+            'commonsLang' : 'org.apache.commons:commons-lang3:',
+            'fastjson'    : 'com.alibaba:fastjson:1.2.56'
+
 
     ]
 

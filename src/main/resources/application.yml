@@ -1,6 +1,8 @@
 spring:
   profiles:
     active: dev
+  application:
+    name: xiaoMing
 server:
   servlet:
     application-display-name: xiaoMing

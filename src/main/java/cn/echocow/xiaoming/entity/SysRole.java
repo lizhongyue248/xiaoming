@@ -41,6 +41,7 @@ public class SysRole extends BaseEntity {
     /**
      * 当前角色的菜单
      */
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "sys_permission_role", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))

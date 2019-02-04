@@ -1,6 +1,8 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
+import cn.echocow.xiaoming.entity.SysPermission;
+import cn.echocow.xiaoming.entity.SysRole;
 import cn.echocow.xiaoming.entity.SysUser;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.repository.SysUserRepository;
@@ -12,7 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.List;
 import java.util.Optional;
+import static org.junit.Assert.*;
+
 
 /**
  * @author Echo
@@ -30,15 +35,14 @@ public class SysUserServiceImplTest {
     private SysUserService sysUserService;
 
     @Test
-    public void putTest() {
-//        SysUser sysUser = sysUserRepository.findById(2L).orElseThrow(() ->
-//                new ResourceNoFoundException(String.format("sys_user by id %s not found!", 2)));
-//        sysUser.setUsername("admin2");
-//        sysUserRepository.save(sysUser);
-        Optional<Long> admin = sysUserRepository.findFirstIdByUsernameAndEnabledTrue("admin");
-        assert admin.isPresent();
-        Long aLong = admin.get();
-        System.out.println(aLong);
+    public void findAllTest() {
+        List<SysUser> all = sysUserRepository.findAll();
+        assertNotNull(all);
+        List<SysRole> roles = all.get(0).getRoles();
+        for (SysRole role : roles) {
+            List<SysPermission> permissions = role.getPermissions();
+            permissions.forEach(System.out::println);
+        }
     }
 
     @Test

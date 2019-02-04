@@ -2,7 +2,7 @@ package cn.echocow.xiaoming.base;
 
 import cn.echocow.xiaoming.exception.InvalidRequestException;
 import cn.echocow.xiaoming.resource.ApplicationResource;
-import cn.echocow.xiaoming.resource.PageInfo;
+import cn.echocow.xiaoming.resource.PageSimple;
 import cn.echocow.xiaoming.resource.RestResource;
 import cn.echocow.xiaoming.resource.RestResources;
 import cn.echocow.xiaoming.resource.annotation.PageResult;
@@ -131,7 +131,7 @@ public abstract class BaseController<T extends BaseEntity, S extends BaseService
         RestResources<RestResource> resources = new RestResources<>(result.stream()
                 .map(entity -> new RestResource<>(entity, getControllerClass()))
                 .collect(Collectors.toList()));
-        resources.setPage(new PageInfo(result.getSize(), result.getNumber() + 1, result.getTotalElements(),
+        resources.setPage(new PageSimple(result.getSize(), result.getNumber() + 1, result.getTotalElements(),
                 result.getTotalPages(), result.hasPrevious(), result.hasNext()));
         return ResponseEntity.ok(resources);
     }

@@ -116,9 +116,9 @@ public class ApiExceptionHandler {
      * @param e 其它异常
      * @return http 响应
      */
-    @ExceptionHandler(Exception.class)
-    public HttpEntity<?> handleException(Exception e){
-        log.error(sysLogService.save(LogUtil.exceptionErrorBuilder(request, e)).toString());
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public HttpEntity<?> handleException(Exception e){
+//        log.error(sysLogService.save(LogUtil.exceptionErrorBuilder(request, e)).toString());
+//        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }

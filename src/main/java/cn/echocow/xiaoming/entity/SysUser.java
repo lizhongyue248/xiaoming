@@ -83,6 +83,7 @@ public class SysUser extends BaseEntity implements UserDetails {
     /**
      * 当前用户的权限
      */
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "sys_user_role",
             joinColumns = {@JoinColumn(name = "user_id", nullable = false)},

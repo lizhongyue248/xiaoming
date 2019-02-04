@@ -18,8 +18,8 @@ import java.io.StringWriter;
  * @date 2019-01-31 23:59
  */
 public class LogUtil {
-    private final static Integer MAX_LEN = 2048;
-    private final static Integer STANDARD_LEN = 2048;
+    private final static Integer MAX_LEN = 250;
+    private final static Integer STANDARD_LEN = 2040;
 
     /**
      * 生成简单日志封装
@@ -50,8 +50,8 @@ public class LogUtil {
     public static SysLog exceptionErrorBuilder(HttpServletRequest request, Exception e) {
         SysLog sysLog = logBuilder(request);
         sysLog.setLevel(LogLevel.ERROR.ordinal());
-        sysLog.setRemark(StringUtils.left(e.getMessage(), STANDARD_LEN - 5));
-        sysLog.setResult(StringUtils.left(printStackTraceToString(e), MAX_LEN - 5));
+        sysLog.setRemark(StringUtils.left(e.getMessage(), MAX_LEN));
+        sysLog.setResult(StringUtils.left(printStackTraceToString(e), STANDARD_LEN));
         return sysLog;
     }
 

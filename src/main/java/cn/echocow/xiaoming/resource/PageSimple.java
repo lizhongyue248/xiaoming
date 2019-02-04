@@ -10,7 +10,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageInfo {
+public class PageSimple {
 
     /**
      * 分页大小

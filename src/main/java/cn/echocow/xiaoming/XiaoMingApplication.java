@@ -12,7 +12,6 @@ import org.springframework.hateoas.config.EnableEntityLinks;
  * @date 2019-01-23 00:02
  */
 @SpringBootApplication
-@EnableCaching
 @EnableJpaAuditing
 public class XiaoMingApplication {
     public static void main(String[] args) {

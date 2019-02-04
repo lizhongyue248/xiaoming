@@ -41,9 +41,9 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        String requestUrl = ((FilterInvocation) object).getRequestUrl();
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
         String method = httpRequest.getMethod();
+        String requestUrl = httpRequest.getServletPath();
         List<SysPermission> permissions = sysPermissionService.findAll();
         for (SysPermission permission : permissions) {
             // 路径匹配

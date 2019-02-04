@@ -2,7 +2,7 @@ package cn.echocow.xiaoming.aop;
 
 import cn.echocow.xiaoming.resource.RestResources;
 import cn.echocow.xiaoming.resource.annotation.PageResult;
-import cn.echocow.xiaoming.resource.PageInfo;
+import cn.echocow.xiaoming.resource.PageSimple;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -44,7 +44,7 @@ public class RestResultAop {
             if (resources == null) {
                 return;
             }
-            PageInfo pageInfo = resources.getPage();
+            PageSimple pageInfo = resources.getPage();
             if (pageInfo == null) {
                 return;
             }

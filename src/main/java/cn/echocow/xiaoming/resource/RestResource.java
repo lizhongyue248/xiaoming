@@ -2,8 +2,7 @@ package cn.echocow.xiaoming.resource;
 
 import cn.echocow.xiaoming.base.BaseEntity;
 import cn.echocow.xiaoming.controller.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -15,11 +14,13 @@ import org.springframework.hateoas.mvc.ControllerLinkBuilder;
  * @version 1.0
  * @date 2019-02-02 22:32
  */
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class RestResource<T extends BaseEntity> extends ResourceSupport {
     private T entity;
     private final static String SYS = "Sys";
+    private Object others;
 
     public RestResource(T entity, Class<?> clazz) {
         this.entity = entity;
@@ -39,5 +40,4 @@ public class RestResource<T extends BaseEntity> extends ResourceSupport {
             add(ControllerLinkBuilder.linkTo(TaskController.class).withRel("task"));
         }
     }
-
 }

@@ -4,6 +4,7 @@ import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
 import cn.echocow.xiaoming.entity.File;
 import cn.echocow.xiaoming.repository.FileRepository;
 import cn.echocow.xiaoming.service.FileService;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,5 +13,6 @@ import org.springframework.stereotype.Service;
  * @date 2019-02-02 20:33
  */
 @Service
+@CacheConfig(cacheNames = {"file"}, keyGenerator = "cacheKeyGenerator")
 public class FileServiceImpl extends BaseServiceImpl<File, Long, FileRepository> implements FileService {
 }

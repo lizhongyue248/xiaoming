@@ -1,5 +1,9 @@
 package cn.echocow.xiaoming.base;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -42,6 +46,8 @@ public abstract class BaseEntity implements Serializable {
     /**
      * 创建时间
      */
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @CreatedDate
     @Column(name = "create_time", nullable = false, columnDefinition = "datetime not null default now() comment '创建时间'")
     private LocalDateTime createTime;
@@ -56,6 +62,8 @@ public abstract class BaseEntity implements Serializable {
     /**
      * 修改时间
      */
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @LastModifiedDate
     @Column(name = "modify_time", nullable = false, columnDefinition = "datetime not null default now() comment '修改时间'")
     private LocalDateTime modifyTime;
