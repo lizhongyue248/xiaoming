@@ -4,6 +4,7 @@ import cn.echocow.xiaoming.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 
 /**
@@ -38,5 +39,10 @@ public class Homework extends BaseEntity {
     @Column(name = "type", columnDefinition = "varchar(100) null comment '文件类型，用 | 进行分割'")
     private String type;
 
+    /**
+     * 文件大小，不写默认 10MB
+     */
+    @Column(name = "size", columnDefinition = "varchar(256) null comment '文件大小，不写默认 10MB'")
+    private String size = "10MB";
 
 }

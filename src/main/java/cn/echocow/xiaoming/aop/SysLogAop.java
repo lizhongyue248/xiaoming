@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -56,6 +57,10 @@ public class SysLogAop {
                 .collect(Collectors.joining(",")), MAX_LENGTH - 5));
         sysLog.setLevel(LogLevel.INFO.ordinal());
         Object proceed = proceedingJoinPoint.proceed();
+        if (proceed == null) {
+            log.info(sysLogService.save(sysLog).toString());
+            return null;
+        }
         sysLog.setResult(StringUtils.left(proceed.toString(), MAX_LENGTH - 5));
         log.info(sysLogService.save(sysLog).toString());
         return proceed;

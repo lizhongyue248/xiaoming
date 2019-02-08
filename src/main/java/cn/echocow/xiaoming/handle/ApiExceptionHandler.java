@@ -1,14 +1,14 @@
 package cn.echocow.xiaoming.handle;
 
 import cn.echocow.xiaoming.utils.LogUtil;
-import cn.echocow.xiaoming.exception.InvalidRequestException;
+import cn.echocow.xiaoming.exception.FileSizeException;
 import cn.echocow.xiaoming.exception.ResourceExistException;
+import cn.echocow.xiaoming.exception.InvalidRequestException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.resource.ErrorResource;
 import cn.echocow.xiaoming.resource.FieldResource;
 import cn.echocow.xiaoming.resource.InvalidErrorResource;
 import cn.echocow.xiaoming.service.SysLogService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -19,9 +19,10 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 对异常进行拦截然后封装到响应体
@@ -97,6 +98,20 @@ public class ApiExceptionHandler {
     }
 
     /**
+     * 文件大小不合法
+     *
+     * @param e 异常
+     * @return http 响应
+     */
+    @ExceptionHandler(FileSizeException.class)
+    public HttpEntity<?> handleFileSizeException(FileSizeException e) {
+        ErrorResource errorResource = new ErrorResource(e.getMessage());
+        log.warn(errorResource.toString() +
+                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
+        return new ResponseEntity<>(errorResource, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * 请求方法不支持异常
      *
      * @param e 异常
@@ -107,7 +122,7 @@ public class ApiExceptionHandler {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
                 sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
-        return  new ResponseEntity<>(errorResource, HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(errorResource, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     /**
@@ -116,9 +131,9 @@ public class ApiExceptionHandler {
      * @param e 其它异常
      * @return http 响应
      */
-//    @ExceptionHandler(Exception.class)
-//    public HttpEntity<?> handleException(Exception e){
-//        log.error(sysLogService.save(LogUtil.exceptionErrorBuilder(request, e)).toString());
-//        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler(Exception.class)
+    public HttpEntity<?> handleException(Exception e){
+        log.error(sysLogService.save(LogUtil.exceptionErrorBuilder(request, e)).toString());
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

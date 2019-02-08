@@ -3,6 +3,7 @@ spring:
     active: dev
   application:
     name: xiaoMing
+    upload-path: /home/echo/Data/work/xiaoming/upload
 server:
   servlet:
     application-display-name: xiaoMing

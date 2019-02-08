@@ -34,6 +34,12 @@ public class File extends BaseEntity {
     private String oldName;
 
     /**
+     * 文件大小
+     */
+    @Column(name = "size", columnDefinition = "varchar(255) not null comment '文件大小'")
+    private String size;
+
+    /**
      * 文件类型
      */
     @Column(name = "type", columnDefinition = "varchar(100) not null comment '文件类型'")
