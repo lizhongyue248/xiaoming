@@ -3,7 +3,6 @@ package cn.echocow.xiaoming.entity;
 import cn.echocow.xiaoming.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
@@ -18,7 +17,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "file")
 @EqualsAndHashCode(callSuper = true)
-@EntityListeners(AuditingEntityListener.class)
 public class File extends BaseEntity {
 
     /**

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import java.util.List;
 @Table(name = "sys_role")
 @EqualsAndHashCode(callSuper = true)
 @ToString(exclude = {"users", "permissions"})
-@EntityListeners(AuditingEntityListener.class)
 public class SysRole extends BaseEntity {
 
     /**

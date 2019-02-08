@@ -4,10 +4,19 @@ import ch.qos.logback.core.util.FileSize;
 import cn.echocow.xiaoming.entity.File;
 import cn.echocow.xiaoming.entity.Homework;
 import cn.echocow.xiaoming.entity.Task;
+import cn.echocow.xiaoming.entity.enums.Qiniu;
+import cn.echocow.xiaoming.entity.enums.UploadMethod;
 import cn.echocow.xiaoming.exception.FileSizeException;
 import cn.echocow.xiaoming.resource.RestResource;
 import cn.echocow.xiaoming.service.FileService;
 import cn.echocow.xiaoming.service.TaskService;
+import com.google.gson.Gson;
+import com.qiniu.common.Zone;
+import com.qiniu.http.Response;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.DefaultPutRet;
+import com.qiniu.util.Auth;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,8 +41,18 @@ import java.util.Objects;
 @RequestMapping("/files")
 public class FileController {
 
-    @Value("${spring.application.upload-path}")
+    @Value("${spring.application.file.upload-path}")
     private String folder;
+    @Value("${spring.application.file.upload-type}")
+    private String uploadType;
+    @Value("${spring.application.qiniu.access-key}")
+    private String accessKey;
+    @Value("${spring.application.qiniu.secret-key}")
+    private String secretKey;
+    @Value("${spring.application.qiniu.domain}")
+    private String bucketName;
+    @Value("${spring.application.qiniu.area}")
+    private String area;
     private final FileService fileService;
     private final TaskService taskService;
 
@@ -56,6 +75,7 @@ public class FileController {
      */
     @PostMapping
     public HttpEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("task") Long taskId) throws IOException {
+        // 本地存储
         String fileType = "";
 
         // 获取后缀
@@ -84,6 +104,14 @@ public class FileController {
         newFile.setType(fileType);
         newFile.setTask(task);
 
+        // 如果是七牛云存储
+        if (UploadMethod.QINIU.match(uploadType)) {
+            DefaultPutRet defaultPutRet = uploadQiniu(file, localFile);
+            File save = fileService.save(newFile);
+            save.setRemark(defaultPutRet.hash);
+            return new ResponseEntity<>(new RestResource<>(save, getControllerClass()), HttpStatus.CREATED);
+        }
+
         // 保存文件
         file.transferTo(localFile);
         return new ResponseEntity<>(new RestResource<>(fileService.save(newFile), getControllerClass()), HttpStatus.CREATED);
@@ -110,5 +138,35 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 七牛云的文件上传
+     *
+     * @param file      上传的文件
+     * @param localFile 本地文件的数据
+     * @return 响应数据
+     * @throws IOException io 异常
+     */
+    private DefaultPutRet uploadQiniu(MultipartFile file, java.io.File localFile) throws IOException {
+        Configuration config;
+        if (Qiniu.EAST.match(area)) {
+            config = new Configuration(Zone.zone0());
+        } else if (Qiniu.NORTH.match(area)) {
+            config = new Configuration(Zone.zone1());
+        } else if (Qiniu.SOUTH.match(area)) {
+            config = new Configuration(Zone.zone2());
+        } else if (Qiniu.AMERICA.match(area)) {
+            config = new Configuration(Zone.zoneNa0());
+        } else if (Qiniu.Asia.match(area)) {
+            config = new Configuration(Zone.zoneAs0());
+        } else {
+            config = new Configuration(Zone.autoZone());
+        }
+        UploadManager uploadManager = new UploadManager(config);
+        Auth auth = Auth.create(accessKey, secretKey);
+        String token = auth.uploadToken(bucketName);
+        Response response = uploadManager.put(file.getBytes(), localFile.getName(), token);
+        return new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
     }
 }

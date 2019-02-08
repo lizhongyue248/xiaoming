@@ -1,11 +1,13 @@
 package cn.echocow.xiaoming.entity.enums;
 
 /**
+ * http 方法
+ *
  * @author Echo
  * @version 1.0
  * @date 2019-01-31 23:16
  */
-public enum  HttpMethod {
+public enum HttpMethod {
     /**
      * GET 方法
      */
@@ -31,6 +33,12 @@ public enum  HttpMethod {
      */
     ALL;
 
+    /**
+     * 方法匹配
+     *
+     * @param name 匹配的方法
+     * @return 结果
+     */
     public boolean match(String name) {
         return name().equals(name);
     }

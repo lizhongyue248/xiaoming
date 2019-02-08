@@ -3,15 +3,8 @@ package cn.echocow.xiaoming.entity;
 import cn.echocow.xiaoming.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 菜单角色关联表
@@ -24,7 +17,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "sys_permission_role")
 @EqualsAndHashCode(callSuper = true)
-@EntityListeners(AuditingEntityListener.class)
 public class SysPermissionRole extends BaseEntity {
 
     /**

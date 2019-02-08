@@ -4,7 +4,6 @@ import cn.echocow.xiaoming.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.List;
 @Entity
 @Table(name = "sys_permission")
 @EqualsAndHashCode(callSuper = true)
-@EntityListeners(AuditingEntityListener.class)
 public class SysPermission extends BaseEntity {
 
     /**

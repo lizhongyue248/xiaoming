@@ -1,10 +1,7 @@
 package cn.echocow.xiaoming.base;
 
-import cn.echocow.xiaoming.resource.RestResources;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.Resources;
-
 import java.io.Serializable;
 import java.util.List;
 

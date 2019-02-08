@@ -39,7 +39,7 @@ public class FileControllerTest {
     public void whenUploadSuccess() throws Exception {
         String result = mockMvc.perform(multipart("/files/")
                 .file(new MockMultipartFile("file", "test.txt", "multipart/form-data", "hello upload".getBytes(StandardCharsets.UTF_8)))
-                .param("task","1"))
+                .param("task", "2"))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
         System.out.println(result);

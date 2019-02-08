@@ -44,7 +44,7 @@ dependencies {
             rootProject.ext.lib.commonsPools,
             rootProject.ext.lib.commonsLang,
             rootProject.ext.lib.userAgent,
-            rootProject.ext.lib.fastjson
+            rootProject.ext.lib.qiniu
     )
     implementation(
             rootProject.ext.security.oauth2,

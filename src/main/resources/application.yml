@@ -3,7 +3,18 @@ spring:
     active: dev
   application:
     name: xiaoMing
-    upload-path: /home/echo/Data/work/xiaoming/upload
+    file:
+      upload-type: local
+      upload-path: /home/echo/Data/work/xiaoming/upload
+    qiniu:
+      area: 华东
+      access-key: CkxAzGq4f31CY75QisJYar3GJ6n72FbQvRojCuTp
+      secret-key: _a9yLqOBb53fJCbFNCcv-_zPt5wdvIoXFDbEVD0b
+      bucket: www-echocow-cn
+      domain: https://resources.echocow.cn/
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
 server:
   servlet:
     application-display-name: xiaoMing

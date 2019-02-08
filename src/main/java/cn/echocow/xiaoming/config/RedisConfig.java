@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.config;
 
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
@@ -18,6 +18,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Objects;
@@ -60,13 +61,14 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     @Bean
-    public KeyGenerator cacheKeyGenerator(){
+    public KeyGenerator cacheKeyGenerator() {
         return (target, method, params) -> {
             StringBuilder sb = new StringBuilder();
             sb.append(target.getClass().getName());
             sb.append(method.getName());
+            Gson gson = new Gson();
             String paramsString = Arrays.stream(params).filter(Objects::nonNull)
-                    .map(JSON::toJSONString)
+                    .map(gson::toJson)
                     .collect(Collectors.joining(","));
             sb.append(paramsString);
             return sb.toString();
@@ -74,8 +76,8 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     @Bean(name = "redisTemplate")
-    public RedisTemplate<String,Object> redisTemplate(){
-        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(keySerializer());
         redisTemplate.setHashKeySerializer(keySerializer());

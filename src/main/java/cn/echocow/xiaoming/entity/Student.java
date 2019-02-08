@@ -4,7 +4,6 @@ import cn.echocow.xiaoming.base.BaseEntity;
 import com.sun.istack.internal.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -20,7 +19,6 @@ import javax.validation.constraints.Pattern;
 @Entity
 @Table(name = "student")
 @EqualsAndHashCode(callSuper = true)
-@EntityListeners(AuditingEntityListener.class)
 public class Student extends BaseEntity {
 
     /**
