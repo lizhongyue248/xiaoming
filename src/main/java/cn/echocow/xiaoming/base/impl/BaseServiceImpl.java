@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.base.impl;
 
-import cn.echocow.xiaoming.Utils.CustomBeanUtils;
+import cn.echocow.xiaoming.utils.CustomBeanUtils;
 import cn.echocow.xiaoming.base.BaseEntity;
 import cn.echocow.xiaoming.base.BaseRepository;
 import cn.echocow.xiaoming.base.BaseService;

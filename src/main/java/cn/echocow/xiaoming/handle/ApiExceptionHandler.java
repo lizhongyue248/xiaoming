@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.handle;
 
-import cn.echocow.xiaoming.Utils.LogUtil;
+import cn.echocow.xiaoming.utils.LogUtil;
 import cn.echocow.xiaoming.exception.InvalidRequestException;
 import cn.echocow.xiaoming.exception.ResourceExistException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;

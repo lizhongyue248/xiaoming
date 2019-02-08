@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.service.impl;
 
-import cn.echocow.xiaoming.Utils.CustomBeanUtils;
+import cn.echocow.xiaoming.utils.CustomBeanUtils;
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
 import cn.echocow.xiaoming.entity.SysUser;
 import cn.echocow.xiaoming.exception.ResourceExistException;

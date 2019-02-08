@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.Utils;
+package cn.echocow.xiaoming.utils;
 
 import cn.echocow.xiaoming.entity.SysLog;
 import eu.bitwalker.useragentutils.OperatingSystem;

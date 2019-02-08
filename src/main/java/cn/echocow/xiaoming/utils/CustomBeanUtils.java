@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.Utils;
+package cn.echocow.xiaoming.utils;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
