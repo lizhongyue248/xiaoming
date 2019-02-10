@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.time.*;
 import java.util.TimeZone;
@@ -57,5 +58,11 @@ public class PasswordTest {
     @Test
     public void charsetTest(){
         System.out.println(Charset.forName("utf8").name());
+    }
+
+    @Test
+    public void pathTest() {
+        File file = new File("/home/echo/Data/work/xiaoming/src/test/java/cn/echocow/xiaoming/service","TaskServiceTest.java");
+        System.out.println(file.getAbsoluteFile());
     }
 }

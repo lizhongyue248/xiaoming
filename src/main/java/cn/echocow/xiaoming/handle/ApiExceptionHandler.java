@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.handle;
 
-import cn.echocow.xiaoming.utils.LogUtil;
+import cn.echocow.xiaoming.utils.LogUtils;
 import cn.echocow.xiaoming.exception.FileUploadException;
 import cn.echocow.xiaoming.exception.ResourceExistException;
 import cn.echocow.xiaoming.exception.InvalidRequestException;
@@ -9,6 +9,7 @@ import cn.echocow.xiaoming.resource.ErrorResource;
 import cn.echocow.xiaoming.resource.FieldResource;
 import cn.echocow.xiaoming.resource.InvalidErrorResource;
 import cn.echocow.xiaoming.service.SysLogService;
+import com.qiniu.common.QiniuException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,7 @@ public class ApiExceptionHandler {
     public HttpEntity<?> handleNotFoundException(ResourceNoFoundException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
-                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(errorResource, HttpStatus.NOT_FOUND);
     }
 
@@ -79,7 +80,7 @@ public class ApiExceptionHandler {
         }
         InvalidErrorResource invalidErrorResource = new InvalidErrorResource(e.getMessage(), fieldResources);
         log.warn(invalidErrorResource.toString() +
-                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(invalidErrorResource, HttpStatus.BAD_REQUEST);
     }
 
@@ -93,7 +94,7 @@ public class ApiExceptionHandler {
     public HttpEntity<?> handleExistException(ResourceExistException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
-                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(errorResource, HttpStatus.CONFLICT);
     }
 
@@ -107,7 +108,7 @@ public class ApiExceptionHandler {
     public HttpEntity<?> handleFileSizeException(FileUploadException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
-                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(errorResource, HttpStatus.BAD_REQUEST);
     }
 
@@ -118,11 +119,24 @@ public class ApiExceptionHandler {
      * @return http 响应
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public HttpEntity handleMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public HttpEntity<?> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
-                sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
         return new ResponseEntity<>(errorResource, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * 七牛云异常
+     *
+     * @param e 七牛云异常
+     * @return http 响应
+     */
+    @ExceptionHandler(QiniuException.class)
+    public HttpEntity<?> handleQiniuException(QiniuException e) {
+        ErrorResource errorResource = new ErrorResource(e.response.toString());
+        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)).toString());
+        return new ResponseEntity<>(errorResource, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -133,8 +147,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public HttpEntity<?> handleException(Exception e){
-        e.printStackTrace();
-        log.error(sysLogService.save(LogUtil.exceptionErrorBuilder(request, e)).toString());
+        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)).toString());
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

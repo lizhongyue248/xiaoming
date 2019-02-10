@@ -44,6 +44,12 @@ public class File extends BaseEntity {
     private String type;
 
     /**
+     * 保存文件的路径名称
+     */
+    @Column(name = "dir_name", columnDefinition = "varchar(255) not null comment '保存文件的路径名称'")
+    private String dirName;
+
+    /**
      * 文件对应的作业任务
      */
     @OneToOne

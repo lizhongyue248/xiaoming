@@ -20,4 +20,12 @@ public interface FileService extends BaseService<File, Long, FileRepository> {
      * @return 结果
      */
     List<File> findAllByTask(Long taskId);
+
+
+    /**
+     * 删除列表的文件
+     *
+     * @param files 列表
+     */
+    void deleteFiles(List<File> files);
 }

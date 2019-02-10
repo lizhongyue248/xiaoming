@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Echo
  * @version 1.0
@@ -27,4 +30,12 @@ public class SysLogRepositoryTest {
         all.forEach(System.out::println);
     }
 
+    @Test
+    public void deleteBatchTest() {
+        List<Long> ids = new ArrayList<>();
+        ids.add(1L);
+        ids.add(2L);
+        ids.add(3L);
+        sysLogRepository.deleteBatch(ids);
+    }
 }

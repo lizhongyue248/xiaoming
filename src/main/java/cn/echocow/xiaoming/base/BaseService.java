@@ -68,4 +68,11 @@ public interface BaseService<T extends BaseEntity, ID extends Serializable, R ex
      * @return 结果
      */
     Page<T> findAll(Pageable pageable);
+
+    /**
+     * 批量删除
+     *
+     * @param ids id 集合
+     */
+    void deleteBatch(List<Long> ids);
 }

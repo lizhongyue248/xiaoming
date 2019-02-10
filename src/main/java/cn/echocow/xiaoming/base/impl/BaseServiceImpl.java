@@ -13,6 +13,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.Assert;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -78,4 +80,9 @@ public abstract class BaseServiceImpl<T extends BaseEntity, ID extends Serializa
         return baseRepository.findAll(pageable);
     }
 
+    @Override
+    public void deleteBatch(List<Long> ids) {
+        Assert.notNull(ids, "ids can not is null!");
+        baseRepository.deleteBatch(ids);
+    }
 }

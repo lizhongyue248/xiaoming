@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.aop;
 
-import cn.echocow.xiaoming.utils.LogUtil;
+import cn.echocow.xiaoming.utils.LogUtils;
 import cn.echocow.xiaoming.model.entity.SysLog;
 import cn.echocow.xiaoming.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,7 @@ public class SysLogAop {
 
     @Around("(sysControllerLog() || sysBaseControllerLog()) && !sysControllerGetClassLog()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        SysLog sysLog = LogUtil.logBuilder(request);
+        SysLog sysLog = LogUtils.logBuilder(request);
         sysLog.setMethod(proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName());
         sysLog.setArgs(StringUtils.left(Arrays.stream(proceedingJoinPoint.getArgs())
                 .filter(Objects::nonNull)

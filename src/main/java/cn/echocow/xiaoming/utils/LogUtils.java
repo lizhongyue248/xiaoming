@@ -17,7 +17,7 @@ import java.io.StringWriter;
  * @version 1.0
  * @date 2019-01-31 23:59
  */
-public class LogUtil {
+public class LogUtils {
     private final static Integer MAX_LEN = 250;
     private final static Integer STANDARD_LEN = 2040;
 
@@ -48,6 +48,7 @@ public class LogUtil {
      * @return 日志
      */
     public static SysLog exceptionErrorBuilder(HttpServletRequest request, Exception e) {
+        e.printStackTrace();
         SysLog sysLog = logBuilder(request);
         sysLog.setLevel(LogLevel.ERROR.ordinal());
         sysLog.setRemark(StringUtils.left(e.getMessage(), MAX_LEN));

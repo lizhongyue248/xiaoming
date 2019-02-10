@@ -10,7 +10,7 @@ import java.time.ZoneOffset;
  * @date 2019-02-10 21:52
  */
 @SuppressWarnings("all")
-public class DateUtil {
+public class DateUtils {
     /**
      * 获取中国的现在时间戳
      *
