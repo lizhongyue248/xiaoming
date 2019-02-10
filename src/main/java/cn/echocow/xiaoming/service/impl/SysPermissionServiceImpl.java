@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
-import cn.echocow.xiaoming.entity.SysPermission;
+import cn.echocow.xiaoming.model.entity.SysPermission;
 import cn.echocow.xiaoming.repository.SysPermissionRepository;
 import cn.echocow.xiaoming.service.SysPermissionService;
 import org.springframework.cache.annotation.CacheConfig;

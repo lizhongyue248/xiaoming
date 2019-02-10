@@ -2,7 +2,7 @@ package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.utils.CustomBeanUtils;
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
-import cn.echocow.xiaoming.entity.SysUser;
+import cn.echocow.xiaoming.model.entity.SysUser;
 import cn.echocow.xiaoming.exception.ResourceExistException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.repository.SysUserRepository;

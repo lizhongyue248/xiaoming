@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.aop;
 
 import cn.echocow.xiaoming.utils.LogUtil;
-import cn.echocow.xiaoming.entity.SysLog;
+import cn.echocow.xiaoming.model.entity.SysLog;
 import cn.echocow.xiaoming.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**

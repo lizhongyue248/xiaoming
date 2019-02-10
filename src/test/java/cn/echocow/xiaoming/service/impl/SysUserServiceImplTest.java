@@ -1,9 +1,9 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
-import cn.echocow.xiaoming.entity.SysPermission;
-import cn.echocow.xiaoming.entity.SysRole;
-import cn.echocow.xiaoming.entity.SysUser;
+import cn.echocow.xiaoming.model.entity.SysPermission;
+import cn.echocow.xiaoming.model.entity.SysRole;
+import cn.echocow.xiaoming.model.entity.SysUser;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.repository.SysUserRepository;
 import cn.echocow.xiaoming.service.SysUserService;
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
-import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 

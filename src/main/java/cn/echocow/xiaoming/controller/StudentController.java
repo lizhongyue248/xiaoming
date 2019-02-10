@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.controller;
 
 import cn.echocow.xiaoming.base.BaseController;
-import cn.echocow.xiaoming.entity.Student;
+import cn.echocow.xiaoming.model.entity.Student;
 import cn.echocow.xiaoming.service.StudentService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

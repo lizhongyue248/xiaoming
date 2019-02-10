@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
-import cn.echocow.xiaoming.entity.SysLog;
+import cn.echocow.xiaoming.model.entity.SysLog;
 import cn.echocow.xiaoming.repository.SysLogRepository;
 import cn.echocow.xiaoming.service.SysLogService;
 import org.springframework.cache.annotation.CacheConfig;

@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
-import cn.echocow.xiaoming.entity.Classroom;
+import cn.echocow.xiaoming.model.entity.Classroom;
 import cn.echocow.xiaoming.repository.ClassroomRepository;
 import cn.echocow.xiaoming.service.ClassroomService;
 import org.springframework.cache.annotation.CacheConfig;

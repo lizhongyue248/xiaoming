@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.controller;
 
 import cn.echocow.xiaoming.base.BaseController;
-import cn.echocow.xiaoming.entity.SysRole;
+import cn.echocow.xiaoming.model.entity.SysRole;
 import cn.echocow.xiaoming.service.SysRoleService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

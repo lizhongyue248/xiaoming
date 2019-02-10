@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
-import cn.echocow.xiaoming.entity.SysRole;
+import cn.echocow.xiaoming.model.entity.SysRole;
 import cn.echocow.xiaoming.repository.SysRoleRepository;
 import cn.echocow.xiaoming.service.SysRoleService;
 import org.springframework.cache.annotation.CacheConfig;

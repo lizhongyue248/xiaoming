@@ -4,14 +4,15 @@ spring:
   application:
     name: xiaoMing
     file:
-      upload-type: local
+      upload-type: local # 可选值 local qiniu
       upload-path: /home/echo/Data/work/xiaoming/upload
-    qiniu:
-      area: 华东
+    qiniu: # 七牛云配置
+      area: 华东 # 可选值 华东 华南 华北 北美 东南亚 不填会自动判断
       access-key: CkxAzGq4f31CY75QisJYar3GJ6n72FbQvRojCuTp
       secret-key: _a9yLqOBb53fJCbFNCcv-_zPt5wdvIoXFDbEVD0b
       bucket: www-echocow-cn
       domain: https://resources.echocow.cn/
+      dir-name: xiaoMing/
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false

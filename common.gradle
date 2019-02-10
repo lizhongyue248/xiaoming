@@ -29,6 +29,7 @@ ext {
             'test'           : 'org.springframework.boot:spring-boot-starter-test',
             'restdocsMockmvc': 'org.springframework.restdocs:spring-restdocs-mockmvc',
             'securityTest'   : 'org.springframework.security:spring-security-test',
+            'configuration'  : 'org.springframework.boot:spring-boot-configuration-processor',
             'mybatis'        : 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0'
     ]
 

@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service;
 
 import cn.echocow.xiaoming.base.BaseService;
-import cn.echocow.xiaoming.entity.SysRole;
+import cn.echocow.xiaoming.model.entity.SysRole;
 import cn.echocow.xiaoming.repository.SysRoleRepository;
 
 import java.util.List;

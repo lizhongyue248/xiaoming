@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.repository.view;
 
-import cn.echocow.xiaoming.entity.view.SysUserRolePermission;
+import cn.echocow.xiaoming.model.view.SysUserRolePermission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

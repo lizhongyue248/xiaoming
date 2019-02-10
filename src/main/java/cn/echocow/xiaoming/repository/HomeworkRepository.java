@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.repository;
 
 import cn.echocow.xiaoming.base.BaseRepository;
-import cn.echocow.xiaoming.entity.Homework;
+import cn.echocow.xiaoming.model.entity.Homework;
 import org.springframework.stereotype.Repository;
 
 /**

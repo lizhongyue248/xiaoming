@@ -1,8 +1,8 @@
 package cn.echocow.xiaoming.config.permission;
 
-import cn.echocow.xiaoming.entity.enums.HttpMethod;
-import cn.echocow.xiaoming.entity.SysPermission;
-import cn.echocow.xiaoming.entity.SysRole;
+import cn.echocow.xiaoming.model.enums.HttpMethod;
+import cn.echocow.xiaoming.model.entity.SysPermission;
+import cn.echocow.xiaoming.model.entity.SysRole;
 import cn.echocow.xiaoming.service.SysPermissionService;
 import cn.echocow.xiaoming.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;

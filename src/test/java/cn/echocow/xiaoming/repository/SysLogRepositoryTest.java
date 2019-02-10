@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.repository;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
-import cn.echocow.xiaoming.entity.SysLog;
+import cn.echocow.xiaoming.model.entity.SysLog;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

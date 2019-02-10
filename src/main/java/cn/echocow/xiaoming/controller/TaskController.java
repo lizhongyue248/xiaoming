@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.controller;
 
 import cn.echocow.xiaoming.base.BaseController;
-import cn.echocow.xiaoming.entity.Task;
+import cn.echocow.xiaoming.model.entity.Task;
 import cn.echocow.xiaoming.resource.RestResources;
 import cn.echocow.xiaoming.service.FileService;
 import cn.echocow.xiaoming.service.TaskService;

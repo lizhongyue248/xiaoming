@@ -1,8 +1,8 @@
 package cn.echocow.xiaoming.repository;
 
 import cn.echocow.xiaoming.base.BaseRepository;
-import cn.echocow.xiaoming.entity.File;
-import cn.echocow.xiaoming.entity.Task;
+import cn.echocow.xiaoming.model.entity.File;
+import cn.echocow.xiaoming.model.entity.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;

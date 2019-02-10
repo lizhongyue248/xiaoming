@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.controller;
 
 import cn.echocow.xiaoming.base.BaseController;
-import cn.echocow.xiaoming.entity.SysLog;
+import cn.echocow.xiaoming.model.entity.SysLog;
 import cn.echocow.xiaoming.service.SysLogService;
 import org.springframework.web.bind.annotation.*;
 

@@ -4,7 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.Duration;
+import java.nio.charset.Charset;
+import java.time.*;
+import java.util.TimeZone;
 
 /**
  * @author Echo
@@ -25,7 +27,7 @@ public class PasswordTest {
     }
 
     @Test
-    public void stringUtilsTest(){
+    public void stringUtilsTest() {
         String s1 = "123456";
         String s2 = "123426";
         String s4 = "1";
@@ -44,5 +46,16 @@ public class PasswordTest {
     public void simpleTest() {
         int page = 5;
         System.out.println(--page);
+    }
+
+    @Test
+    public void timeNowTest() {
+        System.out.println(Instant.now(Clock.systemUTC()).atOffset(ZoneOffset.ofHours(8)).toInstant().toEpochMilli());
+        System.out.println(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
+    }
+
+    @Test
+    public void charsetTest(){
+        System.out.println(Charset.forName("utf8").name());
     }
 }

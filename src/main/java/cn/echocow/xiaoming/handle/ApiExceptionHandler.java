@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.handle;
 
 import cn.echocow.xiaoming.utils.LogUtil;
-import cn.echocow.xiaoming.exception.FileSizeException;
+import cn.echocow.xiaoming.exception.FileUploadException;
 import cn.echocow.xiaoming.exception.ResourceExistException;
 import cn.echocow.xiaoming.exception.InvalidRequestException;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
@@ -103,8 +103,8 @@ public class ApiExceptionHandler {
      * @param e 异常
      * @return http 响应
      */
-    @ExceptionHandler(FileSizeException.class)
-    public HttpEntity<?> handleFileSizeException(FileSizeException e) {
+    @ExceptionHandler(FileUploadException.class)
+    public HttpEntity<?> handleFileSizeException(FileUploadException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
                 sysLogService.save(LogUtil.exceptionWarnBuilder(request, e)).toString());
@@ -133,6 +133,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public HttpEntity<?> handleException(Exception e){
+        e.printStackTrace();
         log.error(sysLogService.save(LogUtil.exceptionErrorBuilder(request, e)).toString());
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

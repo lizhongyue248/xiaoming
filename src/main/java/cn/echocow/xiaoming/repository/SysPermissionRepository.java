@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.repository;
 
 import cn.echocow.xiaoming.base.BaseRepository;
-import cn.echocow.xiaoming.entity.SysPermission;
+import cn.echocow.xiaoming.model.entity.SysPermission;
 import org.springframework.stereotype.Repository;
 
 

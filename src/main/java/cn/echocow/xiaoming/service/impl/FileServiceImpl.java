@@ -1,8 +1,8 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
-import cn.echocow.xiaoming.entity.File;
-import cn.echocow.xiaoming.entity.Task;
+import cn.echocow.xiaoming.model.entity.File;
+import cn.echocow.xiaoming.model.entity.Task;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.repository.FileRepository;
 import cn.echocow.xiaoming.repository.TaskRepository;

@@ -29,6 +29,7 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor rootProject.ext.springBoot.configuration
     implementation(
             rootProject.ext.springBoot.actuator,
             rootProject.ext.springBoot.aop,

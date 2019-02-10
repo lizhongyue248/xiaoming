@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
-import cn.echocow.xiaoming.entity.Classroom;
+import cn.echocow.xiaoming.model.entity.Classroom;
 import cn.echocow.xiaoming.service.ClassroomService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

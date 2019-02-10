@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.entity.view;
+package cn.echocow.xiaoming.model.view;
 
 import org.hibernate.annotations.Subselect;
 import org.hibernate.annotations.Synchronize;

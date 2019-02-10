@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service;
 
 import cn.echocow.xiaoming.base.BaseService;
-import cn.echocow.xiaoming.entity.Classroom;
+import cn.echocow.xiaoming.model.entity.Classroom;
 import cn.echocow.xiaoming.repository.ClassroomRepository;
 
 /**

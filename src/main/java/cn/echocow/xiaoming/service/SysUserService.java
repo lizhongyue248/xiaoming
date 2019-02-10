@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.service;
 
 import cn.echocow.xiaoming.base.BaseService;
-import cn.echocow.xiaoming.entity.SysUser;
+import cn.echocow.xiaoming.model.entity.SysUser;
 import cn.echocow.xiaoming.repository.SysUserRepository;
 import java.util.Optional;
 

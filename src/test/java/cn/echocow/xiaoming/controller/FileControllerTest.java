@@ -15,6 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.nio.charset.StandardCharsets;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -39,7 +40,7 @@ public class FileControllerTest {
     public void whenUploadSuccess() throws Exception {
         String result = mockMvc.perform(multipart("/files/")
                 .file(new MockMultipartFile("file", "test.txt", "multipart/form-data", "hello upload".getBytes(StandardCharsets.UTF_8)))
-                .param("task", "2"))
+                .param("task", "1"))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
         System.out.println(result);
@@ -52,6 +53,17 @@ public class FileControllerTest {
                 .andReturn();
         System.out.println(mvcResult);
     }
+
+    @Test
+    public void whenQiniuDownloadSuccess() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/files/5"))
+                .andExpect(status().isFound())
+                .andExpect(header().exists("location"))
+                .andReturn();
+        System.out.println(mvcResult);
+        System.out.println(mvcResult.getResponse().getHeader("location"));
+    }
+
 
 
 }

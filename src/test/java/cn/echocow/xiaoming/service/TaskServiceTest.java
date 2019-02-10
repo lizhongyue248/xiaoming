@@ -1,6 +1,6 @@
 package cn.echocow.xiaoming.service;
 
-import cn.echocow.xiaoming.entity.Task;
+import cn.echocow.xiaoming.model.entity.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class TaskServiceTest {
 
     @Test
     public void getTest() {
-        Task task = taskService.findById(2L);
+        Task task = taskService.findById(1L);
         assertNotNull(task);
         System.out.println(task.toString());
     }

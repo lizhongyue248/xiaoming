@@ -1,16 +1,10 @@
-package cn.echocow.xiaoming.entity;
+package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 班级，为了区别关键字 class, 使用复数
@@ -36,11 +30,4 @@ public class Classroom extends BaseEntity {
      */
     @Column(name = "number", columnDefinition = "int(10) not null comment '班级人数'")
     private Integer number;
-
-    /**
-     * 排序
-     */
-    @OrderColumn(name = "sort")
-    private Integer sort;
-
 }

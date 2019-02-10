@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.entity.enums;
+package cn.echocow.xiaoming.model.enums;
 
 /**
  * 上传方式

@@ -1,15 +1,16 @@
 package cn.echocow.xiaoming.controller;
 
 import ch.qos.logback.core.util.FileSize;
-import cn.echocow.xiaoming.entity.File;
-import cn.echocow.xiaoming.entity.Homework;
-import cn.echocow.xiaoming.entity.Task;
-import cn.echocow.xiaoming.entity.enums.Qiniu;
-import cn.echocow.xiaoming.entity.enums.UploadMethod;
-import cn.echocow.xiaoming.exception.FileSizeException;
+import cn.echocow.xiaoming.model.entity.File;
+import cn.echocow.xiaoming.model.entity.Homework;
+import cn.echocow.xiaoming.model.entity.Task;
+import cn.echocow.xiaoming.model.enums.QiniuConfig;
+import cn.echocow.xiaoming.model.enums.UploadMethod;
+import cn.echocow.xiaoming.exception.FileUploadException;
 import cn.echocow.xiaoming.resource.RestResource;
 import cn.echocow.xiaoming.service.FileService;
 import cn.echocow.xiaoming.service.TaskService;
+import cn.echocow.xiaoming.utils.DateUtil;
 import com.google.gson.Gson;
 import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
@@ -28,8 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URI;
 import java.net.URLEncoder;
-import java.time.Instant;
+import java.nio.charset.Charset;
 import java.util.Objects;
 
 /**
@@ -49,10 +51,15 @@ public class FileController {
     private String accessKey;
     @Value("${spring.application.qiniu.secret-key}")
     private String secretKey;
-    @Value("${spring.application.qiniu.domain}")
+    @Value("${spring.application.qiniu.bucket}")
     private String bucketName;
     @Value("${spring.application.qiniu.area}")
     private String area;
+    @Value("${spring.application.qiniu.dir-name}")
+    private String dirName;
+    @Value("${spring.application.qiniu.domain}")
+    private String domain;
+    private static final String CHARSET = Charset.forName("utf8").name();
     private final FileService fileService;
     private final TaskService taskService;
 
@@ -84,8 +91,15 @@ public class FileController {
             fileType = file.getOriginalFilename().substring(index + 1);
         }
 
+        // 文件类型
+        Task task = taskService.findById(taskId);
+        Homework homework = task.getHomework();
+        if (!homework.getType().contains(fileType)) {
+            throw new FileUploadException("文件类型不合法！");
+        }
+
         // 本地文件
-        java.io.File localFile = new java.io.File(folder, Instant.now().toString() + "." + fileType);
+        java.io.File localFile = new java.io.File(folder, URLEncoder.encode(DateUtil.nowString() + "." + fileType, CHARSET));
 
         // 数据库的文件
         File newFile = new File();
@@ -93,12 +107,10 @@ public class FileController {
         newFile.setOldName(file.getOriginalFilename());
 
         // 文件大小限制
-        Task task = taskService.findById(taskId);
-        Homework homework = task.getHomework();
         FileSize fileSize = FileSize.valueOf(homework.getSize());
         FileSize nowSize = new FileSize(file.getSize());
         if (fileSize.getSize() < nowSize.getSize()) {
-            throw new FileSizeException("文件大小不合法！");
+            throw new FileUploadException("文件大小不合法！");
         }
         newFile.setSize(nowSize.toString());
         newFile.setType(fileType);
@@ -124,20 +136,25 @@ public class FileController {
      * @param response http 响应
      */
     @GetMapping("/{id}")
-    public void download(@PathVariable Long id, HttpServletResponse response) {
+    public HttpEntity<?> download(@PathVariable Long id, HttpServletResponse response) throws Exception {
         File file = fileService.findById(id);
+        if (UploadMethod.QINIU.match(uploadType)) {
+            return ResponseEntity.status(HttpStatus.FOUND).location(
+                    new URI(domain + dirName + URLEncoder.encode(file.getName(), CHARSET))).build();
+        }
         try (
                 InputStream inputStream = new FileInputStream(new java.io.File(folder, file.getName()));
                 OutputStream outputStream = response.getOutputStream()
         ) {
             response.setContentType("application/x-download");
             response.setHeader("content-type", "application/octet-stream");
-            response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file.getOldName() + file.getType(), "UTF-8"));
+            response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file.getOldName() + file.getType(), CHARSET));
             IOUtils.copy(inputStream, outputStream);
             outputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     /**
@@ -150,15 +167,15 @@ public class FileController {
      */
     private DefaultPutRet uploadQiniu(MultipartFile file, java.io.File localFile) throws IOException {
         Configuration config;
-        if (Qiniu.EAST.match(area)) {
+        if (QiniuConfig.EAST.match(area)) {
             config = new Configuration(Zone.zone0());
-        } else if (Qiniu.NORTH.match(area)) {
+        } else if (QiniuConfig.NORTH.match(area)) {
             config = new Configuration(Zone.zone1());
-        } else if (Qiniu.SOUTH.match(area)) {
+        } else if (QiniuConfig.SOUTH.match(area)) {
             config = new Configuration(Zone.zone2());
-        } else if (Qiniu.AMERICA.match(area)) {
+        } else if (QiniuConfig.AMERICA.match(area)) {
             config = new Configuration(Zone.zoneNa0());
-        } else if (Qiniu.Asia.match(area)) {
+        } else if (QiniuConfig.Asia.match(area)) {
             config = new Configuration(Zone.zoneAs0());
         } else {
             config = new Configuration(Zone.autoZone());
@@ -166,7 +183,7 @@ public class FileController {
         UploadManager uploadManager = new UploadManager(config);
         Auth auth = Auth.create(accessKey, secretKey);
         String token = auth.uploadToken(bucketName);
-        Response response = uploadManager.put(file.getBytes(), localFile.getName(), token);
+        Response response = uploadManager.put(file.getBytes(), dirName + localFile.getName(), token);
         return new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
     }
 }

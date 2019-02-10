@@ -1,7 +1,7 @@
 package cn.echocow.xiaoming.repository.view;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
-import cn.echocow.xiaoming.entity.view.SysUserRolePermission;
+import cn.echocow.xiaoming.model.view.SysUserRolePermission;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

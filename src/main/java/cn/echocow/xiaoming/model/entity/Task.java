@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.entity;
+package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

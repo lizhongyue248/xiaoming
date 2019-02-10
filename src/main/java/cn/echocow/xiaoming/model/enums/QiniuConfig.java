@@ -1,4 +1,4 @@
-package cn.echocow.xiaoming.entity.enums;
+package cn.echocow.xiaoming.model.enums;
 
 /**
  * 七牛云
@@ -7,13 +7,13 @@ package cn.echocow.xiaoming.entity.enums;
  * @version 1.0
  * @date 2019-02-08 23:54
  */
-public enum Qiniu {
+public enum QiniuConfig {
     /**
-     * 华东区域
+     * 华东
      */
     EAST("华东"),
     /**
-     * 华南区域
+     * 华南
      */
     SOUTH("华南"),
     /**
@@ -38,7 +38,7 @@ public enum Qiniu {
      *
      * @param area 地区
      */
-    Qiniu(String area) {
+    QiniuConfig(String area) {
         this.area = area;
     }
 
