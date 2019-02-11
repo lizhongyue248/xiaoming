@@ -1,6 +1,7 @@
 package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

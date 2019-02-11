@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -137,6 +138,19 @@ public class ApiExceptionHandler {
         ErrorResource errorResource = new ErrorResource(e.response.toString());
         log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)).toString());
         return new ResponseEntity<>(errorResource, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 必填参数异常
+     *
+     * @param e present
+     * @return http 响应
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public HttpEntity<?> handleServletRequestParameterException(MissingServletRequestParameterException e) {
+        ErrorResource errorResource = new ErrorResource(e.getMessage());
+        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)).toString());
+        return new ResponseEntity<>(errorResource, HttpStatus.BAD_REQUEST);
     }
 
     /**

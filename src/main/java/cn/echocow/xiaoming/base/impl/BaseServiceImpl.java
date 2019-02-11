@@ -55,7 +55,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity, ID extends Serializa
     }
 
     @Override
-    @CacheEvict
+    @CacheEvict(allEntries = true)
     public void deleteById(ID id) {
         if (!baseRepository.existsById(id)) {
             throw new ResourceNoFoundException(String.format("the resource by id %s not found!", id));
@@ -81,6 +81,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity, ID extends Serializa
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void deleteBatch(List<Long> ids) {
         Assert.notNull(ids, "ids can not is null!");
         baseRepository.deleteBatch(ids);

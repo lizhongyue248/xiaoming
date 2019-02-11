@@ -39,8 +39,9 @@ public class FileControllerTest {
     @Test
     public void whenUploadSuccess() throws Exception {
         String result = mockMvc.perform(multipart("/files/")
-                .file(new MockMultipartFile("file", "test.txt", "multipart/form-data", "hello upload".getBytes(StandardCharsets.UTF_8)))
-                .param("task", "1"))
+                .file(new MockMultipartFile("file", "阿萨德.txt", "multipart/form-data", "hello upload".getBytes(StandardCharsets.UTF_8)))
+                .param("task", "1")
+                .header("Authorization","Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieGlhb01pbmciXSwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJhbGwiXSwiZXhwIjoxNTQ5OTQ5NTI0LCJhdXRob3JpdGllcyI6WyJST0xFX1NUVURFTlQiLCJST0xFX1NUVURZIiwiUk9MRV9BRE1JTiJdLCJqdGkiOiI2ZTdiMTM2ZC0wYzU0LTRjOWUtOTAyYy03NjFhZThkMmQ4YzkiLCJjbGllbnRfaWQiOiJ4aWFvTWluZyJ9.wXHXZu-13cChmQx4Sh_3X3zQLRJtx0ZBgd9akaURh2M"))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
         System.out.println(result);

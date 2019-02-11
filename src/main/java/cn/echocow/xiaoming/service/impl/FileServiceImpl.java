@@ -48,4 +48,9 @@ public class FileServiceImpl extends BaseServiceImpl<File, Long, FileRepository>
         }
         fileRepository.deleteBatch(ids);
     }
+
+    @Override
+    public File findByName(String name) {
+        return fileRepository.findFirstByName(name).orElse(new File());
+    }
 }

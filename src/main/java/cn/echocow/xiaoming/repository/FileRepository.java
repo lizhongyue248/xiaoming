@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 文件上传
@@ -34,4 +35,12 @@ public interface FileRepository extends BaseRepository<File, Long> {
      * @return 结果
      */
     List<File> findAllByTask(Task task);
+
+    /**
+     * 通过 name 查询所有结果
+     *
+     * @param name name
+     * @return 结果
+     */
+    Optional<File> findFirstByName(String name);
 }

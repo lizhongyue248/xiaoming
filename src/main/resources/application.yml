@@ -4,7 +4,7 @@ spring:
   application:
     name: xiaoMing
     file:
-      upload-type: local # 可选值 local qiniu
+      upload-type: qiniu # 可选值 local qiniu
       upload-path: /home/echo/Data/work/xiaoming/upload
     qiniu: # 七牛云配置
       area: 华东 # 可选值 华东 华南 华北 北美 东南亚 不填会自动判断
@@ -12,10 +12,13 @@ spring:
       secret-key: _a9yLqOBb53fJCbFNCcv-_zPt5wdvIoXFDbEVD0b
       bucket: www-echocow-cn
       domain: https://resources.echocow.cn/
-      dir-name: xiaoMing/
+      dir-name: xiaoMing
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+  servlet:
+    multipart:
+      max-file-size: 100MB
 server:
   servlet:
     application-display-name: xiaoMing

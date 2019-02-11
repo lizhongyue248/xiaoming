@@ -28,4 +28,12 @@ public interface FileService extends BaseService<File, Long, FileRepository> {
      * @param files 列表
      */
     void deleteFiles(List<File> files);
+
+    /**
+     * 通过 name 查询
+     *
+     * @param name name
+     * @return 文件
+     */
+    File findByName(String name);
 }

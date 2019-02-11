@@ -5,8 +5,13 @@ import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.*;
+import java.util.Map;
+import java.util.Properties;
 import java.util.TimeZone;
 
 /**
@@ -56,13 +61,34 @@ public class PasswordTest {
     }
 
     @Test
-    public void charsetTest(){
+    public void charsetTest() {
         System.out.println(Charset.forName("utf8").name());
     }
 
     @Test
-    public void pathTest() {
-        File file = new File("/home/echo/Data/work/xiaoming/src/test/java/cn/echocow/xiaoming/service","TaskServiceTest.java");
-        System.out.println(file.getAbsoluteFile());
+    public void pathTest() throws IOException {
+        System.out.println("/home/echo/Data/work/xiaoming/upload/撒旦撒多按时打卡还是空间的好1");
+        File file = new File("/home/echo/Data/work/xiaoming/upload/撒旦asd撒多按时打卡还是空间的好1");
+        System.out.println(file.exists());
+        System.out.println(file.getName());
+        System.out.println(file.createNewFile());
+        System.out.println(file.mkdirs());
+        Map<String, String> getenv = System.getenv();
+        getenv.forEach((key, value) -> System.out.println(key + " ...... " + value));
+        Properties properties = System.getProperties();
+        properties.forEach((key, value) -> System.out.println(key + " ---- " + value));
+    }
+
+    public static void main(String[] args) throws IOException {
+        System.out.println("/home/echo/Data/work/xiaoming/upload/撒旦撒多按时打卡还是空间的好1");
+        System.setProperty("sun.jnu.encoding", "UTF-8");
+        File file = new File("/home/echo/Data/work/xiaoming/upload/撒旦asd撒多按时打卡还是空间的好1");
+        System.out.println(file.getName());
+        System.out.println(file.createNewFile());
+        System.out.println(file.mkdirs());
+        Map<String, String> getenv = System.getenv();
+        getenv.forEach((key, value) -> System.out.println(key + " ...... " + value));
+        System.out.println(System.getProperty("sun.jnu.encoding"));
+        System.out.println(System.getProperty("file.encoding"));
     }
 }
