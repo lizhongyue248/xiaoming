@@ -37,6 +37,8 @@ dependencies {
             rootProject.ext.springBoot.redis,
             rootProject.ext.springBoot.hateoas,
             rootProject.ext.springBoot.mail,
+            rootProject.ext.springBoot.freemarker,
+            rootProject.ext.springBoot.thymeleaf,
             rootProject.ext.springBoot.security,
             rootProject.ext.springBoot.validation,
             rootProject.ext.springBoot.web,

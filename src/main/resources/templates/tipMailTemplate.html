@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<h1>小明提示</h1>
+<!--/*@thymesVar id="username" type="java.lang.String"*/-->
+<p th:text="${username} + ' ,您的作业,还未完成哦请及时上交'">您的作业还未完成哦，请及时上交～！</p>
+</body>
+</html>

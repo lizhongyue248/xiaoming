@@ -19,6 +19,21 @@ spring:
   servlet:
     multipart:
       max-file-size: 100MB
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: echocow@qq.com
+    password:
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
 server:
   servlet:
     application-display-name: xiaoMing
