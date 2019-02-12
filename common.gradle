@@ -13,6 +13,7 @@ ext {
     ]
 
     springBoot = [
+            'starter'        : 'org.springframework.boot:spring-boot-starter',
             'actuator'       : 'org.springframework.boot:spring-boot-starter-actuator',
             'web'            : 'org.springframework.boot:spring-boot-starter-web',
             'aop'            : 'org.springframework.boot:spring-boot-starter-aop',

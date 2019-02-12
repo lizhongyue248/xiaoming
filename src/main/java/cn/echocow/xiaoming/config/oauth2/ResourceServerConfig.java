@@ -3,6 +3,7 @@ package cn.echocow.xiaoming.config.oauth2;
 import cn.echocow.xiaoming.config.permission.AuthAccessDecisionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -52,7 +53,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.requestMatchers().antMatchers(HttpMethod.OPTIONS, "**")
+            .and()
+            .authorizeRequests()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O o) {
@@ -61,6 +64,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         return o;
                     }
                 })
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+            .and()
+            .cors()
+            .and()
+            .csrf().disable();
     }
 }
