@@ -1,5 +1,6 @@
 package cn.echocow.xiaoming.config;
 
+import cn.echocow.xiaoming.model.properties.ApplicationProperties;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,13 +36,13 @@ import java.util.stream.Collectors;
 @EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
 
-    @Value("${spring.application.name}")
-    private String applicationName;
+    private final ApplicationProperties applicationProperties;
     private final RedisConnectionFactory connectionFactory;
 
     @Autowired
-    public RedisConfig(RedisConnectionFactory connectionFactory) {
+    public RedisConfig(RedisConnectionFactory connectionFactory, ApplicationProperties applicationProperties) {
         this.connectionFactory = connectionFactory;
+        this.applicationProperties = applicationProperties;
     }
 
     @Bean
@@ -49,7 +50,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     public CacheManager cacheManager() {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(12))
-                .prefixKeysWith(applicationName)
+                .prefixKeysWith(applicationProperties.getName())
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(keySerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(valueSerializer()))
                 .disableCachingNullValues();

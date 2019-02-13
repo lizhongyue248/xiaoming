@@ -1,10 +1,12 @@
 package cn.echocow.xiaoming.config;
 
+import cn.echocow.xiaoming.intercepter.AuthInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import java.util.concurrent.Executor;
 
 /**
  * @author Echo
@@ -12,14 +14,17 @@ import java.util.concurrent.Executor;
  * @date 2019-02-11 11:54
  */
 @Configuration
-public class ApplicationConfig implements AsyncConfigurer {
-    @Override
-    public Executor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(50);
-        executor.setQueueCapacity(100);
-        executor.initialize();
-        return executor;
+public class ApplicationConfig extends WebMvcConfigurationSupport {
+
+    @Bean
+    public HandlerInterceptor authInterceptor() {
+        return new AuthInterceptor();
     }
+
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor())
+                .addPathPatterns("/auth/**");
+    }
+
 }

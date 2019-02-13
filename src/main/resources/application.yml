@@ -3,16 +3,6 @@ spring:
     active: dev
   application:
     name: xiaoMing
-    file:
-      upload-type: qiniu # 可选值 local qiniu
-      upload-path: /home/echo/Data/work/xiaoming/upload
-    qiniu: # 七牛云配置
-      area: 华东 # 可选值 华东 华南 华北 北美 东南亚 不填会自动判断
-      access-key: CkxAzGq4f31CY75QisJYar3GJ6n72FbQvRojCuTp
-      secret-key: _a9yLqOBb53fJCbFNCcv-_zPt5wdvIoXFDbEVD0b
-      bucket: www-echocow-cn
-      domain: https://resources.echocow.cn/
-      dir-name: xiaoMing
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
@@ -26,7 +16,7 @@ spring:
     password:
     properties:
       mail:
-        debug: true
+        debug: false
         smtp:
           auth: true
           starttls:
@@ -34,7 +24,25 @@ spring:
             required: true
           socketFactory:
             class: javax.net.ssl.SSLSocketFactory
+    test-connection: false
 server:
   servlet:
     application-display-name: xiaoMing
     context-path: /api
+application:
+  name: xiaoMing
+  file:
+    upload-type: qiniu # 可选值 local qiniu
+    upload-path: /home/echo/Data/work/xiaoming/upload
+  qiniu: # 七牛云配置
+    area: 华东 # 可选值 华东 华南 华北 北美 东南亚 不填会自动判断
+    access-key: CkxAzGq4f31CY75QisJYar3GJ6n72FbQvRojCuTp
+    secret-key: _a9yLqOBb53fJCbFNCcv-_zPt5wdvIoXFDbEVD0b
+    bucket: www-echocow-cn
+    domain: https://resources.echocow.cn/
+    dir-name: xiaoMing
+  security:
+    client-id: xiaoMing
+    client-secret: $2a$10$Nww6ckqqJUg/botZzZDn1.8xZwTfW2n1mYE66lrUgn00KVzfe2T7C
+    resource-id: xiaoMing
+    jwt-signing-key: 123

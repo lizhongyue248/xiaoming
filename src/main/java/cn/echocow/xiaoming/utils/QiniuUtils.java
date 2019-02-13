@@ -2,6 +2,7 @@ package cn.echocow.xiaoming.utils;
 
 import cn.echocow.xiaoming.model.entity.File;
 import cn.echocow.xiaoming.model.enums.QiniuConfig;
+import cn.echocow.xiaoming.model.properties.ApplicationProperties;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
@@ -13,7 +14,7 @@ import com.qiniu.storage.model.BatchStatus;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,19 +40,13 @@ import java.util.List;
 @Slf4j
 @Component
 public class QiniuUtils {
-    @Value("${spring.application.qiniu.access-key}")
-    private String accessKey;
-    @Value("${spring.application.qiniu.secret-key}")
-    private String secretKey;
-    @Value("${spring.application.qiniu.bucket}")
-    private String bucketName;
-    @Value("${spring.application.qiniu.area}")
-    private String area;
-    @Value("${spring.application.qiniu.domain}")
-    private String domain;
-    @Value("${spring.application.qiniu.dir-name}")
-    private String dirName;
+    private final ApplicationProperties applicationProperties;
     private static final String CHARSET = Charset.forName("utf8").name();
+
+    @Autowired
+    public QiniuUtils(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
+    }
 
     /**
      * 上传凭证
@@ -59,7 +54,8 @@ public class QiniuUtils {
      * @return 上传凭证
      */
     private Auth createAuth() {
-        return Auth.create(accessKey, secretKey);
+        return Auth.create(applicationProperties.getQiniu().getAccessKey(),
+                applicationProperties.getQiniu().getSecretKey());
     }
 
     /**
@@ -68,6 +64,7 @@ public class QiniuUtils {
      * @return 配置信息
      */
     private Configuration configurationQiNiu() {
+        String area = applicationProperties.getQiniu().getArea();
         Configuration config;
         if (QiniuConfig.EAST.match(area)) {
             config = new Configuration(Zone.zone0());
@@ -95,8 +92,8 @@ public class QiniuUtils {
      */
     public DefaultPutRet upload(MultipartFile file, java.io.File localFile, String pathChild) throws IOException {
         UploadManager uploadManager = new UploadManager(configurationQiNiu());
-        String token = createAuth().uploadToken(bucketName);
-        Response response = uploadManager.put(file.getBytes(), dirName + pathChild + localFile.getName(), token);
+        String token = createAuth().uploadToken(applicationProperties.getQiniu().getBucketName());
+        Response response = uploadManager.put(file.getBytes(), applicationProperties.getQiniu().getDirName() + pathChild + localFile.getName(), token);
         return new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
     }
 
@@ -120,7 +117,7 @@ public class QiniuUtils {
     @Async
     public void deleteOne(File file) throws QiniuException {
         BucketManager bucketManager = new BucketManager(createAuth(), configurationQiNiu());
-        bucketManager.delete(bucketName, file.getDirName() + file.getName());
+        bucketManager.delete(applicationProperties.getQiniu().getBucketName(), file.getDirName() + file.getName());
     }
 
     /**
@@ -134,7 +131,7 @@ public class QiniuUtils {
         BucketManager bucketManager = new BucketManager(createAuth(), configurationQiNiu());
         String[] keyList = files.stream().map(file -> file.getDirName() + file.getName()).toArray(String[]::new);
         BucketManager.BatchOperations batchOperations = new BucketManager.BatchOperations();
-        batchOperations.addDeleteOp(bucketName, keyList);
+        batchOperations.addDeleteOp(applicationProperties.getQiniu().getBucketName(), keyList);
         Response response = bucketManager.batch(batchOperations);
         BatchStatus[] batchStatusList = response.jsonToObject(BatchStatus[].class);
         for (int i = 0; i < keyList.length; i++) {

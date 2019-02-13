@@ -5,6 +5,7 @@ import cn.echocow.xiaoming.model.entity.*;
 import cn.echocow.xiaoming.model.entity.File;
 import cn.echocow.xiaoming.model.enums.UploadMethod;
 import cn.echocow.xiaoming.exception.FileUploadException;
+import cn.echocow.xiaoming.model.properties.ApplicationProperties;
 import cn.echocow.xiaoming.resource.ApplicationResource;
 import cn.echocow.xiaoming.resource.PageSimple;
 import cn.echocow.xiaoming.resource.RestResource;
@@ -23,7 +24,6 @@ import com.qiniu.storage.model.DefaultPutRet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.Resources;
@@ -54,12 +54,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/files")
 public class FileController {
 
-    @Value("${spring.application.file.upload-path}")
-    private String uploadPath;
-    @Value("${spring.application.file.upload-type}")
-    private String uploadType;
-    @Value("${spring.application.qiniu.dir-name}")
-    private String dirName;
     private String separator = java.io.File.separator;
     private static final String CHARSET = Charset.forName("utf8").name();
     private final FileService fileService;
@@ -67,14 +61,16 @@ public class FileController {
     private final StudentService studentService;
     private final FileUtils fileUtils;
     private final QiniuUtils qiniuUtils;
+    private final ApplicationProperties applicationProperties;
 
     @Autowired
-    public FileController(FileService fileService, TaskService taskService, StudentService studentService, FileUtils fileUtils, QiniuUtils qiniuUtils) {
+    public FileController(FileService fileService, TaskService taskService, StudentService studentService, FileUtils fileUtils, QiniuUtils qiniuUtils, ApplicationProperties applicationProperties) {
         this.fileService = fileService;
         this.taskService = taskService;
         this.studentService = studentService;
         this.fileUtils = fileUtils;
         this.qiniuUtils = qiniuUtils;
+        this.applicationProperties = applicationProperties;
     }
 
     public Class getControllerClass() {
@@ -112,7 +108,7 @@ public class FileController {
         Student student = studentService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         String pathChild = separator + classroom.getName() + "_" + homework.getName() + "_" + task.getName() + separator;
         String fileName = new String((student.getName() + "_" + student.getNo() + "." + fileType).getBytes(StandardCharsets.UTF_8));
-        java.io.File folder = new java.io.File(uploadPath + pathChild);
+        java.io.File folder = new java.io.File(applicationProperties.getFile().getUploadPath() + pathChild);
         if (!folder.exists()) {
             int i = 0;
             while (i < 3) {
@@ -139,15 +135,15 @@ public class FileController {
         newFile.setTask(task);
 
         // 如果是七牛云存储
-        if (UploadMethod.QINIU.match(uploadType)) {
+        if (UploadMethod.QINIU.match(applicationProperties.getFile().getUploadType())) {
             DefaultPutRet defaultPutRet = qiniuUtils.upload(file, localFile, pathChild);
             pathChild.replace(separator, "/");
-            newFile.setDirName(dirName + pathChild);
+            newFile.setDirName(applicationProperties.getQiniu().getDirName() + pathChild);
             File save = fileService.save(newFile);
             save.setRemark(defaultPutRet.hash);
             return new ResponseEntity<>(new RestResource<>(save, getControllerClass()), HttpStatus.CREATED);
         }
-        newFile.setDirName(uploadPath + pathChild);
+        newFile.setDirName(applicationProperties.getFile().getUploadPath() + pathChild);
         // 保存文件
         file.transferTo(localFile);
         return new ResponseEntity<>(new RestResource<>(fileService.save(newFile), getControllerClass()), HttpStatus.CREATED);
@@ -162,7 +158,7 @@ public class FileController {
     @GetMapping("/{id}")
     public HttpEntity<?> download(@PathVariable Long id, HttpServletResponse response) throws Exception {
         File file = fileService.findById(id);
-        if (UploadMethod.QINIU.match(uploadType)) {
+        if (UploadMethod.QINIU.match(applicationProperties.getFile().getUploadType())) {
             return qiniuUtils.download(file);
         }
         try (
@@ -190,7 +186,7 @@ public class FileController {
     @DeleteMapping("/{id}")
     public HttpEntity<?> delete(@PathVariable Long id) throws QiniuException {
         File file = fileService.findById(id);
-        if (UploadMethod.QINIU.match(uploadType)) {
+        if (UploadMethod.QINIU.match(applicationProperties.getFile().getUploadType())) {
             qiniuUtils.deleteOne(file);
         } else {
             fileUtils.localFileDelete(file);
@@ -236,7 +232,7 @@ public class FileController {
     }
 
     private HttpEntity<?> deleteFiles(List<File> files) throws QiniuException {
-        if (UploadMethod.QINIU.match(uploadType)) {
+        if (UploadMethod.QINIU.match(applicationProperties.getFile().getUploadType())) {
             qiniuUtils.delete(files);
         } else {
             fileUtils.localFilesDelete(files);

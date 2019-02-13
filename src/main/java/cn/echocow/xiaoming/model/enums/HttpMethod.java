@@ -40,6 +40,6 @@ public enum HttpMethod {
      * @return 结果
      */
     public boolean match(String name) {
-        return name().equals(name);
+        return name().equalsIgnoreCase(name);
     }
 }

@@ -19,6 +19,8 @@ public interface SysUserService extends BaseService<SysUser, Long, SysUserReposi
      */
     SysUser loadUserByUsername(String username);
 
+    SysUser loadUserByMobile(String phone);
+
     /**
      * 通过用户名查找启用的用户的 ID
      *

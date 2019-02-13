@@ -3,13 +3,15 @@ ext {
     java = ['javaVersion': JavaVersion.VERSION_1_8]
 
     lib = [
-            'mysql'       : 'mysql:mysql-connector-java',
-            'lombok'      : 'org.projectlombok:lombok',
-            'userAgent'   : 'eu.bitwalker:UserAgentUtils:1.21',
-            'commonsPools': 'org.apache.commons:commons-pool2:',
-            'commonsLang' : 'org.apache.commons:commons-lang3:',
-            'fastjson'    : 'com.alibaba:fastjson:1.2.56',
-            'qiniu'       : 'com.qiniu:qiniu-java-sdk:7.2.18'
+            'mysql'              : 'mysql:mysql-connector-java',
+            'lombok'             : 'org.projectlombok:lombok',
+            'userAgent'          : 'eu.bitwalker:UserAgentUtils:1.21',
+            'commonsPools'       : 'org.apache.commons:commons-pool2',
+            'commonsLang'        : 'org.apache.commons:commons-lang3',
+            'commonsCollections4': 'org.apache.commons:commons-collections4:4.3',
+            'fastjson'           : 'com.alibaba:fastjson:1.2.56',
+            'qiniu'              : 'com.qiniu:qiniu-java-sdk:7.2.18',
+
     ]
 
     springBoot = [

@@ -40,6 +40,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRe
         );
     }
 
+    @Override
+    public SysUser loadUserByMobile(String phone) {
+        return sysUserRepository.findFirstByPhoneAndEnabledTrue(phone).orElseThrow(() ->
+                new UsernameNotFoundException("用户不存在")
+        );
+    }
+
     @Cacheable
     @Override
     public Optional<Long> findFirstIdByUsernameAndEnabledTrue(String username) {

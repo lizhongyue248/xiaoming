@@ -6,13 +6,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TimeZone;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Echo
@@ -77,6 +76,14 @@ public class PasswordTest {
         getenv.forEach((key, value) -> System.out.println(key + " ...... " + value));
         Properties properties = System.getProperties();
         properties.forEach((key, value) -> System.out.println(key + " ---- " + value));
+    }
+
+    @Test
+    public void passwordTest() {
+        String e = "$2a$10$Nww6ckqqJUg/botZzZDn1.8xZwTfW2n1mYE66lrUgn00KVzfe2T7C";
+        String p = "123456";
+        boolean matches = new BCryptPasswordEncoder().matches(p, e);
+        assertTrue(matches);
     }
 
     public static void main(String[] args) throws IOException {
