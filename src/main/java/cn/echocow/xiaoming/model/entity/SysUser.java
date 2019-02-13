@@ -108,6 +108,7 @@ public class SysUser extends BaseEntity implements UserDetails {
      * @return 未过期
      */
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -118,6 +119,7 @@ public class SysUser extends BaseEntity implements UserDetails {
      * @return 未锁定
      */
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
@@ -128,6 +130,7 @@ public class SysUser extends BaseEntity implements UserDetails {
      * @return 未过期
      */
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
