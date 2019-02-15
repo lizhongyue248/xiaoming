@@ -32,6 +32,7 @@ dependencies {
     annotationProcessor rootProject.ext.springBoot.configuration
     implementation(
             rootProject.ext.springBoot.starter,
+            rootProject.ext.springBoot.cache,
             rootProject.ext.springBoot.actuator,
             rootProject.ext.springBoot.aop,
             rootProject.ext.springBoot.jpa,
@@ -49,7 +50,9 @@ dependencies {
             rootProject.ext.lib.commonsLang,
             rootProject.ext.lib.commonsCollections4,
             rootProject.ext.lib.userAgent,
-            rootProject.ext.lib.qiniu
+            rootProject.ext.lib.qiniu,
+            rootProject.ext.lib.fastjson,
+            rootProject.ext.lib.jacksonDatatypeHibernate5
     )
     implementation(
             rootProject.ext.security.oauth2,

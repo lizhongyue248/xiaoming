@@ -1,6 +1,7 @@
 package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -82,12 +83,12 @@ public class SysUser extends BaseEntity implements UserDetails {
     /**
      * 当前用户的权限
      */
-    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = "users")
     @JoinTable(name = "sys_user_role",
             joinColumns = {@JoinColumn(name = "user_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false)})
-    private List<SysRole> roles = new ArrayList<>();
+    private List<SysRole> roles;
 
     /**
      * 授权

@@ -1,9 +1,24 @@
 package cn.echocow.xiaoming.config;
 
 import cn.echocow.xiaoming.model.properties.ApplicationProperties;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ser.PropertyFilter;
+import com.fasterxml.jackson.databind.ser.PropertyWriter;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.google.gson.Gson;
+import org.hibernate.collection.spi.PersistentCollection;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -15,11 +30,9 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.*;
 
+import java.nio.charset.Charset;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Objects;
@@ -92,8 +105,73 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     private RedisSerializer<Object> valueSerializer() {
-        return new GenericJackson2JsonRedisSerializer();
+//        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+//        ObjectMapper om = new ObjectMapper();
+//        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+//        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+//        Hibernate5Module hibernate5Module = new Hibernate5Module();
+//        hibernate5Module.configure(Hibernate5Module.Feature.REQUIRE_EXPLICIT_LAZY_LOADING_MARKER, true);
+//        om.registerModule(hibernate5Module);
+//        jackson2JsonRedisSerializer.setObjectMapper(om);
+//        return jackson2JsonRedisSerializer;
+
+
+//        return new GenericJackson2JsonRedisSerializer();
+//        return new Jackson2JsonRedisSerializer<>(Object.class);
+//        return new OxmSerializer();
+//        return new GsonRedisSerializer<>(Object.class);
+        return new FastJsonRedisSerializer<>(Object.class);
     }
 
 
+    private class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
+        private Class<T> clazz;
+        FastJsonRedisSerializer(Class<T> clazz) {
+            super();
+            this.clazz = clazz;
+        }
+
+        @Override
+        public byte[] serialize(T t) throws SerializationException {
+            if (null == t) {
+                return new byte[0];
+            }
+            return JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(Charset.forName("UTF-8"));
+        }
+
+        @Override
+        public T deserialize(byte[] bytes) throws SerializationException {
+            if (null == bytes || bytes.length <= 0) {
+                return null;
+            }
+            String str = new String(bytes, Charset.forName("UTF-8"));
+            return JSON.parseObject(str, clazz);
+        }
+    }
+
+    private class GsonRedisSerializer<T> implements RedisSerializer<T> {
+        private Class<T> clazz;
+
+        GsonRedisSerializer(Class<T> clazz) {
+            super();
+            this.clazz = clazz;
+        }
+
+        @Override
+        public byte[] serialize(T t) throws SerializationException {
+            if (t == null) {
+                return new byte[0];
+            }
+            return new Gson().toJson(t).getBytes(Charset.forName("UTF-8"));
+        }
+
+        @Override
+        public T deserialize(byte[] bytes) throws SerializationException {
+            if (null == bytes || bytes.length <= 0) {
+                return null;
+            }
+            String str = new String(bytes, Charset.forName("UTF-8"));
+            return new Gson().fromJson(str, clazz);
+        }
+    }
 }

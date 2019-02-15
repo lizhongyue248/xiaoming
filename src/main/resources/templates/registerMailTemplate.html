@@ -7,25 +7,31 @@
         html, body {
             height: 100%;
             width: 100%;
-            display: flex;
             overflow: hidden;
         }
 
         #content {
-            justify-content: center;
-            align-content: center;
-            align-items: center;
-            display: flex;
             height: 95%;
             width: 100%;
         }
+
+        #content p {
+            font-size: 15px;
+            color: grey;
+        }
+
+        #content p b {
+            font-weight: bolder;
+            font-size: 25px;
+            color: red;
+        }
+
     </style>
 </head>
 <body>
 <div id="content">
-    <img src="timg.gif" alt="logo">
-    <!--/*@thymesVar id="username" type="java.lang.String"*/-->
-    <p th:text="${username} + ' ,您的作业,还未完成哦请及时上交'">您的作业还未完成哦，请及时上交～！</p>
+    <!--/*@thymesVar id="code" type="java.lang.String"*/-->
+    <p>小明同学欢迎您的注册！您的注册码是： <b th:text="${code}">123456</b> <br>注册码三十分钟内有效哦～！</p>
 </div>
 </body>
 </html>

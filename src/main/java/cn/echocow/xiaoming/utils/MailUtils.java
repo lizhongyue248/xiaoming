@@ -37,7 +37,7 @@ public class MailUtils {
         javaMailSender.send(message);
     }
 
-    public void sendTipMail(String from, String to, String subject, String content) {
+    public void sendTemplateMail(String from, String to, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);

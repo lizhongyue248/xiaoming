@@ -35,6 +35,14 @@ public interface SysUserRepository extends BaseRepository<SysUser, Long> {
     Optional<SysUser> findFirstByPhoneAndEnabledTrue(@Param("phone") String phone);
 
     /**
+     * 通过邮箱查找启用的用户
+     *
+     * @param email 邮箱
+     * @return 结果
+     */
+    Optional<SysUser> findFirstByEmailAndEnabledTrue(@Param("email") String email);
+
+    /**
      * 通过用户名查找启用的用户的 ID
      *
      * @param username 用户名

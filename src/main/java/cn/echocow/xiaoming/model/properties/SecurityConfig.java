@@ -3,6 +3,8 @@ package cn.echocow.xiaoming.model.properties;
 import lombok.Data;
 
 /**
+ * 安全配置
+ *
  * @author Echo
  * @version 1.0
  * @date 2019-02-13 17:59

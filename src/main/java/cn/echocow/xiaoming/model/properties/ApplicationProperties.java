@@ -13,8 +13,24 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
+    /**
+     * 应用名称
+     */
     private String name;
+    /**
+     * 七牛云配置相关
+     */
     private QiniuConfig qiniu = new QiniuConfig();
+    /**
+     * 安全配置相关
+     */
     private SecurityConfig security = new SecurityConfig();
+    /**
+     * 文件配置相关
+     */
     private FileConfig file = new FileConfig();
+    /**
+     * 验证配置相关
+     */
+    private ValidateConfig validate = new ValidateConfig();
 }

@@ -40,17 +40,17 @@ public class MailUtilsTest {
     public void sendFreeMarkerTipMail() throws Exception {
         Template template = configuration.getTemplate("tipMailTemplate.ftl");
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, null);
-        mailUtils.sendTipMail("echocow@qq.com", "lizhongyue248@163.com",
+        mailUtils.sendTemplateMail("echocow@qq.com", "lizhongyue248@163.com",
                 "tip", content);
         Thread.sleep(50000);
     }
 
     @Test
-    public void sendTipMail() throws Exception {
+    public void sendThymleafMail() throws Exception {
         Context context = new Context();
         context.setVariable("username","xiaoming");
         String content = templateEngine.process("tipMailTemplate.html", context);
-        mailUtils.sendTipMail("echocow@qq.com", "lizhongyue248@163.com",
+        mailUtils.sendTemplateMail("echocow@qq.com", "lizhongyue248@163.com",
                 "tip", content);
         Thread.sleep(50000);
     }

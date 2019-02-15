@@ -1,5 +1,6 @@
 package cn.echocow.xiaoming;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,6 +41,9 @@ public class PasswordTest {
 
         System.out.println(StringUtils.compare(s1, s2));
         System.out.println(StringUtils.compare(s4, s5));
+
+        String random = RandomStringUtils.randomNumeric(10,15);
+        System.out.println(random);
     }
 
     @Test
@@ -84,6 +88,10 @@ public class PasswordTest {
         String p = "123456";
         boolean matches = new BCryptPasswordEncoder().matches(p, e);
         assertTrue(matches);
+    }
+
+    public void redisTest(){
+        String s = "{\"@class\":\"cn.echocow.xiaoming.model.entity.SysUser\",\"id\":1,\"sort\":null,\"createTime\":[2019,1,23,20,25,34],\"createUser\":null,\"modifyTime\":[2019,2,4,0,11,13],\"modifyUser\":\"admin\",\"remark\":null,\"nickname\":\"admin21\",\"username\":\"admin\",\"password\":\"$2a$10$6UpGJI4nDFC2MWO/bbDJFujBoTBalgNxD4DgF.2tXEFvGbR42AhYC\",\"phone\":\"123456\",\"email\":\"lizhongyue248@163.com\",\"img\":null,\"enabled\":true,\"roles\":[\"org.hibernate.collection.internal.PersistentBag\",[{\"@class\":\"cn.echocow.xiaoming.model.entity.SysRole\",\"id\":2,\"sort\":null,\"createTime\":[2019,1,23,20,26,10],\"createUser\":null,\"modifyTime\":[2019,1,23,20,26,10],\"modifyUser\":null,\"remark\":null,\"name\":\"ROLE_ADMIN\",\"nameZh\":\"管理员\",\"permissions\":[\"org.hibernate.collection.internal.PersistentBag\",[{\"@class\":\"cn.echocow.xiaoming.model.entity.SysPermission\",\"id\":2,\"sort\":null,\"createTime\":[2019,1,23,21,22,3],\"createUser\":null,\"modifyTime\":[2019,1,23,21,22,3],\"modifyUser\":null,\"remark\":null,\"name\":\"系统管理\",\"matchUrl\":\"/sysLogs**\",\"requestPath\":\"/sysLogs**\",\"method\":\"ALL\",\"component\":\"系统管理\",\"icon\":null,\"keepAlive\":true,\"sysPermission\":null}]]},{\"@class\":\"cn.echocow.xiaoming.model.entity.SysRole\",\"id\":3,\"sort\":null,\"createTime\":[2019,1,30,19,57,50],\"createUser\":null,\"modifyTime\":[2019,1,30,19,57,50],\"modifyUser\":null,\"remark\":null,\"name\":\"ROLE_STUDENT\",\"nameZh\":\"学生\",\"permissions\":[\"org.hibernate.collection.internal.PersistentBag\",[]]},{\"@class\":\"cn.echocow.xiaoming.model.entity.SysRole\",\"id\":4,\"sort\":null,\"createTime\":[2019,1,30,19,58,33],\"createUser\":null,\"modifyTime\":[2019,1,30,19,58,33],\"modifyUser\":null,\"remark\":null,\"name\":\"ROLE_STUDY\",\"nameZh\":\"学习委员\",\"permissions\":[\"org.hibernate.collection.internal.PersistentBag\",[]]},{\"@class\":\"cn.echocow.xiaoming.model.entity.SysRole\",\"id\":2,\"sort\":null,\"createTime\":[2019,1,23,20,26,10],\"createUser\":null,\"modifyTime\":[2019,1,23,20,26,10],\"modifyUser\":null,\"remark\":null,\"name\":\"ROLE_ADMIN\",\"nameZh\":\"管理员\",\"permissions\":[\"org.hibernate.collection.internal.PersistentBag\",[{\"@class\":\"cn.echocow.xiaoming.model.entity.SysPermission\",\"id\":2,\"sort\":null,\"createTime\":[2019,1,23,21,22,3],\"createUser\":null,\"modifyTime\":[2019,1,23,21,22,3],\"modifyUser\":null,\"remark\":null,\"name\":\"系统管理\",\"matchUrl\":\"/sysLogs**\",\"requestPath\":\"/sysLogs**\",\"method\":\"ALL\",\"component\":\"系统管理\",\"icon\":null,\"keepAlive\":true,\"sysPermission\":null}]]},{\"@class\":\"cn.echocow.xiaoming.model.entity.SysRole\",\"id\":3,\"sort\":null,\"createTime\":[2019,1,30,19,57,50],\"createUser\":null,\"modifyTime\":[2019,1,30,19,57,50],\"modifyUser\":null,\"remark\":null,\"name\":\"ROLE_STUDENT\",\"nameZh\":\"学生\",\"permissions\":[\"org.hibernate.collection.internal.PersistentBag\",[]]},{\"@class\":\"cn.echocow.xiaoming.model.entity.SysRole\",\"id\":4,\"sort\":null,\"createTime\":[2019,1,30,19,58,33],\"createUser\":null,\"modifyTime\":[2019,1,30,19,58,33],\"modifyUser\":null,\"remark\":null,\"name\":\"ROLE_STUDY\",\"nameZh\":\"学习委员\",\"permissions\":[\"org.hibernate.collection.internal.PersistentBag\",[]]}]]}";
     }
 
     public static void main(String[] args) throws IOException {

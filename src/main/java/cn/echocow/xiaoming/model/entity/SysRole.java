@@ -2,6 +2,7 @@ package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -39,8 +40,8 @@ public class SysRole extends BaseEntity {
     /**
      * 当前角色的菜单
      */
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @JsonIgnoreProperties(value = "roles")
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "sys_permission_role", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<SysPermission> permissions = new ArrayList<>();
@@ -50,7 +51,6 @@ public class SysRole extends BaseEntity {
      * 双向映射造成数据重复查询死循环问题
      */
     @ManyToMany(mappedBy = "roles")
-    @JsonIgnore
     private List<SysUser> users = new ArrayList<>();
 
 }

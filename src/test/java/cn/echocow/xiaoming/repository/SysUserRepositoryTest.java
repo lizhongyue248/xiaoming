@@ -43,8 +43,12 @@ public class SysUserRepositoryTest {
      */
     @Test
     public void testFindFirstByUsernameAndEnabledTrue() {
-        Optional<SysUser> admin = sysUserRepository.findFirstByUsernameAndEnabledTrue("admin");
-        assertNull(admin);
+        Optional<SysUser> admin = sysUserRepository.findFirstByPhoneAndEnabledTrue("123456");
+        assertNotNull(admin);
+        assert admin.isPresent();
+        SysUser sysUser = admin.get();
+        System.out.println(sysUser);
+        System.out.println(sysUser.getRoles());
     }
 
 

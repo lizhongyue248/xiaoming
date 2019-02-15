@@ -1,14 +1,11 @@
 package cn.echocow.xiaoming.config;
 
-import cn.echocow.xiaoming.config.permission.AuthAccessDecisionManager;
 import cn.echocow.xiaoming.model.properties.ApplicationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,8 +19,6 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -41,15 +36,11 @@ import org.springframework.web.filter.CorsFilter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-    private final FilterInvocationSecurityMetadataSource securityMetadataSource;
-    private final AuthAccessDecisionManager authAccessDecisionManager;
     private final ApplicationProperties applicationProperties;
 
     @Autowired
-    public WebSecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, FilterInvocationSecurityMetadataSource securityMetadataSource, AuthAccessDecisionManager authAccessDecisionManager, ApplicationProperties applicationProperties) {
+    public WebSecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, ApplicationProperties applicationProperties) {
         this.userDetailsService = userDetailsService;
-        this.securityMetadataSource = securityMetadataSource;
-        this.authAccessDecisionManager = authAccessDecisionManager;
         this.applicationProperties = applicationProperties;
     }
 
@@ -140,31 +131,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 可以在 ResourceServerConfig 中配置，但是这个的级别较高
+     * 在 ResourceServerConfig 中配置
+     * 此处的级别较高，且对 ResourceServerConfig 会有一定影响
      *
      * @param http 配置
      */
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .requestMatchers().antMatchers(HttpMethod.OPTIONS, "**")
-                .and()
-                .authorizeRequests()
-                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-                    @Override
-                    public <O extends FilterSecurityInterceptor> O postProcess(O o) {
-                        o.setSecurityMetadataSource(securityMetadataSource);
-                        o.setAccessDecisionManager(authAccessDecisionManager);
-                        return o;
-                    }
-                })
-                .anyRequest().authenticated()
-                .antMatchers("/auth/**/**").permitAll()
-                .and()
-                .cors()
-                .and()
-                .csrf().disable();
-    }
+    protected void configure(HttpSecurity http) {}
 
     @Override
     public void configure(WebSecurity webSecurity) {

@@ -9,6 +9,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
+    open-in-view: true
     hibernate:
       ddl-auto: update
     properties:
@@ -16,7 +17,7 @@ spring:
         enable_lazy_load_no_trans: true
   redis:
     host: 127.0.0.1
-    database: 4
+    database: 1
     password: 123456
     lettuce:
       pool:

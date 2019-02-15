@@ -29,6 +29,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@RequestMapping("/files")
+@RequestMapping(value = "/files", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FileController {
 
     private String separator = java.io.File.separator;

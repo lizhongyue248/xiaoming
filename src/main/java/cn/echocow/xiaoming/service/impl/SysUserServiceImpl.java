@@ -34,6 +34,25 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRe
     private SysUserRepository sysUserRepository;
 
     @Override
+    @Cacheable
+    public SysUser loadUser(String identity) {
+        Optional<SysUser> sysUser = sysUserRepository.findFirstByUsernameAndEnabledTrue(identity);
+        if (sysUser.isPresent()) {
+            return sysUser.get();
+        }
+        sysUser = sysUserRepository.findFirstByEmailAndEnabledTrue(identity);
+        if (sysUser.isPresent()) {
+            return sysUser.get();
+        }
+        sysUser = sysUserRepository.findFirstByPhoneAndEnabledTrue(identity);
+        if (sysUser.isPresent()) {
+            return sysUser.get();
+        }
+        throw new UsernameNotFoundException("用户不存在");
+    }
+
+    @Override
+    @Cacheable
     public SysUser loadUserByUsername(String username) {
         return sysUserRepository.findFirstByUsernameAndEnabledTrue(username).orElseThrow(() ->
                 new UsernameNotFoundException("用户不存在")
@@ -41,14 +60,22 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRe
     }
 
     @Override
+    @Cacheable
     public SysUser loadUserByMobile(String phone) {
         return sysUserRepository.findFirstByPhoneAndEnabledTrue(phone).orElseThrow(() ->
                 new UsernameNotFoundException("用户不存在")
         );
     }
 
-    @Cacheable
     @Override
+    @Cacheable
+    public SysUser loadUserByEmail(String email) {
+        return sysUserRepository.findFirstByEmailAndEnabledTrue(email).orElseThrow(() ->
+                new UsernameNotFoundException("用户不存在"));
+    }
+
+    @Override
+    @Cacheable
     public Optional<Long> findFirstIdByUsernameAndEnabledTrue(String username) {
         return sysUserRepository.findFirstIdByUsernameAndEnabledTrue(username);
     }

@@ -3,20 +3,24 @@ ext {
     java = ['javaVersion': JavaVersion.VERSION_1_8]
 
     lib = [
-            'mysql'              : 'mysql:mysql-connector-java',
-            'lombok'             : 'org.projectlombok:lombok',
-            'userAgent'          : 'eu.bitwalker:UserAgentUtils:1.21',
-            'commonsPools'       : 'org.apache.commons:commons-pool2',
-            'commonsLang'        : 'org.apache.commons:commons-lang3',
-            'commonsCollections4': 'org.apache.commons:commons-collections4:4.3',
-            'fastjson'           : 'com.alibaba:fastjson:1.2.56',
-            'qiniu'              : 'com.qiniu:qiniu-java-sdk:7.2.18',
+            'mysql'                    : 'mysql:mysql-connector-java',
+            'lombok'                   : 'org.projectlombok:lombok',
+            'userAgent'                : 'eu.bitwalker:UserAgentUtils:1.21',
+            'commonsPools'             : 'org.apache.commons:commons-pool2',
+            'commonsLang'              : 'org.apache.commons:commons-lang3',
+            'commonsCollections4'      : 'org.apache.commons:commons-collections4:4.3',
+            'fastjson'                 : 'com.alibaba:fastjson:1.2.56',
+            'qiniu'                    : 'com.qiniu:qiniu-java-sdk:7.2.18',
+            'ehcache'                  : 'org.ehcache:ehcache:3.6.3',
+            'jacksonDatatypeHibernate5': 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.8'
+
 
     ]
 
     springBoot = [
             'starter'        : 'org.springframework.boot:spring-boot-starter',
             'actuator'       : 'org.springframework.boot:spring-boot-starter-actuator',
+            'cache'          : 'org.springframework.boot:spring-boot-starter-cache',
             'web'            : 'org.springframework.boot:spring-boot-starter-web',
             'aop'            : 'org.springframework.boot:spring-boot-starter-aop',
             'jpa'            : 'org.springframework.boot:spring-boot-starter-data-jpa',

@@ -24,7 +24,7 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor())
-                .addPathPatterns("/auth/**");
+                .addPathPatterns("/auth/**/**");
     }
 
 }

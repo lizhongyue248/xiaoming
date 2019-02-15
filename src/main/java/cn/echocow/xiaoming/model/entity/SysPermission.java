@@ -4,6 +4,8 @@ import cn.echocow.xiaoming.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -76,6 +78,5 @@ public class SysPermission extends BaseEntity {
      * 双向映射造成数据重复查询死循环问题
      */
     @ManyToMany(mappedBy = "permissions")
-    @JsonIgnore
     private List<SysRole> roles = new ArrayList<>();
 }
