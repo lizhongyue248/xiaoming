@@ -1,25 +1,14 @@
 package cn.echocow.xiaoming.service.impl;
 
-import cn.echocow.xiaoming.utils.CustomBeanUtils;
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
+import cn.echocow.xiaoming.mapper.SysUserMapper;
 import cn.echocow.xiaoming.model.entity.SysUser;
-import cn.echocow.xiaoming.exception.ResourceExistException;
-import cn.echocow.xiaoming.exception.ResourceNoFoundException;
-import cn.echocow.xiaoming.repository.SysUserRepository;
 import cn.echocow.xiaoming.service.SysUserService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import com.sun.javafx.binding.StringFormatter;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.Optional;
 
 /**
@@ -28,85 +17,52 @@ import java.util.Optional;
  * @date 2019-01-23 20:40
  */
 @Service
-@CacheConfig(cacheNames = {"sysUser"}, keyGenerator = "cacheKeyGenerator")
-public class SysUserServiceImpl extends BaseServiceImpl<SysUser, Long, SysUserRepository> implements SysUserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> implements SysUserService {
     @Resource
-    private SysUserRepository sysUserRepository;
+    private SysUserMapper sysUserMapper;
 
     @Override
-    @Cacheable
     public SysUser loadUser(String identity) {
-        Optional<SysUser> sysUser = sysUserRepository.findFirstByUsernameAndEnabledTrue(identity);
-        if (sysUser.isPresent()) {
-            return sysUser.get();
-        }
-        sysUser = sysUserRepository.findFirstByEmailAndEnabledTrue(identity);
-        if (sysUser.isPresent()) {
-            return sysUser.get();
-        }
-        sysUser = sysUserRepository.findFirstByPhoneAndEnabledTrue(identity);
-        if (sysUser.isPresent()) {
-            return sysUser.get();
-        }
-        throw new UsernameNotFoundException("用户不存在");
+        return Optional.ofNullable(sysUserMapper.findByIdentity(identity)).orElseThrow(() ->
+                new UsernameNotFoundException("the user not exist!"));
     }
 
     @Override
-    @Cacheable
     public SysUser loadUserByUsername(String username) {
-        return sysUserRepository.findFirstByUsernameAndEnabledTrue(username).orElseThrow(() ->
-                new UsernameNotFoundException("用户不存在")
-        );
+        SysUser sysUser = new SysUser();
+        sysUser.setUsername(username);
+        return Optional.ofNullable(sysUserMapper.findByUser(sysUser)).orElseThrow(() ->
+                new UsernameNotFoundException("the user not exist!"));
     }
 
     @Override
-    @Cacheable
     public SysUser loadUserByMobile(String phone) {
-        return sysUserRepository.findFirstByPhoneAndEnabledTrue(phone).orElseThrow(() ->
-                new UsernameNotFoundException("用户不存在")
-        );
+        SysUser sysUser = new SysUser();
+        sysUser.setPhone(phone);
+        return Optional.ofNullable(sysUserMapper.findByUser(sysUser)).orElseThrow(() ->
+                new UsernameNotFoundException("the user not exist!"));
     }
 
     @Override
-    @Cacheable
     public SysUser loadUserByEmail(String email) {
-        return sysUserRepository.findFirstByEmailAndEnabledTrue(email).orElseThrow(() ->
-                new UsernameNotFoundException("用户不存在"));
+        SysUser sysUser = new SysUser();
+        sysUser.setEmail(email);
+        return Optional.ofNullable(sysUserMapper.findByUser(sysUser)).orElseThrow(() ->
+                new UsernameNotFoundException("the user not exist!"));
     }
 
     @Override
-    @Cacheable
-    public Optional<Long> findFirstIdByUsernameAndEnabledTrue(String username) {
-        return sysUserRepository.findFirstIdByUsernameAndEnabledTrue(username);
-    }
-
-    @Override
-    @CacheEvict
-    public SysUser save(SysUser sysUser) {
-        String username = sysUser.getUsername();
-        sysUser.setPassword(new BCryptPasswordEncoder().encode(sysUser.getPassword()));
-        if (sysUserRepository.findFirstByUsernameAndEnabledTrue(username).isPresent()) {
-            throw new ResourceExistException(String.format("sys_user by username %s already exist!", username));
+    public String existUser(SysUser user) {
+        if (user.getUsername() != null && sysUserMapper.findSimpleByIdentity(user.getUsername()) != null){
+            return StringFormatter.format("user by %s already exist!", user.getUsername()).getValue();
         }
-        return sysUserRepository.save(sysUser);
-    }
-
-    @Override
-    @CachePut
-    public SysUser update(Long id, SysUser sysUser) {
-        if (StringUtils.isNotEmpty(sysUser.getPassword())) {
-            sysUser.setPassword(new BCryptPasswordEncoder().encode(sysUser.getPassword()));
+        if (user.getPhone() != null && sysUserMapper.findSimpleByIdentity(user.getPhone()) != null){
+            return StringFormatter.format("user by %s already exist!", user.getPhone()).getValue();
         }
-        SysUser exist = sysUserRepository.findById(id).orElseThrow(() ->
-                new ResourceNoFoundException(String.format("sys_user by id %s not found!", id)));
-        if (StringUtils.compare(sysUser.getUsername(), exist.getUsername()) != 0
-                && sysUserRepository.findFirstIdByUsernameAndEnabledTrue(sysUser.getUsername()).isPresent()) {
-            throw new ResourceExistException(String.format("sys_user by username %s already exist!", sysUser.getUsername()));
+        if (user.getEmail() != null && sysUserMapper.findSimpleByIdentity(user.getEmail()) != null){
+            return StringFormatter.format("user by %s already exist!", user.getEmail()).getValue();
         }
-        sysUser.getRoles().addAll(exist.getRoles());
-        sysUser.setRoles(new ArrayList<>(new LinkedHashSet<>(sysUser.getRoles())));
-        BeanUtils.copyProperties(sysUser, exist, CustomBeanUtils.getNullPropertyNames(sysUser));
-        return exist;
+        return null;
     }
 
 }

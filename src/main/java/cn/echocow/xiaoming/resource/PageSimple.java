@@ -15,32 +15,22 @@ public class PageSimple {
     /**
      * 分页大小
      */
-    private Integer size;
+    private Long size;
 
     /**
      * 当前页
      */
-    private Integer number;
+    private Long current;
 
     /**
      * 元素个数
      */
-    private Long totalElements;
+    private Long total;
 
     /**
      * 总页码
      */
-    private Integer totalPages;
-
-    /**
-     * 是否拥有上一页
-     */
-    private boolean previous;
-
-    /**
-     * 是否拥有下一页
-     */
-    private boolean next;
+    private Long pages;
 
     /**
      * 是否拥有上一页
@@ -48,7 +38,7 @@ public class PageSimple {
      * @return 是否拥有上一页
      */
     public boolean hasPrevioud() {
-        return this.previous;
+        return (current - 1) < 1;
     }
 
     /**
@@ -57,6 +47,6 @@ public class PageSimple {
      * @return 是否拥有下一页
      */
     public boolean hasNext() {
-        return this.next;
+        return current + 1 > pages;
     }
 }

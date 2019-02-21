@@ -1,10 +1,11 @@
 package cn.echocow.xiaoming.controller;
 
 import ch.qos.logback.core.util.FileSize;
+import cn.echocow.xiaoming.exception.FileUploadException;
+import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.model.entity.*;
 import cn.echocow.xiaoming.model.entity.File;
 import cn.echocow.xiaoming.model.enums.UploadMethod;
-import cn.echocow.xiaoming.exception.FileUploadException;
 import cn.echocow.xiaoming.model.properties.ApplicationProperties;
 import cn.echocow.xiaoming.resource.ApplicationResource;
 import cn.echocow.xiaoming.resource.PageSimple;
@@ -16,6 +17,8 @@ import cn.echocow.xiaoming.service.StudentService;
 import cn.echocow.xiaoming.service.TaskService;
 import cn.echocow.xiaoming.utils.FileUtils;
 import cn.echocow.xiaoming.utils.QiniuUtils;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
@@ -24,8 +27,6 @@ import com.qiniu.storage.model.DefaultPutRet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -40,9 +41,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -87,20 +86,19 @@ public class FileController {
      */
     @PostMapping
     public HttpEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("task") Long taskId) throws IOException {
-        System.setProperty("sun.jnu.encoding", "UTF-8");
         // 本地存储
         String fileType = "";
-
         // 获取后缀
         int index = Objects.requireNonNull(file.getOriginalFilename()).lastIndexOf(".");
         if (index != -1) {
             fileType = file.getOriginalFilename().substring(index + 1);
         }
-
         // 文件类型
-        Task task = taskService.findById(taskId);
-        Classroom classroom = task.getClassroom();
-        Homework homework = task.getHomework();
+        Task task = taskService.getCompleteById(taskId);
+        Classroom classroom = Optional.ofNullable(task.getClassroom()).orElseThrow(
+                () -> new ResourceNoFoundException("the task do not have classroom!"));
+        Homework homework = Optional.ofNullable(task.getHomework()).orElseThrow(
+                () -> new ResourceNoFoundException("the task do not have homework!"));
         if (!"*".equals(homework.getType()) && !homework.getType().contains(fileType)) {
             throw new FileUploadException("文件类型不合法！");
         }
@@ -122,7 +120,11 @@ public class FileController {
         // 本地文件
         java.io.File localFile = new java.io.File(folder, fileName);
         // 数据库的文件
-        File newFile = fileService.findByName(localFile.getName());
+        File newFile = fileService.findByStudentIdAndTaskId(student.getId(), taskId);
+        java.io.File oldFile = null;
+        if (newFile.getId() != null) {
+            oldFile = new java.io.File(newFile.getDirName(), newFile.getName());
+        }
         newFile.setName(localFile.getName());
         newFile.setOldName(file.getOriginalFilename());
         // 文件大小限制
@@ -133,21 +135,31 @@ public class FileController {
         }
         newFile.setSize(nowSize.toString());
         newFile.setType(fileType);
-        newFile.setTask(task);
-
+        newFile.setTaskId(task.getId());
+        newFile.setStudentId(student.getId());
         // 如果是七牛云存储
         if (UploadMethod.QINIU.match(applicationProperties.getFile().getUploadType())) {
-            DefaultPutRet defaultPutRet = qiniuUtils.upload(file, localFile, pathChild);
-            pathChild.replace(separator, "/");
-            newFile.setDirName(applicationProperties.getQiniu().getDirName() + pathChild);
-            File save = fileService.save(newFile);
-            save.setRemark(defaultPutRet.hash);
-            return new ResponseEntity<>(new RestResource<>(save, getControllerClass()), HttpStatus.CREATED);
+            DefaultPutRet defaultPutRet = qiniuUtils.upload(file, fileName, pathChild);
+            newFile.setDirName(applicationProperties.getQiniu().getDirName() + pathChild.replace(separator, "/"));
+            if (!fileService.save(newFile)) {
+                throw new RuntimeException("Save failed!");
+            }
+            newFile.setRemark(defaultPutRet.hash);
+            return new ResponseEntity<>(new RestResource<>(newFile, getControllerClass()), HttpStatus.CREATED);
         }
         newFile.setDirName(applicationProperties.getFile().getUploadPath() + pathChild);
+        // 删除原来的文件
+        if (oldFile != null && oldFile.exists()) {
+            if (!oldFile.delete()) {
+                log.warn("last file delete failed!" + oldFile.getAbsolutePath());
+            }
+        }
         // 保存文件
         file.transferTo(localFile);
-        return new ResponseEntity<>(new RestResource<>(fileService.save(newFile), getControllerClass()), HttpStatus.CREATED);
+        if (!fileService.saveOrUpdate(newFile)) {
+            throw new RuntimeException("Save Or Update failed!");
+        }
+        return new ResponseEntity<>(new RestResource<>(newFile, getControllerClass()), HttpStatus.CREATED);
     }
 
     /**
@@ -158,7 +170,7 @@ public class FileController {
      */
     @GetMapping("/{id}")
     public HttpEntity<?> download(@PathVariable Long id, HttpServletResponse response) throws Exception {
-        File file = fileService.findById(id);
+        File file = fileService.getById(id);
         if (UploadMethod.QINIU.match(applicationProperties.getFile().getUploadType())) {
             return qiniuUtils.download(file);
         }
@@ -186,13 +198,13 @@ public class FileController {
      */
     @DeleteMapping("/{id}")
     public HttpEntity<?> delete(@PathVariable Long id) throws QiniuException {
-        File file = fileService.findById(id);
+        File file = fileService.getById(id);
         if (UploadMethod.QINIU.match(applicationProperties.getFile().getUploadType())) {
             qiniuUtils.deleteOne(file);
         } else {
             fileUtils.localFileDelete(file);
         }
-        fileService.deleteById(id);
+        fileService.removeById(id);
         return new ResponseEntity<>(new ApplicationResource(), HttpStatus.NO_CONTENT);
     }
 
@@ -224,15 +236,22 @@ public class FileController {
         JsonParser parser = new JsonParser();
         JsonArray jsonArray = parser.parse(files).getAsJsonArray();
         Gson gson = new Gson();
-        ArrayList<File> filesList = new ArrayList<>();
+        ArrayList<Long> ids = new ArrayList<>();
         jsonArray.forEach(jsonElement -> {
-            File file = gson.fromJson(jsonElement, File.class);
-            filesList.add(file);
+            Long id = gson.fromJson(jsonElement, Long.class);
+            ids.add(id);
         });
-        return deleteFiles(filesList);
+        return deleteFiles(fileService.listByIds(ids));
     }
 
-    private HttpEntity<?> deleteFiles(List<File> files) throws QiniuException {
+    /**
+     * 删除文件
+     *
+     * @param files 文件列表
+     * @return http 响应
+     * @throws QiniuException 七牛云异常
+     */
+    private HttpEntity<?> deleteFiles(Collection<File> files) throws QiniuException {
         if (UploadMethod.QINIU.match(applicationProperties.getFile().getUploadType())) {
             qiniuUtils.delete(files);
         } else {
@@ -254,15 +273,14 @@ public class FileController {
     public HttpEntity<?> files(@RequestParam(required = false) Integer page,
                                @RequestParam(required = false) Integer size) {
         if (page == null || size == null || page <= 0 || size <= 0) {
-            return ResponseEntity.ok(new Resources<>(fileService.findAll().stream()
+            return ResponseEntity.ok(new Resources<>(fileService.list().stream()
                     .map(entity -> new RestResource<>(entity, getControllerClass()))
                     .collect(Collectors.toList())));
         }
-        Page<File> result = fileService.findAll(PageRequest.of(--page, size));
+        IPage<File> result = fileService.page(new Page<>(page, size));
         RestResources<RestResource> resources = new RestResources<>();
-        resources.setPage(new PageSimple(result.getSize(), result.getNumber() + 1,
-                result.getTotalElements(), result.getTotalPages(), result.hasPrevious(), result.hasNext()));
-        resources.setCollect(result.stream()
+        resources.setPage(new PageSimple(result.getSize(), result.getCurrent(), result.getTotal(), result.getPages()));
+        resources.setCollect(result.getRecords().stream()
                 .map(file -> new RestResource<>(file, getControllerClass()))
                 .collect(Collectors.toList()));
         return ResponseEntity.ok(resources);

@@ -49,19 +49,21 @@ public class SysLogAop {
     @Around("(sysControllerLog() || sysBaseControllerLog()) && !sysControllerGetClassLog()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         SysLog sysLog = LogUtils.logBuilder(request);
-        sysLog.setMethod(proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName());
+        sysLog.setClassMethod(proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName());
         sysLog.setArgs(StringUtils.left(Arrays.stream(proceedingJoinPoint.getArgs())
                 .filter(Objects::nonNull)
                 .map(Object::toString)
                 .collect(Collectors.joining(",")), MAX_LENGTH - 5));
-        sysLog.setLevel(LogLevel.INFO.ordinal());
+        sysLog.setLevel(String.valueOf(LogLevel.INFO.ordinal()));
         Object proceed = proceedingJoinPoint.proceed();
         if (proceed == null) {
-            log.info(sysLogService.save(sysLog).toString());
+            sysLogService.save(sysLog);
+            log.info(sysLog.toString());
             return null;
         }
         sysLog.setResult(StringUtils.left(proceed.toString(), MAX_LENGTH - 5));
-        log.info(sysLogService.save(sysLog).toString());
+        sysLogService.save(sysLog);
+        log.info(sysLog.toString());
         return proceed;
     }
 }

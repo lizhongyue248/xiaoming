@@ -31,8 +31,9 @@ server:
     context-path: /api
 application:
   name: xiaoMing
+  admin: true # 管理员模式：放行所有拥有管理员角色请求
   file:
-    upload-type: qiniu # 可选值 local qiniu
+    upload-type: local # 可选值 local qiniu
     upload-path: /home/echo/Data/work/xiaoming/upload
   qiniu: # 七牛云配置
     area: 华东 # 可选值 华东 华南 华北 北美 东南亚 不填会自动判断

@@ -6,15 +6,6 @@ spring:
     username: root
     password: 123456
     platform: mysql
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: true
-    open-in-view: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        enable_lazy_load_no_trans: true
   redis:
     host: 127.0.0.1
     database: 1
@@ -23,11 +14,16 @@ spring:
       pool:
         max-active: 20
         max-wait: -1ms
+mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    cache-enabled: true
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   level:
-    org:
-      springframework:
-        security: DEBUG
+    org.springframework.security: INFO
+#    cn.echocow.xiaoming.service: DEBUG
 security:
   oauth2:
     client:

@@ -1,6 +1,7 @@
 package cn.echocow.xiaoming.model.properties;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 文件配置
@@ -10,6 +11,7 @@ import lombok.Data;
  * @date 2019-02-13 18:04
  */
 @Data
+@ConfigurationProperties(prefix = "application.file")
 @SuppressWarnings("all")
 public class FileConfig {
     private String uploadPath;

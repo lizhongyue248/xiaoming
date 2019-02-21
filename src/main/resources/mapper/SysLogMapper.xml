@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.echocow.xiaoming.mapper.SysLogMapper">
+    <resultMap id="BaseResultMap" type="cn.echocow.xiaoming.model.entity.SysLog">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="modify_user" jdbcType="VARCHAR" property="modifyUser"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="args" jdbcType="VARCHAR" property="args"/>
+        <result column="browser" jdbcType="VARCHAR" property="browser"/>
+        <result column="device_type" jdbcType="VARCHAR" property="deviceType"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="level" jdbcType="VARCHAR" property="level"/>
+        <result column="class_method" jdbcType="VARCHAR" property="classMethod"/>
+        <result column="os" jdbcType="VARCHAR" property="os"/>
+        <result column="request_method" jdbcType="VARCHAR" property="requestMethod"/>
+        <result column="result" jdbcType="VARCHAR" property="result"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        id, create_time, create_user, modify_time, modify_user, remark, sort, args, browser,
+        device_type, ip, `level`, class_method, os, request_method, `result`, url
+    </sql>
+</mapper>

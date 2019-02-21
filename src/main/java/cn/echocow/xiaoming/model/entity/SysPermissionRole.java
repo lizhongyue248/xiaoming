@@ -1,34 +1,30 @@
 package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
-
 /**
- * 菜单角色关联表
+ * 权限角色关联表
  *
  * @author Echo
  * @version 1.0
- * @date 2019-01-21 15:24
+ * @date 2019-02-17 17:39
  */
 @Data
-@Entity
-@Table(name = "sys_permission_role")
 @EqualsAndHashCode(callSuper = true)
+@TableName(value = "sys_permission_role")
 public class SysPermissionRole extends BaseEntity {
 
-    /**
-     * 菜单id
-     */
-    @Column(name = "permission_id")
+    @TableField(value = "permission_id")
     private Long permissionId;
 
-    /**
-     * 角色id
-     */
-    @Column(name = "role_id")
+    @TableField(value = "role_id")
     private Long roleId;
 
+    public static final String COL_PERMISSION_ID = "permission_id";
+
+    public static final String COL_ROLE_ID = "role_id";
 }

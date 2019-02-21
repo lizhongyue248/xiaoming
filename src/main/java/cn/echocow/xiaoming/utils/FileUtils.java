@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public class FileUtils {
      * @param files 删除的文件
      */
     @Async
-    public void localFilesDelete(List<File> files){
+    public void localFilesDelete(Collection<File> files){
         if (files.size() < 1){
             return;
         }

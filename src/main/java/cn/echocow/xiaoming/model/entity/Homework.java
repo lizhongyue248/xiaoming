@@ -1,46 +1,51 @@
 package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
-
 /**
- * 作业表
+ * 作业
  *
  * @author Echo
  * @version 1.0
- * @date 2019-01-30 15:52
+ * @date 2019-02-17 17:39
  */
 @Data
-@Entity
-@Table(name = "homework")
+@TableName(value = "homework")
 @EqualsAndHashCode(callSuper = true)
 public class Homework extends BaseEntity {
+    /**
+     * 作业详情
+     */
+    @TableField(value = "detail")
+    private String detail;
 
     /**
      * 作业名称
      */
-    @Column(name = "name", columnDefinition = "varchar(50) not null comment '作业名称'")
+    @TableField(value = "name")
     private String name;
-
-    /**
-     * 作业详情
-     */
-    @Column(name = "detail", columnDefinition = "varchar(2048) null comment '作业详情'")
-    private String detail;
 
     /**
      * 文件类型，用 | 进行分割
      */
-    @Column(name = "type", columnDefinition = "varchar(100) null comment '文件类型，用 | 进行分割'")
+    @TableField(value = "type")
     private String type;
 
     /**
      * 文件大小，不写默认 10MB
      */
-    @Column(name = "size", columnDefinition = "varchar(256) null comment '文件大小，不写默认 10MB'")
-    private String size = "10MB";
+    @TableField(value = "size")
+    private String size;
 
+    public static final String COL_DETAIL = "detail";
+
+    public static final String COL_NAME = "name";
+
+    public static final String COL_TYPE = "type";
+
+    public static final String COL_SIZE = "size";
 }

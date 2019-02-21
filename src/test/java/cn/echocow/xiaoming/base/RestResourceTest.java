@@ -1,8 +1,6 @@
 package cn.echocow.xiaoming.base;
 
 import cn.echocow.xiaoming.XiaoMingApplication;
-import cn.echocow.xiaoming.model.entity.Classroom;
-import cn.echocow.xiaoming.resource.RestResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +17,7 @@ public class RestResourceTest {
 
     @Test
     public void createTest(){
-        RestResource<Classroom> resource = new RestResource<>(new Classroom(), BaseEntity.class);
-        System.out.println(resource);
+//        RestResource<Classroom> resource = new RestResource<>(new Classroom(), BaseEntity.class);
+//        System.out.println(resource);
     }
 }

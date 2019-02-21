@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.echocow.xiaoming.mapper.SysPermissionMapper">
+    <resultMap id="BaseResultMap" type="cn.echocow.xiaoming.model.entity.SysPermission">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="modify_user" jdbcType="VARCHAR" property="modifyUser"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="component" jdbcType="VARCHAR" property="component"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="keep_alive" jdbcType="BIT" property="keepAlive"/>
+        <result column="match_url" jdbcType="VARCHAR" property="matchUrl"/>
+        <result column="method" jdbcType="VARCHAR" property="method"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="request_path" jdbcType="VARCHAR" property="requestPath"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        id, create_time, create_user, modify_time, modify_user, remark, sort, component,
+        icon, keep_alive, match_url, `method`, `name`, request_path, parent_id
+    </sql>
+
+    <select id="findAllByRoleIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_permission
+        WHERE id in (
+            SELECT distinct pr.permission_id
+            FROM sys_permission_role pr
+            WHERE pr.role_id in
+            <foreach item="item" index="index" collection="idList"
+                     open="(" separator="," close=")">
+                #{item,jdbcType=BIGINT}
+            </foreach>
+        )
+    </select>
+</mapper>

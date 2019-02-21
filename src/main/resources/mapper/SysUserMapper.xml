@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.echocow.xiaoming.mapper.SysUserMapper">
+    <resultMap id="BaseResultMap" type="cn.echocow.xiaoming.model.entity.SysUser">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="modify_user" jdbcType="VARCHAR" property="modifyUser"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="enabled" jdbcType="BIT" property="enabled"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+    </resultMap>
+    <resultMap id="AllResultMap" type="cn.echocow.xiaoming.model.entity.SysUser" extends="BaseResultMap">
+        <collection property="roles" ofType="cn.echocow.xiaoming.model.entity.SysRole">
+            <id column="rid" jdbcType="BIGINT" property="id"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="name_zh" jdbcType="VARCHAR" property="nameZh"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        id, create_time, create_user, modify_time, modify_user, remark, sort, email, enabled,
+        img, nickname, `password`, phone, username
+    </sql>
+    <sql id="All_Column_List">
+            u.id,
+            u.create_time,
+            u.create_user,
+            u.modify_time,
+            u.modify_user,
+            u.remark,
+            u.sort,
+            u.email,
+            u.enabled,
+            u.img,
+            u.nickname,
+            u.`password`,
+            u.phone,
+            u.username,
+            r.id rid,
+            r.name,
+            r.name_zh
+    </sql>
+
+    <select id="findByUser" resultMap="AllResultMap">
+        SELECT
+        <include refid="All_Column_List"/>
+        FROM sys_user u,
+        sys_user_role ur,
+        sys_role r
+        WHERE u.id = ur.user_id
+        AND ur.role_id = r.id
+        AND u.enabled = true
+        <choose>
+            <when test="user.username != null and user.username != ''">
+                AND u.username = #{user.username,jdbcType=VARCHAR}
+            </when>
+            <when test="user.phone != null and user.phone != ''">
+                AND u.phone = #{user.phone,jdbcType=VARCHAR}
+            </when>
+            <when test="user.email != null and user.email != ''">
+                AND u.email = #{user.email,jdbcType=VARCHAR}
+            </when>
+            <otherwise/>
+        </choose>
+        limit 1
+    </select>
+
+
+    <select id="findSimpleByUsernameAndEnabledTrue" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where username = #{username,jdbcType=VARCHAR}
+        and enabled = true
+        limit 1
+    </select>
+
+    <select id="findByIdentity" resultMap="AllResultMap">
+        SELECT
+        <include refid="All_Column_List"/>
+        FROM sys_user u,
+        sys_user_role ur,
+        sys_role r
+        WHERE u.id = ur.user_id
+        AND ur.role_id = r.id
+        AND u.enabled = true
+        AND (
+        u.username = #{identity,jdbcType=VARCHAR}
+        or u.phone = #{identity,jdbcType=VARCHAR}
+        or u.email = #{identity,jdbcType=VARCHAR}
+        )
+        limit 1
+    </select>
+    <select id="findSimpleByIdentity" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where username = #{identity,jdbcType=VARCHAR}
+        or phone = #{identity,jdbcType=VARCHAR}
+        or email = #{identity,jdbcType=VARCHAR}
+        limit 1
+    </select>
+</mapper>

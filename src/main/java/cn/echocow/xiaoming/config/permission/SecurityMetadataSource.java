@@ -5,6 +5,7 @@ import cn.echocow.xiaoming.model.entity.SysPermission;
 import cn.echocow.xiaoming.model.entity.SysRole;
 import cn.echocow.xiaoming.service.SysPermissionService;
 import cn.echocow.xiaoming.service.SysRoleService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -44,7 +45,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
         String method = httpRequest.getMethod();
         String requestUrl = httpRequest.getServletPath();
-        List<SysPermission> permissions = sysPermissionService.findAll();
+        List<SysPermission> permissions = sysPermissionService.list(Wrappers.emptyWrapper());
         for (SysPermission permission : permissions) {
             // 路径匹配
             if (!antPathMatcher.match(permission.getMatchUrl(), requestUrl)) {

@@ -5,6 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * 只注册一个组件，不注册其它的了
+ *
  * @author Echo
  * @version 1.0
  * @date 2019-02-13 17:45
@@ -17,6 +19,10 @@ public class ApplicationProperties {
      * 应用名称
      */
     private String name;
+    /**
+     * 管理员模式
+     */
+    private Boolean admin;
     /**
      * 七牛云配置相关
      */

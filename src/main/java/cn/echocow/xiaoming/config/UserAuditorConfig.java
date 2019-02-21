@@ -30,7 +30,7 @@ public class UserAuditorConfig implements AuditorAware<String> {
         }
         Object principal = context.getAuthentication().getPrincipal();
         if (principal.getClass().isAssignableFrom(String.class)) {
-            return Optional.of(principal.toString());
+            return Optional.ofNullable(principal.toString());
         }
         return Optional.empty();
     }

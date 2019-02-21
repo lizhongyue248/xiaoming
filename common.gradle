@@ -4,6 +4,7 @@ ext {
 
     lib = [
             'mysql'                    : 'mysql:mysql-connector-java',
+            'mysql8'                   : 'mysql:mysql-connector-java:8.0.15',
             'lombok'                   : 'org.projectlombok:lombok',
             'userAgent'                : 'eu.bitwalker:UserAgentUtils:1.21',
             'commonsPools'             : 'org.apache.commons:commons-pool2',
@@ -12,8 +13,10 @@ ext {
             'fastjson'                 : 'com.alibaba:fastjson:1.2.56',
             'qiniu'                    : 'com.qiniu:qiniu-java-sdk:7.2.18',
             'ehcache'                  : 'org.ehcache:ehcache:3.6.3',
-            'jacksonDatatypeHibernate5': 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.8'
-
+            'jacksonDatatypeHibernate5': 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.8',
+            'mybatisplus'              : 'com.baomidou:mybatis-plus:3.0.7.1',
+            'mybatisplusGen'           : 'com.baomidou:mybatis-plus-generator:3.0.7.1',
+            'freemarker'               : 'org.freemarker:freemarker:2.3.28'
 
     ]
 
@@ -39,7 +42,8 @@ ext {
             'freemarker'     : 'org.springframework.boot:spring-boot-starter-freemarker',
             'thymeleaf'      : 'org.springframework.boot:spring-boot-starter-thymeleaf',
             'configuration'  : 'org.springframework.boot:spring-boot-configuration-processor',
-            'mybatis'        : 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0'
+            'mybatis'        : 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0',
+            'mybatisplus'    : 'com.baomidou:mybatis-plus-boot-starter:3.0.7.1'
     ]
 
     security = [

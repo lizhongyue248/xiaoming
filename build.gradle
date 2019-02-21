@@ -20,12 +20,14 @@ group = 'cn.echocow'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-repositories {
-    mavenLocal()
-    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
-    maven { url "https://repo.spring.io/snapshot" }
-    maven { url "https://repo.spring.io/milestone" }
-    mavenCentral()
+allprojects {
+    repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+        mavenCentral()
+    }
 }
 
 dependencies {
@@ -35,7 +37,9 @@ dependencies {
             rootProject.ext.springBoot.cache,
             rootProject.ext.springBoot.actuator,
             rootProject.ext.springBoot.aop,
-            rootProject.ext.springBoot.jpa,
+//            rootProject.ext.springBoot.jpa,
+            rootProject.ext.springBoot.mybatis,
+            rootProject.ext.springBoot.mybatisplus,
             rootProject.ext.springBoot.redis,
             rootProject.ext.springBoot.hateoas,
             rootProject.ext.springBoot.mail,
@@ -50,6 +54,7 @@ dependencies {
             rootProject.ext.lib.commonsLang,
             rootProject.ext.lib.commonsCollections4,
             rootProject.ext.lib.userAgent,
+            rootProject.ext.lib.mybatisplus,
             rootProject.ext.lib.qiniu,
             rootProject.ext.lib.fastjson,
             rootProject.ext.lib.jacksonDatatypeHibernate5
@@ -67,7 +72,8 @@ dependencies {
     testImplementation(
             rootProject.ext.springBoot.test,
             rootProject.ext.springBoot.restdocsMockmvc,
-            rootProject.ext.springBoot.securityTest
+            rootProject.ext.springBoot.securityTest,
+            rootProject.ext.lib.lombok
     )
 
 }

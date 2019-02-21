@@ -1,60 +1,53 @@
 package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
-import com.sun.istack.internal.NotNull;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
-import javax.validation.constraints.Pattern;
-
 /**
- * 学生表
+ * 学生
  *
  * @author Echo
  * @version 1.0
- * @date 2019-01-30 15:30
+ * @date 2019-02-17 17:39
  */
 @Data
-@Entity
-@Table(name = "student")
+@TableName(value = "student")
 @EqualsAndHashCode(callSuper = true)
 public class Student extends BaseEntity {
-
     /**
      * 学生名称
      */
-    @Column(name = "name", columnDefinition = "varchar(20) not null comment '学生名称'")
+    @TableField(value = "name")
     private String name;
 
     /**
      * 学号
      */
-    @Column(name = "no", columnDefinition = "varchar(100) not null comment '学号'")
+    @TableField(value = "no")
     private String no;
 
     /**
      * 性别,1男0女
      */
-    @NotNull
-    @Pattern(regexp = "[01]", message = "性别只能为男或女")
-    @Column(name = "sex", columnDefinition = "int not null default 1 comment '性别,1男0女'")
+    @TableField(value = "sex")
     private Integer sex;
 
-    /**
-     * 一对一，对应当前学生所在的班级
-     */
-    @OneToOne
-    @JoinColumn(name = "classroom_id")
-    private Classroom classroom;
+    @TableField(value = "classroom_id")
+    private Long classroomId;
 
-    /**
-     * 一对一，对应当前当前学生的用户
-     */
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private SysUser user;
+    @TableField(value = "user_id")
+    private Long userId;
 
+    public static final String COL_NAME = "name";
 
+    public static final String COL_NO = "no";
 
+    public static final String COL_SEX = "sex";
+
+    public static final String COL_CLASSROOM_ID = "classroom_id";
+
+    public static final String COL_USER_ID = "user_id";
 }

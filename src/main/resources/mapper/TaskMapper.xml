@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.echocow.xiaoming.mapper.TaskMapper">
+    <resultMap id="BaseResultMap" type="cn.echocow.xiaoming.model.entity.Task">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="modify_user" jdbcType="VARCHAR" property="modifyUser"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="classroom_id" jdbcType="BIGINT" property="classroomId"/>
+        <result column="homework_id" jdbcType="BIGINT" property="homeworkId"/>
+    </resultMap>
+
+    <resultMap id="AllResultMap" type="cn.echocow.xiaoming.model.entity.Task" extends="BaseResultMap">
+        <association property="classroom" javaType="cn.echocow.xiaoming.model.entity.Classroom">
+            <id column="classroom_id" jdbcType="BIGINT" property="id"/>
+            <result column="classroom_name" jdbcType="VARCHAR" property="name"/>
+            <result column="classroom_number" jdbcType="INTEGER" property="number"/>
+        </association>
+        <association property="homework" javaType="cn.echocow.xiaoming.model.entity.Homework">
+            <id column="homework_id" jdbcType="BIGINT" property="id"/>
+            <result column="homework_detail" jdbcType="VARCHAR" property="detail"/>
+            <result column="homework_name" jdbcType="VARCHAR" property="name"/>
+            <result column="homework_type" jdbcType="VARCHAR" property="type"/>
+            <result column="homework_size" jdbcType="VARCHAR" property="size"/>
+        </association>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        id, create_time, create_user, modify_time, modify_user, remark, sort, end_time, `name`,
+        start_time, classroom_id, homework_id
+    </sql>
+    <sql id="All_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        t.id, t.create_time, t.create_user, t.modify_time, t.modify_user, t.remark, t.sort, t.end_time, t.`name`,
+        t.start_time, t.classroom_id, t.homework_id,h.id homework_id, h.detail homework_detail,h.name homework_name,
+        h.type homework_type,h.size homework_size, c.id classroom_id, c.name classroom_name, c.number classroom_number
+    </sql>
+
+    <select id="findFirstCompleteById" resultMap="AllResultMap">
+        select
+        <include refid="All_Column_List"/>
+        from task t, classroom c, homework h
+        where t.id=#{id,jdbcType=BIGINT}
+        and t.classroom_id = c.id
+        and t.homework_id = h.id
+        limit 1
+    </select>
+</mapper>

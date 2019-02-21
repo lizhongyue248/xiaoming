@@ -1,89 +1,100 @@
 package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
-
 /**
- * 日志表
+ * 日志
  *
  * @author Echo
  * @version 1.0
- * @date 2019-01-30 16:13
+ * @date 2019-02-17 17:39
  */
 @Data
-@Entity
-@Table(name = "sys_log")
+@TableName(value = "sys_log")
 @EqualsAndHashCode(callSuper = true)
 public class SysLog extends BaseEntity {
 
     /**
+     * 请求参数
+     */
+    @TableField(value = "args")
+    private String args;
+
+    /**
      * 浏览器名称
      */
-    @Column(name = "browser", columnDefinition = "varchar(255) null comment '浏览器名称'")
+    @TableField(value = "browser")
     private String browser;
-
-    /**
-     * 操作系统
-     */
-    @Column(name = "os", columnDefinition = "varchar(255) null comment '操作系统'")
-    private String os;
-
-    /**
-     * IP 地址
-     */
-    @Column(name = "ip", columnDefinition = "varchar(255) null comment 'IP 地址'")
-    private String ip;
-
-    /**
-     * 访问地址
-     */
-    @Column(name = "url", columnDefinition = "varchar(255) null comment '访问地址'")
-    private String url;
-
-    /**
-     * 日志等级
-     * 0. TRACE
-     * 1. DEBUG
-     * 2. INFO
-     * 3. WARN
-     * 4. ERROR
-     * 5. FATAL
-     */
-    @Column(name = "level", columnDefinition = "varchar(4) null comment '日志等级 0. TRACE 1. DEBUG 2. INFO 3. WARN 4. ERROR 5. FATAL'")
-    private Integer level;
-
-    /**
-     * 调用方法
-     */
-    @Column(name = "class_method", columnDefinition = "varchar(255) null comment '调用方法'")
-    private String method;
-
-    /**
-     * 请求方式
-     */
-    @Column(name = "request_method", columnDefinition = "varchar(255) null comment '请求方式'")
-    private String requestMethod;
 
     /**
      * 设备类型
      */
-    @Column(name = "device_type", columnDefinition = "varchar(255) null comment '设备类型'")
+    @TableField(value = "device_type")
     private String deviceType;
 
     /**
-     * 请求参数
+     * IP 地址
      */
-    @Column(name = "args", columnDefinition = "varchar(2048) null comment '请求参数'")
-    private String args;
+    @TableField(value = "ip")
+    private String ip;
+
+    /**
+     * 日志等级 0. TRACE 1. DEBUG 2. INFO 3. WARN 4. ERROR 5. FATAL
+     */
+    @TableField(value = "level")
+    private String level;
+
+    /**
+     * 调用方法
+     */
+    @TableField(value = "class_method")
+    private String classMethod;
+
+    /**
+     * 操作系统
+     */
+    @TableField(value = "os")
+    private String os;
+
+    /**
+     * 请求方式
+     */
+    @TableField(value = "request_method")
+    private String requestMethod;
 
     /**
      * 返回结果
      */
-    @Column(name = "result", columnDefinition = "varchar(2048) null comment '返回结果'")
+    @TableField(value = "result")
     private String result;
 
+    /**
+     * 访问地址
+     */
+    @TableField(value = "url")
+    private String url;
 
+    public static final String COL_ARGS = "args";
+
+    public static final String COL_BROWSER = "browser";
+
+    public static final String COL_DEVICE_TYPE = "device_type";
+
+    public static final String COL_IP = "ip";
+
+    public static final String COL_LEVEL = "level";
+
+    public static final String COL_CLASS_METHOD = "class_method";
+
+    public static final String COL_OS = "os";
+
+    public static final String COL_REQUEST_METHOD = "request_method";
+
+    public static final String COL_RESULT = "result";
+
+    public static final String COL_URL = "url";
 }

@@ -59,7 +59,7 @@ public class ApiExceptionHandler {
     public HttpEntity<?> handleNotFoundException(ResourceNoFoundException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
-                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)));
         return new ResponseEntity<>(errorResource, HttpStatus.NOT_FOUND);
     }
 
@@ -84,7 +84,7 @@ public class ApiExceptionHandler {
         }
         InvalidErrorResource invalidErrorResource = new InvalidErrorResource(e.getMessage(), fieldResources);
         log.warn(invalidErrorResource.toString() +
-                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)));
         return new ResponseEntity<>(invalidErrorResource, HttpStatus.BAD_REQUEST);
     }
 
@@ -98,7 +98,7 @@ public class ApiExceptionHandler {
     public HttpEntity<?> handleExistException(ResourceExistException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
-                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)));
         return new ResponseEntity<>(errorResource, HttpStatus.CONFLICT);
     }
 
@@ -112,7 +112,7 @@ public class ApiExceptionHandler {
     public HttpEntity<?> handleFileSizeException(FileUploadException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
-                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)));
         return new ResponseEntity<>(errorResource, HttpStatus.BAD_REQUEST);
     }
 
@@ -126,7 +126,7 @@ public class ApiExceptionHandler {
     public HttpEntity<?> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +
-                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)).toString());
+                sysLogService.save(LogUtils.exceptionWarnBuilder(request, e)));
         return new ResponseEntity<>(errorResource, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -139,7 +139,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(QiniuException.class)
     public HttpEntity<?> handleQiniuException(QiniuException e) {
         ErrorResource errorResource = new ErrorResource(e.response.toString());
-        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)).toString());
+        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)) + "");
         return new ResponseEntity<>(errorResource, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -153,7 +153,7 @@ public class ApiExceptionHandler {
             UnapprovedClientAuthenticationException.class})
     public HttpEntity<?> handleServletRequestParameterException(Exception e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
-        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)).toString());
+        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)) + "");
         return new ResponseEntity<>(errorResource, HttpStatus.BAD_REQUEST);
     }
 
@@ -166,7 +166,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     public HttpEntity<?> handleException(Exception e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
-        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)).toString());
+        log.error(sysLogService.save(LogUtils.exceptionErrorBuilder(request, e)) + "");
         return new ResponseEntity<>(errorResource, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,6 +1,7 @@
 package cn.echocow.xiaoming.model.properties;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 验证配置
@@ -10,6 +11,7 @@ import lombok.Data;
  * @date 2019-02-14 15:55
  */
 @Data
+@ConfigurationProperties(prefix = "application.validate")
 @SuppressWarnings("all")
 public class ValidateConfig {
     private Integer emailCodeMinLength;

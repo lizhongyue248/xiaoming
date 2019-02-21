@@ -25,7 +25,7 @@ public class ApplicationPropertiesTest {
         assertNotNull(qiniu);
         System.out.println(qiniu.getAccessKey());
         System.out.println(qiniu.getArea());
-        System.out.println(qiniu.getBucketName());
+        System.out.println(qiniu.getBucket());
         System.out.println(applicationProperties.getName());
     }
 }

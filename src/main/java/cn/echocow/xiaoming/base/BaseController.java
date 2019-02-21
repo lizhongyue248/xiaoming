@@ -1,14 +1,18 @@
 package cn.echocow.xiaoming.base;
 
 import cn.echocow.xiaoming.exception.InvalidRequestException;
+import cn.echocow.xiaoming.exception.ResourceNoFoundException;
+import cn.echocow.xiaoming.exception.ServiceException;
 import cn.echocow.xiaoming.resource.ApplicationResource;
 import cn.echocow.xiaoming.resource.PageSimple;
 import cn.echocow.xiaoming.resource.RestResource;
 import cn.echocow.xiaoming.resource.RestResources;
 import cn.echocow.xiaoming.resource.annotation.PageResult;
+import cn.echocow.xiaoming.utils.CustomBeanUtils;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +30,8 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @date 2019-02-03 21:43
  */
-public abstract class BaseController<T extends BaseEntity, S extends BaseService> {
+@SuppressWarnings("all")
+public abstract class BaseController<T extends BaseEntity, S extends BaseService<T>> {
 
     @Autowired
     private S baseService;
@@ -51,7 +57,10 @@ public abstract class BaseController<T extends BaseEntity, S extends BaseService
             throw new InvalidRequestException("Invalid parameter", bindingResult);
         }
         entity.setId(null);
-        return new ResponseEntity<>(new RestResource<>(baseService.save(entity), getControllerClass()), HttpStatus.CREATED);
+        if (!baseService.save(entity)){
+            throw new ServiceException("the resource save failed!");
+        }
+        return new ResponseEntity<>(new RestResource<>(entity, getControllerClass()), HttpStatus.CREATED);
     }
 
     /**
@@ -63,7 +72,7 @@ public abstract class BaseController<T extends BaseEntity, S extends BaseService
      */
     @DeleteMapping("/{id}")
     public HttpEntity<?> deleteResource(@PathVariable Long id) {
-        baseService.deleteById(id);
+        baseService.removeById(id);
         return new ResponseEntity<>(new ApplicationResource(), HttpStatus.NO_CONTENT);
     }
 
@@ -94,7 +103,14 @@ public abstract class BaseController<T extends BaseEntity, S extends BaseService
      */
     @PatchMapping("/{id}")
     public HttpEntity<?> patchResource(@PathVariable Long id, @RequestBody T entity) {
-        return ResponseEntity.ok(new RestResource<>(baseService.update(id, entity), getControllerClass()));
+        entity.setId(id);
+        T exist = Optional.ofNullable(baseService.getById(id)).orElseThrow(
+                () -> new ResourceNoFoundException(id));
+        BeanUtils.copyProperties(entity, exist, CustomBeanUtils.getNullPropertyNames(entity));
+        if (!baseService.updateById(exist)){
+            throw new ServiceException("the resource update failed!");
+        }
+        return ResponseEntity.ok(new RestResource<>(entity, getControllerClass()));
     }
 
     /**
@@ -106,7 +122,7 @@ public abstract class BaseController<T extends BaseEntity, S extends BaseService
      */
     @GetMapping("/{id}")
     public HttpEntity<?> getResource(@PathVariable Long id) {
-        return ResponseEntity.ok(new RestResource<>(baseService.findById(id), getControllerClass()));
+        return ResponseEntity.ok(new RestResource<>(baseService.getById(id), getControllerClass()));
     }
 
     /**
@@ -122,17 +138,16 @@ public abstract class BaseController<T extends BaseEntity, S extends BaseService
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
         if (page == null || size == null || page <= 0 || size <= 0) {
-            List<T> all = baseService.findAll();
+            List<T> all = baseService.list();
             return ResponseEntity.ok(new Resources<>(all.stream()
                     .map(entity -> new RestResource<>(entity, getControllerClass()))
                     .collect(Collectors.toList())));
         }
-        Page<T> result = baseService.findAll(PageRequest.of(--page, size));
-        RestResources<RestResource> resources = new RestResources<>(result.stream()
+        IPage<T> result = baseService.page(new Page<>(page, size));
+        RestResources<RestResource> resources = new RestResources<>(result.getRecords().stream()
                 .map(entity -> new RestResource<>(entity, getControllerClass()))
                 .collect(Collectors.toList()));
-        resources.setPage(new PageSimple(result.getSize(), result.getNumber() + 1, result.getTotalElements(),
-                result.getTotalPages(), result.hasPrevious(), result.hasNext()));
+        resources.setPage(new PageSimple(result.getSize(), result.getCurrent(), result.getTotal(), result.getPages()));
         return ResponseEntity.ok(resources);
     }
 

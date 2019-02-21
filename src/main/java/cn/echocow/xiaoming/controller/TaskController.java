@@ -7,6 +7,7 @@ import cn.echocow.xiaoming.service.FileService;
 import cn.echocow.xiaoming.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019-02-02 22:43
  */
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TaskController extends BaseController<Task, TaskService> {
 
     private final FileService fileService;

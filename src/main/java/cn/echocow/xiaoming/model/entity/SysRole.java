@@ -1,56 +1,35 @@
 package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * 角色表
+ * 权限表
  *
  * @author Echo
  * @version 1.0
- * @date 2019-01-21 15:24
+ * @date 2019-02-17 17:39
  */
 @Data
-@Entity
-@Table(name = "sys_role")
+@TableName(value = "sys_role")
 @EqualsAndHashCode(callSuper = true)
-@ToString(exclude = {"users", "permissions"})
 public class SysRole extends BaseEntity {
-
     /**
      * 角色名,按照SpringSecurity的规范,以ROLE_开头
      */
-    @Column(name = "name", unique = true, nullable = false, columnDefinition = "varchar(20) not null comment '角色名,按照SpringSecurity的规范,以ROLE_开头'")
+    @TableField(value = "name")
     private String name;
 
     /**
      * 角色名,中文
      */
-    @Column(name = "name_zh", nullable = false, columnDefinition = "varchar(255) not null comment '角色名,中文'")
+    @TableField(value = "name_zh")
     private String nameZh;
 
-    /**
-     * 当前角色的菜单
-     */
-    @JsonIgnoreProperties(value = "roles")
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "sys_permission_role", joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private List<SysPermission> permissions = new ArrayList<>();
+    public static final String COL_NAME = "name";
 
-    /**
-     * 当前角色对应的用户
-     * 双向映射造成数据重复查询死循环问题
-     */
-    @ManyToMany(mappedBy = "roles")
-    private List<SysUser> users = new ArrayList<>();
-
+    public static final String COL_NAME_ZH = "name_zh";
 }

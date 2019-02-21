@@ -19,13 +19,20 @@ import java.util.List;
  */
 @Getter
 @Setter
-@NoArgsConstructor
 public class RestResources<T> extends Resources<T> {
     private PageSimple page;
     private List<T> collect;
 
+    public RestResources() {
+        addLink();
+    }
+
     public RestResources(List<T> collect) {
+        addLink();
         this.collect = collect;
+    }
+
+    private void addLink(){
         add(ControllerLinkBuilder.linkTo(SysPermissionController.class).withRel("sys_menu"));
         add(ControllerLinkBuilder.linkTo(SysUserController.class).withRel("sys_user"));
         add(ControllerLinkBuilder.linkTo(SysRoleController.class).withRel("sys_role"));

@@ -2,14 +2,14 @@ package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
 import cn.echocow.xiaoming.model.entity.SysRole;
-import cn.echocow.xiaoming.repository.SysRoleRepository;
+import cn.echocow.xiaoming.mapper.SysRoleMapper;
 import cn.echocow.xiaoming.service.SysRoleService;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Echo
@@ -17,14 +17,13 @@ import java.util.List;
  * @date 2019-01-23 22:01
  */
 @Service
-@CacheConfig(cacheNames = {"sysRole"}, keyGenerator = "cacheKeyGenerator")
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, Long, SysRoleRepository> implements SysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
     @Resource
-    private SysRoleRepository sysRoleRepository;
+    private SysRoleMapper sysRoleMapper;
 
     @Override
-    @Cacheable
-    public List<SysRole> findAllByPermissionId(Long menuId) {
-        return sysRoleRepository.findAllByPermissionId(menuId);
+    public List<SysRole> findAllByPermissionId(Long permissionId) {
+        return Optional.ofNullable(sysRoleMapper.findByPermissionId(permissionId))
+                .orElse(new ArrayList<>());
     }
 }

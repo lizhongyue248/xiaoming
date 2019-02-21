@@ -3,21 +3,7 @@ package cn.echocow.xiaoming.config;
 import cn.echocow.xiaoming.model.properties.ApplicationProperties;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
-import com.fasterxml.jackson.databind.ser.PropertyWriter;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.google.gson.Gson;
-import org.hibernate.collection.spi.PersistentCollection;
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -65,8 +51,7 @@ public class RedisConfig extends CachingConfigurerSupport {
                 .entryTtl(Duration.ofHours(12))
                 .prefixKeysWith(applicationProperties.getName())
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(keySerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(valueSerializer()))
-                .disableCachingNullValues();
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(valueSerializer()));
         return RedisCacheManager
                 .builder(RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory))
                 .cacheDefaults(redisCacheConfiguration)
@@ -79,7 +64,6 @@ public class RedisConfig extends CachingConfigurerSupport {
         return (target, method, params) -> {
             StringBuilder sb = new StringBuilder();
             sb.append(target.getClass().getName());
-            sb.append(method.getName());
             Gson gson = new Gson();
             String paramsString = Arrays.stream(params).filter(Objects::nonNull)
                     .map(gson::toJson)
@@ -116,11 +100,11 @@ public class RedisConfig extends CachingConfigurerSupport {
 //        return jackson2JsonRedisSerializer;
 
 
-//        return new GenericJackson2JsonRedisSerializer();
+        return new GenericJackson2JsonRedisSerializer();
 //        return new Jackson2JsonRedisSerializer<>(Object.class);
 //        return new OxmSerializer();
 //        return new GsonRedisSerializer<>(Object.class);
-        return new FastJsonRedisSerializer<>(Object.class);
+//        return new FastJsonRedisSerializer<>(Object.class);
     }
 
 

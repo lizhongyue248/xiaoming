@@ -23,7 +23,8 @@ import org.springframework.stereotype.Component;
 public class RestResultAop {
 
     @Pointcut("@annotation(cn.echocow.xiaoming.resource.annotation.PageResult)")
-    public void pageResult() { }
+    public void pageResult() {
+    }
 
     @AfterReturning(value = "pageResult()", returning = "result")
     public void doAfterReturningAdvice1(JoinPoint joinPoint, Object result) {
@@ -48,8 +49,8 @@ public class RestResultAop {
             if (pageInfo == null) {
                 return;
             }
-            Integer size = pageInfo.getSize();
-            Integer page = pageInfo.getNumber();
+            Long size = pageInfo.getSize();
+            Long page = pageInfo.getCurrent();
             // 尝试多次，只能手动封装
             String uri = ControllerLinkBuilder.linkTo(joinPoint.getTarget().getClass()).toString();
             resources.add(new Link(uri + "?page=" + page + "&size=" + size).withSelfRel());
@@ -60,7 +61,7 @@ public class RestResultAop {
                 resources.add(new Link(uri + "?page=" + (page + 1) + "&size=" + size).withRel(Link.REL_NEXT));
             }
             resources.add(new Link(uri + "?page=" + 1 + "&size=" + size).withRel(Link.REL_FIRST));
-            resources.add(new Link(uri + "?page=" + pageInfo.getTotalPages() + "&size=" + size).withRel(Link.REL_LAST));
+            resources.add(new Link(uri + "?page=" + pageInfo.getPages() + "&size=" + size).withRel(Link.REL_LAST));
         } catch (Exception e) {
             e.printStackTrace();
         }

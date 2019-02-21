@@ -50,7 +50,7 @@ public class LogUtils {
     public static SysLog exceptionErrorBuilder(HttpServletRequest request, Exception e) {
         e.printStackTrace();
         SysLog sysLog = logBuilder(request);
-        sysLog.setLevel(LogLevel.ERROR.ordinal());
+        sysLog.setLevel(String.valueOf(LogLevel.ERROR.ordinal()));
         sysLog.setRemark(StringUtils.left(e.getMessage(), MAX_LEN));
         sysLog.setResult(StringUtils.left(printStackTraceToString(e), STANDARD_LEN));
         return sysLog;
@@ -65,7 +65,7 @@ public class LogUtils {
      */
     public static SysLog exceptionWarnBuilder(HttpServletRequest request, Exception e) {
         SysLog sysLog = logBuilder(request);
-        sysLog.setLevel(LogLevel.WARN.ordinal());
+        sysLog.setLevel(String.valueOf(LogLevel.WARN.ordinal()));
         sysLog.setResult(e.getMessage());
         return sysLog;
     }

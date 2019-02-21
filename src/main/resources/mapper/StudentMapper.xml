@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.echocow.xiaoming.mapper.StudentMapper">
+    <resultMap id="BaseResultMap" type="cn.echocow.xiaoming.model.entity.Student">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="modify_user" jdbcType="VARCHAR" property="modifyUser"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="no" jdbcType="VARCHAR" property="no"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="classroom_id" jdbcType="BIGINT" property="classroomId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        id, create_time, create_user, modify_time, modify_user, remark, sort, `name`, `no`,
+        sex, classroom_id, user_id
+    </sql>
+
+    <select id="findFirstByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from student
+        where user_id=#{userId,jdbcType=BIGINT} limit 1
+    </select>
+</mapper>

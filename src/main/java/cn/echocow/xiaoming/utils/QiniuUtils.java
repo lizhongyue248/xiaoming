@@ -28,7 +28,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * 七牛云工具类
@@ -86,14 +86,14 @@ public class QiniuUtils {
      * 七牛云 文件上传
      *
      * @param file      要上传的文件
-     * @param localFile 本地文件
+     * @param fileName  文件名
      * @param pathChild 子目录
      * @return DefaultPutRet
      */
-    public DefaultPutRet upload(MultipartFile file, java.io.File localFile, String pathChild) throws IOException {
+    public DefaultPutRet upload(MultipartFile file, String fileName, String pathChild) throws IOException {
         UploadManager uploadManager = new UploadManager(configurationQiNiu());
-        String token = createAuth().uploadToken(applicationProperties.getQiniu().getBucketName());
-        Response response = uploadManager.put(file.getBytes(), applicationProperties.getQiniu().getDirName() + pathChild + localFile.getName(), token);
+        String token = createAuth().uploadToken(applicationProperties.getQiniu().getBucket());
+        Response response = uploadManager.put(file.getBytes(), applicationProperties.getQiniu().getDirName() + pathChild + fileName, token);
         return new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
     }
 
@@ -117,7 +117,7 @@ public class QiniuUtils {
     @Async
     public void deleteOne(File file) throws QiniuException {
         BucketManager bucketManager = new BucketManager(createAuth(), configurationQiNiu());
-        bucketManager.delete(applicationProperties.getQiniu().getBucketName(), file.getDirName() + file.getName());
+        bucketManager.delete(applicationProperties.getQiniu().getBucket(), file.getDirName() + file.getName());
     }
 
     /**
@@ -127,11 +127,11 @@ public class QiniuUtils {
      * @throws QiniuException 异常
      */
     @Async
-    public void delete(List<File> files) throws QiniuException {
+    public void delete(Collection<File> files) throws QiniuException {
         BucketManager bucketManager = new BucketManager(createAuth(), configurationQiNiu());
         String[] keyList = files.stream().map(file -> file.getDirName() + file.getName()).toArray(String[]::new);
         BucketManager.BatchOperations batchOperations = new BucketManager.BatchOperations();
-        batchOperations.addDeleteOp(applicationProperties.getQiniu().getBucketName(), keyList);
+        batchOperations.addDeleteOp(applicationProperties.getQiniu().getBucket(), keyList);
         Response response = bucketManager.batch(batchOperations);
         BatchStatus[] batchStatusList = response.jsonToObject(BatchStatus[].class);
         for (int i = 0; i < keyList.length; i++) {

@@ -2,7 +2,7 @@ package cn.echocow.xiaoming.service;
 
 import cn.echocow.xiaoming.base.BaseService;
 import cn.echocow.xiaoming.model.entity.SysUser;
-import cn.echocow.xiaoming.repository.SysUserRepository;
+
 import java.util.Optional;
 
 /**
@@ -10,7 +10,7 @@ import java.util.Optional;
  * @version 1.0
  * @date 2019-01-23 20:39
  */
-public interface SysUserService extends BaseService<SysUser, Long, SysUserRepository> {
+public interface SysUserService extends BaseService<SysUser> {
 
     /**
      * 通过身份查找用户，查询顺序如下
@@ -46,13 +46,12 @@ public interface SysUserService extends BaseService<SysUser, Long, SysUserReposi
      * @return 结果
      */
     SysUser loadUserByEmail(String email);
+
     /**
-     * 通过用户名查找启用的用户的 ID
+     * 判断一个用户是否存在
      *
-     * @param username 用户名
-     * @return 结果
+     * @param user 用户
+     * @return 存在则返回存在的原因，不存在返回 null
      */
-    Optional<Long> findFirstIdByUsernameAndEnabledTrue(String username);
-
-
+    String existUser(SysUser user);
 }

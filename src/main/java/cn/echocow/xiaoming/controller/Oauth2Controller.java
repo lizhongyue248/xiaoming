@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,9 +33,9 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @date 2019-02-13 16:20
  */
-@RestController
-@RequestMapping(value = "/auth", produces = "application/json;charset=UTF-8")
 @Slf4j
+@RestController
+@RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class Oauth2Controller {
 
     private final ClientDetailsService clientDetailsService;
@@ -49,7 +51,7 @@ public class Oauth2Controller {
 
     @Autowired
     public Oauth2Controller(ClientDetailsService clientDetailsService, ApplicationProperties applicationProperties,
-                            SysUserService sysUserService, TokenEnhancer tokenEnhancer, MailUtils mailUtils, DefaultTokenServices defaultTokenServices,
+                            SysUserService sysUserService, @Qualifier("accessTokenConverter") TokenEnhancer tokenEnhancer, MailUtils mailUtils, DefaultTokenServices defaultTokenServices,
                             Oauth2Service oauth2Service, TemplateEngine templateEngine) {
         this.clientDetailsService = clientDetailsService;
         this.applicationProperties = applicationProperties;

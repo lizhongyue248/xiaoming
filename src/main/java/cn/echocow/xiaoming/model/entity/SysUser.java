@@ -1,19 +1,13 @@
 package cn.echocow.xiaoming.model.entity;
 
 import cn.echocow.xiaoming.base.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.hibernate.validator.constraints.Length;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,126 +17,77 @@ import java.util.List;
  *
  * @author Echo
  * @version 1.0
- * @date 2019-01-21 15:24
+ * @date 2019-02-17 17:39
  */
 @Data
-@Entity
-@Table(name = "sys_user")
-@ToString(exclude = "roles")
+@TableName(value = "sys_user")
 @EqualsAndHashCode(callSuper = true)
-public class SysUser extends BaseEntity implements UserDetails {
+public class SysUser extends BaseEntity {
+    /**
+     * 邮箱
+     */
+    @TableField(value = "email")
+    private String email;
+
+    /**
+     * 是否启用
+     */
+    @TableField(value = "enabled")
+    private Boolean enabled;
+
+    /**
+     * 头像
+     */
+    @TableField(value = "img")
+    private String img;
 
     /**
      * 用户昵称
      */
-    @Length(max = 20)
-    @Column(name = "nickname", columnDefinition = "varchar(20) not null comment '用户昵称'")
+    @TableField(value = "nickname")
     private String nickname;
-
-    /**
-     * 用户名
-     */
-    @NotNull(message = "用户名不能为空")
-    @Length(max = 50, message = "用户名长度最大为50")
-    @Column(name = "username", unique = true, columnDefinition = "varchar(50) not null comment '用户名'")
-    private String username;
 
     /**
      * 密码
      */
-    @NotNull(message = "密码不能为空")
-    @Column(name = "password", columnDefinition = "varchar(255) not null comment '密码'")
+    @TableField(value = "password")
     private String password;
 
     /**
      * 电话号码
      */
-    @Length(min = 11, max = 11, message = "手机长度只能为11位")
-    @Column(name = "phone", unique = true, columnDefinition = "varchar(255) null comment '电话号码'")
+    @TableField(value = "phone")
     private String phone;
 
     /**
-     * 邮箱
+     * 用户名
      */
-    @Email(message = "邮箱地址不合法")
-    @Column(name = "email", unique = true, columnDefinition = "varchar(255) null comment '邮箱'")
-    private String email;
+    @TableField(value = "username")
+    private String username;
 
-    /**
-     * 头像
-     */
-    @Column(name = "img", columnDefinition = "varchar(255) null comment '头像'")
-    private String img;
+    @TableField(exist = false)
+    private transient List<SysRole> roles;
 
-    /**
-     * 是否启用
-     */
-    @Column(name = "enabled", nullable = false, columnDefinition = "bit not null default 1 comment '是否启用'")
-    private Boolean enabled = true;
+    public static final String COL_EMAIL = "email";
 
-    /**
-     * 当前用户的权限
-     */
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = "users")
-    @JoinTable(name = "sys_user_role",
-            joinColumns = {@JoinColumn(name = "user_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false)})
-    private List<SysRole> roles;
+    public static final String COL_ENABLED = "enabled";
 
-    /**
-     * 授权
-     *
-     * @return authorities
-     */
+    public static final String COL_IMG = "img";
+
+    public static final String COL_NICKNAME = "nickname";
+
+    public static final String COL_PASSWORD = "password";
+
+    public static final String COL_PHONE = "phone";
+
+    public static final String COL_USERNAME = "username";
+
     @JsonIgnore
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        roles.forEach(sysRole -> authorities.add(new SimpleGrantedAuthority(sysRole.getName())));
+        if (roles != null) {
+            roles.forEach(sysRole -> authorities.add(new SimpleGrantedAuthority(sysRole.getName())));
+        }
         return authorities;
-    }
-
-    /**
-     * 帐户是否过期
-     *
-     * @return 未过期
-     */
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    /**
-     * 账号是否锁定
-     *
-     * @return 未锁定
-     */
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    /**
-     * 账号密码是否过期
-     *
-     * @return 未过期
-     */
-    @Override
-    @JsonIgnore
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    /**
-     * 账号是否启用
-     *
-     * @return 是否启用
-     */
-    @Override
-    public boolean isEnabled() {
-        return getEnabled();
     }
 }
