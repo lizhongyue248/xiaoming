@@ -2,14 +2,21 @@ package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
 import cn.echocow.xiaoming.mapper.SysUserMapper;
+import cn.echocow.xiaoming.model.entity.Student;
 import cn.echocow.xiaoming.model.entity.SysUser;
 import cn.echocow.xiaoming.service.SysUserService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sun.javafx.binding.StringFormatter;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Echo
@@ -53,16 +60,28 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public String existUser(SysUser user) {
-        if (user.getUsername() != null && sysUserMapper.findSimpleByIdentity(user.getUsername()) != null){
+        if (user.getUsername() != null && sysUserMapper.findSimpleByIdentity(user.getUsername()) != null) {
             return StringFormatter.format("user by %s already exist!", user.getUsername()).getValue();
         }
-        if (user.getPhone() != null && sysUserMapper.findSimpleByIdentity(user.getPhone()) != null){
+        if (user.getPhone() != null && sysUserMapper.findSimpleByIdentity(user.getPhone()) != null) {
             return StringFormatter.format("user by %s already exist!", user.getPhone()).getValue();
         }
-        if (user.getEmail() != null && sysUserMapper.findSimpleByIdentity(user.getEmail()) != null){
+        if (user.getEmail() != null && sysUserMapper.findSimpleByIdentity(user.getEmail()) != null) {
             return StringFormatter.format("user by %s already exist!", user.getEmail()).getValue();
         }
         return null;
+    }
+
+    @Override
+    public List<SysUser> findByStudents(List<Student> students) {
+        if (students == null || students.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<@NotNull Long> ids = students.stream().map(Student::getUserId).collect(Collectors.toList());
+        return sysUserMapper.selectList(new QueryWrapper<SysUser>()
+                .lambda()
+                .eq(SysUser::getEnabled, true)
+                .in(SysUser::getId, ids));
     }
 
 }

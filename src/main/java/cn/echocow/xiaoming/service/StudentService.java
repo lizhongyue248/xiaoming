@@ -1,7 +1,10 @@
 package cn.echocow.xiaoming.service;
 
 import cn.echocow.xiaoming.base.BaseService;
+import cn.echocow.xiaoming.model.entity.Classroom;
 import cn.echocow.xiaoming.model.entity.Student;
+
+import java.util.List;
 
 /**
  * @author Echo
@@ -17,4 +20,12 @@ public interface StudentService extends BaseService<Student> {
      * @return 学生
      */
     Student findByUsername(String username);
+
+    /**
+     * 通过 classroom 查询所有学生
+     *
+     * @param classroom 班级
+     * @return 学生
+     */
+    List<Student> findByClassroom(Classroom classroom);
 }

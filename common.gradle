@@ -16,7 +16,8 @@ ext {
             'jacksonDatatypeHibernate5': 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.8',
             'mybatisplus'              : 'com.baomidou:mybatis-plus:3.0.7.1',
             'mybatisplusGen'           : 'com.baomidou:mybatis-plus-generator:3.0.7.1',
-            'freemarker'               : 'org.freemarker:freemarker:2.3.28'
+            'freemarker'               : 'org.freemarker:freemarker:2.3.28',
+            'httpClient'               : 'org.apache.httpcomponents:httpclient:4.5.7'
 
     ]
 

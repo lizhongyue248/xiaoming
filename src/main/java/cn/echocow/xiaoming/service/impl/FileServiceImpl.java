@@ -4,15 +4,15 @@ import cn.echocow.xiaoming.base.impl.BaseServiceImpl;
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.model.entity.File;
 import cn.echocow.xiaoming.mapper.FileMapper;
+import cn.echocow.xiaoming.model.entity.Student;
+import cn.echocow.xiaoming.model.entity.Task;
 import cn.echocow.xiaoming.service.FileService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Echo
@@ -24,7 +24,6 @@ public class FileServiceImpl extends BaseServiceImpl<FileMapper, File> implement
 
     @Resource
     private FileMapper fileMapper;
-
 
     @Override
     public List<File> findAllByTask(Long taskId) {
@@ -49,5 +48,24 @@ public class FileServiceImpl extends BaseServiceImpl<FileMapper, File> implement
                         .eq(File::getStudentId, studentId)
                         .eq(File::getTaskId, taskId)))
                 .orElse(new File());
+    }
+
+    @Override
+    public List<Student> findNoFinishedByTaskAndStudents(Task task, List<Student> students) {
+        if (students == null || students.isEmpty()){
+            return Collections.emptyList();
+        }
+        List<Long> ids = students.stream()
+                .map(Student::getId)
+                .collect(Collectors.toList());
+        fileMapper.selectList(new QueryWrapper<File>()
+                .lambda()
+                .eq(File::getTaskId, task.getId())
+                .in(File::getStudentId, ids))
+                // 此时 ids 只存放没有交作业的学生
+                .forEach(file -> ids.remove(file.getStudentId()));
+        return students.stream()
+                .filter(student -> ids.contains(student.getId()))
+                .collect(Collectors.toList());
     }
 }

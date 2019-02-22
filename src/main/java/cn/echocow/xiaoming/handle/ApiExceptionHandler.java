@@ -1,10 +1,7 @@
 package cn.echocow.xiaoming.handle;
 
+import cn.echocow.xiaoming.exception.*;
 import cn.echocow.xiaoming.utils.LogUtils;
-import cn.echocow.xiaoming.exception.FileUploadException;
-import cn.echocow.xiaoming.exception.ResourceExistException;
-import cn.echocow.xiaoming.exception.InvalidRequestException;
-import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.resource.ErrorResource;
 import cn.echocow.xiaoming.resource.FieldResource;
 import cn.echocow.xiaoming.resource.InvalidErrorResource;
@@ -103,12 +100,12 @@ public class ApiExceptionHandler {
     }
 
     /**
-     * 文件大小不合法
+     * 文件上传和错误请求
      *
      * @param e 异常
      * @return http 响应
      */
-    @ExceptionHandler(FileUploadException.class)
+    @ExceptionHandler({FileUploadException.class, BadRequestException.class})
     public HttpEntity<?> handleFileSizeException(FileUploadException e) {
         ErrorResource errorResource = new ErrorResource(e.getMessage());
         log.warn(errorResource.toString() +

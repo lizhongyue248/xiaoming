@@ -4,9 +4,12 @@ import cn.echocow.xiaoming.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 任务表
@@ -23,7 +26,7 @@ public class Task extends BaseEntity {
      * 结束时间
      */
     @TableField(value = "end_time")
-    private Date endTime;
+    private LocalDateTime endTime;
 
     /**
      * 任务名称
@@ -35,7 +38,7 @@ public class Task extends BaseEntity {
      * 开启时间
      */
     @TableField(value = "start_time")
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @TableField(value = "classroom_id")
     private Long classroomId;

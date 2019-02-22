@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 班级
  *
@@ -20,12 +22,14 @@ public class Classroom extends BaseEntity {
     /**
      * 班级名称
      */
+    @NotNull
     @TableField(value = "name")
     private String name;
 
     /**
      * 班级人数
      */
+    @NotNull
     @TableField(value = "number")
     private Integer number;
 

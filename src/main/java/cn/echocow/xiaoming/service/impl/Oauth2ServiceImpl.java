@@ -15,24 +15,25 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class Oauth2ServiceImpl implements Oauth2Service {
-    private final RedisTemplate redisTemplate;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    public Oauth2ServiceImpl(RedisTemplate redisTemplate) {
+    public Oauth2ServiceImpl(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
     @Override
     public void saveValidateCode(Object key, Object value, Long time, TimeUnit timeUnit) {
-        redisTemplate.opsForValue().set(key, value, time, timeUnit);
+        redisTemplate.opsForValue().set(key.toString(), value, time, timeUnit);
     }
 
     @Override
     public boolean validate(Object key, Object code) {
         Object valueObj = redisTemplate.opsForValue().get(key);
         boolean res = valueObj != null && StringUtils.equalsIgnoreCase(code.toString(), valueObj.toString());
-        if (res){
-            redisTemplate.delete(key);
+        if (res) {
+            redisTemplate.delete(key.toString());
         }
         return res;
     }

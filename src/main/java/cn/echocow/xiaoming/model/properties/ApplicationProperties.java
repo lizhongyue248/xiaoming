@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * 只注册一个组件，不注册其它的了
+ * 历史遗留代码，懒得改所以不删除
  *
  * @author Echo
  * @version 1.0
@@ -39,4 +39,8 @@ public class ApplicationProperties {
      * 验证配置相关
      */
     private ValidateConfig validate = new ValidateConfig();
+    /**
+     * 短信配置相关
+     */
+    private MessageConfig message = new MessageConfig();
 }

@@ -2,6 +2,7 @@ package cn.echocow.xiaoming.model.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * 文件配置
@@ -11,9 +12,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2019-02-13 18:04
  */
 @Data
+@Component
 @ConfigurationProperties(prefix = "application.file")
-@SuppressWarnings("all")
 public class FileConfig {
+    /**
+     * 文件上传路径
+     */
     private String uploadPath;
+    /**
+     * 上传类型
+     */
     private String uploadType;
 }

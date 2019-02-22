@@ -2,6 +2,7 @@ package cn.echocow.xiaoming.service.impl;
 
 import cn.echocow.xiaoming.exception.ResourceNoFoundException;
 import cn.echocow.xiaoming.mapper.SysUserMapper;
+import cn.echocow.xiaoming.model.entity.Classroom;
 import cn.echocow.xiaoming.model.entity.Student;
 import cn.echocow.xiaoming.model.entity.SysUser;
 import cn.echocow.xiaoming.mapper.StudentMapper;
@@ -11,6 +12,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,5 +41,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 .orElseThrow(() -> new ResourceNoFoundException(String.format("the user by username %s not found!", username)));
         return Optional.ofNullable(studentMapper.selectById(sysUser.getId())).orElseThrow(() ->
                 new ResourceNoFoundException("student","username", username));
+    }
+
+    @Override
+    public List<Student> findByClassroom(Classroom classroom) {
+        return Optional.ofNullable(studentMapper.selectList(new QueryWrapper<Student>()
+                .lambda()
+                .eq(Student::getClassroomId, classroom.getId())))
+                .orElse(Collections.emptyList());
     }
 }

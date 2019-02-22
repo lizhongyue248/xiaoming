@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 作业
  *
@@ -26,20 +28,23 @@ public class Homework extends BaseEntity {
     /**
      * 作业名称
      */
+    @NotNull
     @TableField(value = "name")
     private String name;
 
     /**
      * 文件类型，用 | 进行分割
      */
+    @NotNull
     @TableField(value = "type")
     private String type;
 
     /**
      * 文件大小，不写默认 10MB
      */
+    @NotNull
     @TableField(value = "size")
-    private String size;
+    private String size = "10 MB";
 
     public static final String COL_DETAIL = "detail";
 

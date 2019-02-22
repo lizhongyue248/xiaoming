@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +28,7 @@ public class SysUser extends BaseEntity {
     /**
      * 邮箱
      */
+    @NotNull
     @TableField(value = "email")
     private String email;
 
@@ -56,12 +59,15 @@ public class SysUser extends BaseEntity {
     /**
      * 电话号码
      */
+    @NotNull
+    @Length(max = 11, min = 11)
     @TableField(value = "phone")
     private String phone;
 
     /**
      * 用户名
      */
+    @NotNull
     @TableField(value = "username")
     private String username;
 

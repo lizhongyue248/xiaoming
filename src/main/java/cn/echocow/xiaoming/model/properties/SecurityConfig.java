@@ -2,6 +2,7 @@ package cn.echocow.xiaoming.model.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * 安全配置
@@ -11,11 +12,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2019-02-13 17:59
  */
 @Data
+@Component
 @ConfigurationProperties(prefix = "application.security")
-@SuppressWarnings("all")
 public class SecurityConfig {
+    /**
+     * clientId
+     */
     private String clientId;
+    /**
+     * clientSecret
+     */
     private String clientSecret;
+    /**
+     * resourceId
+     */
     private String resourceId;
+    /**
+     * jwtSigningKey
+     */
     private String jwtSigningKey;
 }

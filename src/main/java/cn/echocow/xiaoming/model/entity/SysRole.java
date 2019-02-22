@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 权限表
  *
@@ -20,12 +22,14 @@ public class SysRole extends BaseEntity {
     /**
      * 角色名,按照SpringSecurity的规范,以ROLE_开头
      */
+    @NotNull
     @TableField(value = "name")
     private String name;
 
     /**
      * 角色名,中文
      */
+    @NotNull
     @TableField(value = "name_zh")
     private String nameZh;
 

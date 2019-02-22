@@ -48,9 +48,14 @@ application:
     resource-id: xiaoMing
     jwt-signing-key: 123
   validate:
-    email-code-min-legth: 4
-    email-code-max-legth: 4
+    email-code-min-length: 4
+    email-code-max-length: 4
     email-code-validity-period: 30  # 邮箱验证码的有效时间，单位：分钟
     mobile-code-min-length: 4
     mobile-code-max-length: 4
     mobile-code-validity-period: 30 # 手机验证码的有效时间，单位：分钟
+  message:
+    app-id:
+    app-key:
+    register-template:
+    homework-tip-template:

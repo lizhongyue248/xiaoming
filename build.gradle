@@ -57,6 +57,7 @@ dependencies {
             rootProject.ext.lib.mybatisplus,
             rootProject.ext.lib.qiniu,
             rootProject.ext.lib.fastjson,
+            rootProject.ext.lib.httpClient,
             rootProject.ext.lib.jacksonDatatypeHibernate5
     )
     implementation(

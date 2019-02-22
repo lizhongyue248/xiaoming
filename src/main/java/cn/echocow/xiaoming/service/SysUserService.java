@@ -1,8 +1,10 @@
 package cn.echocow.xiaoming.service;
 
 import cn.echocow.xiaoming.base.BaseService;
+import cn.echocow.xiaoming.model.entity.Student;
 import cn.echocow.xiaoming.model.entity.SysUser;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -54,4 +56,12 @@ public interface SysUserService extends BaseService<SysUser> {
      * @return 存在则返回存在的原因，不存在返回 null
      */
     String existUser(SysUser user);
+
+    /**
+     * 通过学生查询用户
+     *
+     * @param students 学生
+     * @return 用户
+     */
+    List<SysUser> findByStudents(List<Student> students);
 }

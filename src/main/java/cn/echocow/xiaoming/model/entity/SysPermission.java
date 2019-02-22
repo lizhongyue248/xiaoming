@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 权限
  *
@@ -20,6 +22,7 @@ public class SysPermission extends BaseEntity {
     /**
      * 组件名称
      */
+    @NotNull
     @TableField(value = "component")
     private String component;
 
@@ -38,27 +41,34 @@ public class SysPermission extends BaseEntity {
     /**
      * 请求路径规则
      */
+    @NotNull
     @TableField(value = "match_url")
     private String matchUrl;
 
     /**
      * 请求方法 GET、POST、PUT、PATCH、DELETE、ALL
      */
+    @NotNull
     @TableField(value = "method")
-    private String method;
+    private String method = "ALL";
 
     /**
      * 菜单名称
      */
+    @NotNull
     @TableField(value = "name")
     private String name;
 
     /**
      * 路由 path
      */
+    @NotNull
     @TableField(value = "request_path")
     private String requestPath;
 
+    /**
+     * 父菜单 Id
+     */
     @TableField(value = "parent_id")
     private Long parentId;
 

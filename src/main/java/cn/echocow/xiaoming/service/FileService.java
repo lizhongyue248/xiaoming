@@ -2,6 +2,8 @@ package cn.echocow.xiaoming.service;
 
 import cn.echocow.xiaoming.base.BaseService;
 import cn.echocow.xiaoming.model.entity.File;
+import cn.echocow.xiaoming.model.entity.Student;
+import cn.echocow.xiaoming.model.entity.Task;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,4 +39,13 @@ public interface FileService extends BaseService<File> {
      * @return 文件
      */
     File findByStudentIdAndTaskId(Long studentId, Long taskId);
+
+    /**
+     * 通过 task 和 students 筛选没交作业的学生
+     *
+     * @param task task
+     * @param students 学生
+     * @return 结果
+     */
+    List<Student> findNoFinishedByTaskAndStudents(Task task, List<Student> students);
 }
