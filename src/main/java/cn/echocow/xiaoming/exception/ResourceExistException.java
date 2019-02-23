@@ -7,8 +7,20 @@ package cn.echocow.xiaoming.exception;
  * @version 1.0
  * @date 2019-01-31 21:19
  */
-public class ResourceExistException extends RuntimeException {
+public class ResourceExistException extends BadRequestException {
     public ResourceExistException(String message) {
         super(message);
+    }
+
+    public ResourceExistException(Long id) {
+        super(id);
+    }
+
+    public ResourceExistException(String name, Long id) {
+        super(name, id);
+    }
+
+    public ResourceExistException(String name, String field, Object content) {
+        super(name, field, content);
     }
 }

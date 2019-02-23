@@ -23,6 +23,7 @@ public interface Oauth2Service {
      *
      * @param key 键
      * @param code 验证码
+     * @return 验证结果
      */
     boolean validate(Object key, Object code);
 }
